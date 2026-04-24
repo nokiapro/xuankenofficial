@@ -44,11 +44,11 @@ const ap = new APlayer({
         },
 		{
             name: 'Ánh Mắt Em',
-            artist: 'XuanKen',
-            url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/anhmatem/ANHMATEM-XUANKEN.m3u8',
-            cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
-            theme: '#a6096b',
-			type: 'hls'
+			artist: 'XuanKen',
+			url: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/musicofficial/anhmatem/ANHMATEM-XUANKEN.m3u8',
+			cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			theme: '#a6096b',
+			type: 'hls',
 		},
 		{
             name: 'Để Em Bên Người Khác',
