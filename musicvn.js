@@ -17,7 +17,7 @@ const ap = new APlayer({
     preload: 'metadata',
     listFolded: true,
     listMaxHeight: 660,
-    showlrc: true,
+    showlrc: false,
     volume: 100,
     autoplay: true,
     audio: [
@@ -88,13 +88,6 @@ const ap = new APlayer({
             name: 'Giữa Hai Người Là Cô Đơn',
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/GIUAHAINGUOILACODON-XUANKEN.mp3',
-            cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
-            theme: '#a6096b',
-        },
-		{
-            name: 'Chúng Ta Dừng Lại Ở Đây',
-            artist: 'XuanKen',
-            url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/CHUNGTADUNGLAIODAY-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
             theme: '#a6096b',
         },
