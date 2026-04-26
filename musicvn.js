@@ -2,8 +2,9 @@
 lrc: dropbox.com
 storage: archive.org
 storage: dropbox.com
+storage: github.com
 author: by XuanKen
-creat year: 2021-2022-2023-2024
+creat year: 2021-2022-2023-2024-2025-2026
 website 1: karaokenb.ga
 website 2: nhacbuon.tk
 website 3: clipnb.ga
@@ -34,6 +35,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/THATTINHLAMBANANHNHE-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/THATTINHLAMBANANHNHE-LYRIC.lrc',
             theme: '#a6096b',
         },
 		{
@@ -48,6 +50,7 @@ const ap = new APlayer({
 			artist: 'XuanKen',
 			url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/ANHMATEM-XUANKEN.mp3',
 			cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/ANHMATEM-LYRIC.lrc',
 			theme: '#a6096b',
 		},
 		{
@@ -69,6 +72,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/DINHEMMATROI-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/DINHEMMATROI-LYRIC.lrc',
             theme: '#a6096b',
         },
 		{
@@ -83,6 +87,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/NGUOIOLAIGIUAMUA-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/NGUOIOLAIGIUAMUA-LYRIC.lrc',
             theme: '#a6096b',
         },
 		{
@@ -90,6 +95,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/GIUAHAINGUOILACODON-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/GIUAHAINGUOILACODON-LYRIC.lrc',
             theme: '#a6096b',
         },
 		{
@@ -97,6 +103,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/CHUNGTADUNGLAIODAY-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/CHUNGTADUNGLAIODAY-LYRIC.lrc',
             theme: '#a6096b',
         },
 		{
@@ -104,6 +111,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/DENCUOIVANLAANH-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/DENCUOIVANLANH-LYRIC.lrc',
             theme: '#a6096b',
         },
 		{
@@ -111,6 +119,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/VEQUANGNINHVOITOI-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/VEQUANGNINHVOITOI-LYRIC.lrc',
             theme: '#a6096b',
         },
     ]
