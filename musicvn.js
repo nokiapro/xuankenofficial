@@ -26,6 +26,7 @@ const ap = new APlayer({
             artist: 'XuanKen',
             url: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/musicofficial/NGAYEMVUQUY-XUANKEN.mp3',
             cover: 'https://github.com/nokiapro/xuankenofficial/raw/refs/heads/main/logoofficial.png',
+			lrc: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/refs/heads/main/lyric/NGAYEMVUQUY-LYRIC.lrc',
             theme: '#a6096b',
         },
         {
