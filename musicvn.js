@@ -10,7 +10,7 @@ website 2: nhacbuon.tk
 website 3: clipnb.ga
 */
 const ap = new APlayer({
-    container: document.getElementById('xuankenoffcial'),
+    container: document.getElementById('player'),
     mini: false,
     lrcType: 3,
     loop: 'all',
