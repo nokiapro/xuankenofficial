@@ -1,4 +1,4 @@
-/*
+﻿/*
 lrc: dropbox.com
 storage: archive.org
 storage: dropbox.com
@@ -9,6 +9,7 @@ website 1: karaokenb.ga
 website 2: nhacbuon.tk
 website 3: clipnb.ga
 */
+
 const ap = new APlayer({
     container: document.getElementById('xuankenofficialplayer'),
     mini: false,
@@ -128,3 +129,116 @@ const ap = new APlayer({
         },
     ]
 });
+
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes xuanKenSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    .aplayer .aplayer-pic {
+        position: relative !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+    }
+    
+    .aplayer .aplayer-pic {
+        background-size: cover !important;
+        background-position: center !important;
+    }
+    
+    .aplayer .aplayer-pic::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: var(--aplayer-cover);
+        background-size: cover;
+        background-position: center;
+        border-radius: 50%;
+        animation: xuanKenSpin 10s linear infinite;
+        animation-play-state: paused;
+        transition: all 0.3s ease;
+        z-index: 1;
+    }
+
+    .aplayer.aplayer-playing .aplayer-pic::before {
+        animation-play-state: running;
+    }
+    
+    .aplayer .aplayer-pic .aplayer-button {
+        position: absolute !important;
+        z-index: 10 !important;
+        animation: none !important;
+        transform: none !important;
+        background: rgba(0,0,0,0.5) !important;
+        border-radius: 50% !important;
+    }
+    
+    .aplayer .aplayer-pic > * {
+        position: relative;
+        z-index: 10;
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    .aplayer .aplayer-pic:hover::before {
+        transform: scale(1.05);
+    }
+    
+    .aplayer .aplayer-pic:hover .aplayer-button {
+        transform: scale(1.1) !important;
+        background: rgba(0,0,0,0.7) !important;
+    }
+`;
+document.head.appendChild(style);
+
+function updateCoverImage() {
+    setTimeout(() => {
+        const playerPic = document.querySelector('.aplayer .aplayer-pic');
+        if (playerPic) {
+            const bgImage = window.getComputedStyle(playerPic).backgroundImage;
+            if (bgImage && bgImage !== 'none') {
+                playerPic.style.setProperty('--aplayer-cover', bgImage);
+                playerPic.style.backgroundImage = 'none';
+            }
+        }
+    }, 100);
+}
+
+ap.on('play', function() {
+    const playerElement = document.querySelector('.aplayer');
+    if (playerElement && !playerElement.classList.contains('aplayer-playing')) {
+        playerElement.classList.add('aplayer-playing');
+    }
+    updateCoverImage();
+    console.log('🎵 Đang phát - Ảnh bìa đang quay');
+});
+
+ap.on('pause', function() {
+    const playerElement = document.querySelector('.aplayer');
+    if (playerElement && playerElement.classList.contains('aplayer-playing')) {
+        playerElement.classList.remove('aplayer-playing');
+    }
+    console.log('⏸ Tạm dừng - Ảnh bìa ngừng quay');
+});
+
+ap.on('ended', function() {
+    const playerElement = document.querySelector('.aplayer');
+    if (playerElement && playerElement.classList.contains('aplayer-playing')) {
+        playerElement.classList.remove('aplayer-playing');
+    }
+    console.log('⏹ Kết thúc - Ảnh bìa ngừng quay');
+});
+
+ap.on('listswitch', function() {
+    updateCoverImage();
+});
+
+setTimeout(() => {
+    updateCoverImage();
+    console.log('✅ APlayer đã sẵn sàng - Ảnh bìa sẽ quay khi phát nhạc, button đứng yên!');
+}, 200);
