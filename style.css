@@ -1,5 +1,16 @@
+*,
+*::before,
+*::after {
+    font-family: "Roboto Condensed", "Roboto", sans-serif;
+}
+
 body {
-    font-family: 'Quicksand', sans-serif;
+    font-family: "Roboto Condensed", "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fafafc;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -13,16 +24,22 @@ h1 {
     font-size: 54px;
     color: #333;
     margin: 30px 0 10px;
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 700;
 }
 
 h2 {
     font-size: 22px;
     color: #555;
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 600;
 }
 
 h3 {
     font-size: 24px;
     color: #555;
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 600;
 }
 
 hr {
@@ -37,10 +54,12 @@ hr {
 a {
     color: #08c;
     text-decoration: none;
+    font-family: "Roboto Condensed", sans-serif;
 }
 
 p {
     font-size: 18px;
+    font-family: "Roboto Condensed", sans-serif;
 }
 
 .aplayer-wrappp {
@@ -48,11 +67,13 @@ p {
     max-width: 100%;
 }
 
-.xkllxkll {
+.xuankenofficial {
     width: 395px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
-.xkll {
+.xuanken {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -67,6 +88,177 @@ p {
     -ms-flex-direction: column;
     flex-direction: column;
     height: 100%;
+    min-height: 100vh;
     -webkit-user-select: none;
     user-select: none;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+}
+
+.aplayer,
+.aplayer *,
+.aplayer .aplayer-info,
+.aplayer .aplayer-list,
+.aplayer .aplayer-lrc p,
+.aplayer .aplayer-title,
+.aplayer .aplayer-author,
+.aplayer-list-author,
+.aplayer-list-index,
+.aplayer .aplayer-time,
+.aplayer .aplayer-music,
+.aplayer .aplayer-bar-wrap,
+.aplayer .aplayer-controller,
+.aplayer .aplayer-list ol li,
+.aplayer .aplayer-list ol li span,
+.aplayer .aplayer-list .aplayer-list-cur {
+    font-family: "Roboto Condensed", "Roboto", sans-serif !important;
+}
+
+.aplayer .aplayer-title {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #226012;
+    font-size: 14px;
+}
+
+.aplayer .aplayer-author {
+    font-weight: 600;
+    color: #293bc1;
+    font-size: 14px;
+}
+
+.aplayer .aplayer-lrc p.aplayer-lrc-current {
+    font-weight: 700;
+    color: #d14;
+    font-family: "Roboto Condensed", "Roboto", sans-serif !important;
+}
+
+.aplayer-list ol li {
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    font-size: 13px;
+    line-height: 32px;
+    height: 32px;
+    padding: 0 15px 0 35px !important;
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.aplayer-list ol {
+    counter-reset: song-counter;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.aplayer-list-index {
+    display: none !important;
+}
+
+.aplayer-list ol li {
+    counter-increment: song-counter;
+}
+
+.aplayer-list ol li::before {
+    content: counter(song-counter, decimal-leading-zero);
+    position: absolute;
+    left: 12px;
+    top: 0;
+    width: 28px;
+    height: 32px;
+    line-height: 32px;
+    text-align: left;
+    color: #666;
+    font-weight: 600;
+    font-family: "Roboto Condensed", monospace;
+    font-size: 12px;
+    background: transparent;
+    display: inline-block;
+}
+
+.aplayer-list ol li .aplayer-list-title {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+}
+
+.aplayer-list-author {
+    float: none !important;
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 12px;
+}
+
+.aplayer-list ol li > span:not(.aplayer-list-cur):not(.aplayer-list-index) {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.aplayer-time,
+.aplayer-time-inner {
+    font-family: "Roboto Condensed", monospace;
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.aplayer {
+    margin: 5px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+@media (max-width: 480px) {
+    .xuankenofficial {
+        width: 100%;
+        padding: 0 6px;
+        box-sizing: border-box;
+    }
+    
+    .xuanken {
+        padding: 1rem 0.5rem;
+    }
+    
+    .aplayer-list ol li {
+        padding: 0 10px 0 32px !important;
+        font-size: 11px;
+    }
+    
+    .aplayer-list ol li::before {
+        left: 6px;
+        width: 24px;
+        font-size: 11px;
+        text-align: left;
+    }
+    
+    .aplayer-list-author {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 375px) {
+    .aplayer-list ol li {
+        padding: 0 8px 0 30px !important;
+        font-size: 10px;
+    }
+    
+    .aplayer-list ol li::before {
+        left: 5px;
+        width: 22px;
+        font-size: 10px;
+    }
+    
+    .aplayer-list-author {
+        max-width: 70px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
