@@ -129,9 +129,7 @@
             transition: opacity 0.1s ease-in-out;
         }
 
-        .lyric-fade {
-            opacity: 0;
-        }
+        .lyric-fade { opacity: 0; }
 
         .controls-bar {
             padding: 24px;
@@ -213,9 +211,7 @@
             scroll-behavior: smooth;
         }
 
-        .playlist.active {
-            transform: translateY(0);
-        }
+        .playlist.active { transform: translateY(0); }
 
         .close-playlist {
             position: absolute;
@@ -232,15 +228,12 @@
             padding: 14px 20px;
             cursor: pointer;
             border-bottom: 1px solid var(--border-color);
-            transition: border-color 0.8s ease;
         }
 
         .song-item.active {
             background: var(--bg-color);
             border-left: 5px solid var(--accent-color);
         }
-
-        .song-item.active .item-title { color: #000; font-weight: 700; }
 
         #interaction-hint {
             position: fixed;
@@ -253,29 +246,12 @@
             align-items: center;
             cursor: pointer;
         }
-
-        .loader {
-            width: 48px;
-            height: 48px;
-            border: 5px solid #f3f3f3;
-            border-bottom-color: #000;
-            border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
 
     <div id="interaction-hint">
-        <div class="loader"></div>
+        <div class="loader mb-4 border-4 border-gray-200 border-t-black rounded-full w-12 h-12 animate-spin"></div>
         <p class="font-bold text-2xl text-center px-4 tracking-tighter">XUANKEN MUSIC OFFICIAL</p>
         <p class="text-gray-500 text-sm mt-2">Chạm để bắt đầu nghe nhạc</p>
     </div>
@@ -293,7 +269,7 @@
                 <span class="song-title" id="current-title">Sẵn sàng</span>
                 <span class="artist-name" id="current-artist">XuanKen Official</span>
                 <div class="lyric-container">
-                    <div class="current-lyric" id="lyric-text">Chạm màn hình để nghe nhạc</div>
+                    <div class="current-lyric" id="lyric-text">Chọn bài hát để phát</div>
                 </div>
             </div>
         </div>
@@ -362,22 +338,31 @@
         const repeatBtn = document.getElementById('repeat-btn');
         const playlistOverlay = document.getElementById('playlist');
 
+        // Cập nhật Media Session để hiển thị trình điều khiển trên màn hình khóa
         function updateMediaSession() {
             if ('mediaSession' in navigator) {
                 const song = songs[index];
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: song.title,
                     artist: 'XuanKen Official',
-                    artwork: [{ src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '512x512', type: 'image/png' }]
+                    album: 'XuanKen Official Collection',
+                    artwork: [
+                        { src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '96x96', type: 'image/png' },
+                        { src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '512x512', type: 'image/png' },
+                    ]
                 });
+
+                // Gán các nút điều khiển
                 navigator.mediaSession.setActionHandler('play', togglePlay);
                 navigator.mediaSession.setActionHandler('pause', togglePlay);
-                navigator.mediaSession.setActionHandler('previoustrack', () => changeSong(isShuffle ? Math.floor(Math.random() * songs.length) : (index - 1 + songs.length) % songs.length));
+                navigator.mediaSession.setActionHandler('previoustrack', prevSong);
                 navigator.mediaSession.setActionHandler('nexttrack', handleNextAction);
+                
+                // Cập nhật trạng thái liên tục
+                navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
             }
         }
 
-        // Luôn cuộn lên đầu bài đang phát
         function scrollToActive() {
             const activeItem = document.querySelector('.song-item.active');
             if (activeItem) {
@@ -408,23 +393,6 @@
             return result;
         }
 
-        function getBorderColor(hex) {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            return `rgba(${Math.max(0, r-20)}, ${Math.max(0, g-20)}, ${Math.max(0, b-20)}, 0.5)`;
-        }
-
-        function updateLyricText(newText) {
-            if (lastLyric === newText) return;
-            lastLyric = newText;
-            lyricDisplay.classList.add('lyric-fade');
-            setTimeout(() => {
-                lyricDisplay.innerText = newText;
-                lyricDisplay.classList.remove('lyric-fade');
-            }, 80);
-        }
-
         async function loadSong(i) {
             if (isChanging) return;
             isChanging = true;
@@ -432,11 +400,11 @@
             const song = songs[index];
             document.getElementById('current-title').innerText = song.title;
             
+            // Cập nhật màu sắc UI
             const themeColor = song.color || "#fcfcfc";
             const accentColor = song.accent || "#000000";
             document.documentElement.style.setProperty('--bg-color', themeColor);
             document.documentElement.style.setProperty('--accent-color', accentColor);
-            document.documentElement.style.setProperty('--border-color', getBorderColor(themeColor));
 
             audio.pause();
             audio.src = song.url;
@@ -444,7 +412,7 @@
             
             lyrics = [];
             lastLyric = "";
-            updateLyricText("Đang kết nối...");
+            lyricDisplay.innerText = "Đang kết nối...";
             progressBar.style.width = '0%';
 
             try {
@@ -452,37 +420,25 @@
                 if (res.ok) lyrics = parseLRC(await res.text());
             } catch (e) {}
             
-            if (lyrics.length === 0) updateLyricText("XuanKen Official");
+            if (lyrics.length === 0) lyricDisplay.innerText = "XuanKen Official";
             renderPlaylist();
             updateMediaSession();
             
-            // Cuộn lên đầu ngay lập tức
-            setTimeout(scrollToActive, 100);
+            setTimeout(scrollToActive, 200);
             isChanging = false;
         }
 
         function togglePlay() {
             if (audio.paused) {
-                audio.play().then(() => {
-                    isPlaying = true;
-                    playIcon.className = 'fas fa-pause';
-                    art.style.animationPlayState = 'running';
-                });
+                audio.play().catch(e => console.log("Play error:", e));
             } else {
                 audio.pause();
-                isPlaying = false;
-                playIcon.className = 'fas fa-play';
-                art.style.animationPlayState = 'paused';
             }
         }
 
         function changeSong(i) {
             loadSong(i).then(() => {
-                audio.play().then(() => {
-                    isPlaying = true;
-                    playIcon.className = 'fas fa-pause';
-                    art.style.animationPlayState = 'running';
-                });
+                audio.play().catch(e => console.log("Auto-play error:", e));
             });
         }
 
@@ -501,12 +457,27 @@
             }
         }
 
-        hint.addEventListener('click', () => {
-            hint.style.display = 'none';
-            changeSong(index);
-        });
+        function prevSong() {
+            let prev = isShuffle ? Math.floor(Math.random() * songs.length) : (index - 1 + songs.length) % songs.length;
+            changeSong(prev);
+        }
 
-        audio.addEventListener('timeupdate', () => {
+        // Sự kiện audio
+        audio.onplay = () => {
+            isPlaying = true;
+            playIcon.className = 'fas fa-pause';
+            art.style.animationPlayState = 'running';
+            updateMediaSession();
+        };
+
+        audio.onpause = () => {
+            isPlaying = false;
+            playIcon.className = 'fas fa-play';
+            art.style.animationPlayState = 'paused';
+            updateMediaSession();
+        };
+
+        audio.ontimeupdate = () => {
             const cur = audio.currentTime;
             const dur = audio.duration;
             if (dur) {
@@ -516,17 +487,27 @@
             }
             if (lyrics.length > 0) {
                 const active = lyrics.findLast(l => cur >= l.time);
-                if (active) updateLyricText(active.text);
+                if (active && lastLyric !== active.text) {
+                    lastLyric = active.text;
+                    lyricDisplay.innerText = active.text;
+                }
             }
-        });
+        };
 
-        audio.addEventListener('ended', handleNextAction);
+        // Quan trọng: Sửa lỗi chạy xong 1 bài không chạy nữa
+        audio.onended = () => {
+            console.log("Song ended, moving to next...");
+            handleNextAction();
+        };
+
+        hint.onclick = () => {
+            hint.style.display = 'none';
+            changeSong(index);
+        };
+
         document.getElementById('play-pause-btn').onclick = togglePlay;
         document.getElementById('next-btn').onclick = handleNextAction;
-        document.getElementById('prev-btn').onclick = () => {
-            let prev = isShuffle ? Math.floor(Math.random() * songs.length) : (index - 1 + songs.length) % songs.length;
-            changeSong(prev);
-        };
+        document.getElementById('prev-btn').onclick = prevSong;
 
         document.getElementById('list-btn').onclick = (e) => {
             e.stopPropagation();
@@ -534,10 +515,7 @@
             setTimeout(scrollToActive, 300);
         };
         
-        document.getElementById('close-playlist-btn').onclick = (e) => {
-            e.stopPropagation();
-            playlistOverlay.classList.remove('active');
-        };
+        document.getElementById('close-playlist-btn').onclick = () => playlistOverlay.classList.remove('active');
         
         shuffleBtn.onclick = function() {
             isShuffle = !isShuffle;
@@ -558,12 +536,12 @@
         function renderPlaylist() {
             const list = document.getElementById('playlist-content');
             list.innerHTML = songs.map((s, i) => `
-                <div class="song-item ${i === index ? 'active' : ''}" data-index="${i}" onclick="if(!isChanging) changeSong(${i})">
+                <div class="song-item ${i === index ? 'active' : ''}" onclick="if(!isChanging) changeSong(${i})">
                     <div class="flex-1">
                         <div class="item-title text-sm uppercase font-bold">${s.title}</div>
                         <div class="text-xs text-gray-500">XuanKen Official</div>
                     </div>
-                    ${i === index ? '<i class="fas fa-volume-up text-xs text-black"></i>' : ''}
+                    ${i === index ? '<i class="fas fa-volume-up text-xs"></i>' : ''}
                 </div>
             `).join('');
         }
