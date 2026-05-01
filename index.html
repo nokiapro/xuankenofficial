@@ -338,7 +338,6 @@
         const repeatBtn = document.getElementById('repeat-btn');
         const playlistOverlay = document.getElementById('playlist');
 
-        // Cập nhật Media Session để hiển thị trình điều khiển trên màn hình khóa
         function updateMediaSession() {
             if ('mediaSession' in navigator) {
                 const song = songs[index];
@@ -347,18 +346,13 @@
                     artist: 'XuanKen Official',
                     album: 'XuanKen Official Collection',
                     artwork: [
-                        { src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '96x96', type: 'image/png' },
-                        { src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '512x512', type: 'image/png' },
+                        { src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '512x512', type: 'image/png' }
                     ]
                 });
-
-                // Gán các nút điều khiển
                 navigator.mediaSession.setActionHandler('play', togglePlay);
                 navigator.mediaSession.setActionHandler('pause', togglePlay);
                 navigator.mediaSession.setActionHandler('previoustrack', prevSong);
                 navigator.mediaSession.setActionHandler('nexttrack', handleNextAction);
-                
-                // Cập nhật trạng thái liên tục
                 navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
             }
         }
@@ -400,7 +394,6 @@
             const song = songs[index];
             document.getElementById('current-title').innerText = song.title;
             
-            // Cập nhật màu sắc UI
             const themeColor = song.color || "#fcfcfc";
             const accentColor = song.accent || "#000000";
             document.documentElement.style.setProperty('--bg-color', themeColor);
@@ -442,6 +435,12 @@
             });
         }
 
+        function selectSongFromList(i) {
+            if (isChanging) return;
+            playlistOverlay.classList.remove('active');
+            changeSong(i);
+        }
+
         function handleNextAction() {
             if (isRepeatOne) {
                 audio.currentTime = 0;
@@ -462,7 +461,6 @@
             changeSong(prev);
         }
 
-        // Sự kiện audio
         audio.onplay = () => {
             isPlaying = true;
             playIcon.className = 'fas fa-pause';
@@ -494,9 +492,7 @@
             }
         };
 
-        // Quan trọng: Sửa lỗi chạy xong 1 bài không chạy nữa
         audio.onended = () => {
-            console.log("Song ended, moving to next...");
             handleNextAction();
         };
 
@@ -536,7 +532,7 @@
         function renderPlaylist() {
             const list = document.getElementById('playlist-content');
             list.innerHTML = songs.map((s, i) => `
-                <div class="song-item ${i === index ? 'active' : ''}" onclick="if(!isChanging) changeSong(${i})">
+                <div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})">
                     <div class="flex-1">
                         <div class="item-title text-sm uppercase font-bold">${s.title}</div>
                         <div class="text-xs text-gray-500">XuanKen Official</div>
