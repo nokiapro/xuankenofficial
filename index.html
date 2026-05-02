@@ -112,12 +112,15 @@
             margin-bottom: 15px;
         }
 
+        /* Lyric Styles Updated */
         .lyric-container {
             height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            width: 100%;
+            padding: 0 10px;
         }
 
         .current-lyric {
@@ -126,7 +129,10 @@
             font-weight: 400;
             text-align: center;
             opacity: 1;
-            transition: opacity 0.1s ease-in-out;
+            transition: opacity 0.1s ease-in-out, font-size 0.2s ease;
+            white-space: nowrap; /* Không cho phép xuống dòng */
+            display: inline-block;
+            max-width: 100%;
         }
 
         .lyric-fade { opacity: 0; }
@@ -331,12 +337,30 @@
         const playIcon = document.getElementById('play-icon');
         const art = document.getElementById('current-art');
         const lyricDisplay = document.getElementById('lyric-text');
+        const lyricContainer = document.querySelector('.lyric-container');
         const progressBar = document.getElementById('progress-bar');
         const hint = document.getElementById('interaction-hint');
         
         const shuffleBtn = document.getElementById('shuffle-btn');
         const repeatBtn = document.getElementById('repeat-btn');
         const playlistOverlay = document.getElementById('playlist');
+
+        // Hàm điều chỉnh kích thước chữ tự động
+        function adjustLyricFontSize(text) {
+            lyricDisplay.style.fontSize = '1.15rem'; // Reset font size
+            lyricDisplay.innerText = text;
+            
+            // Lấy chiều rộng hiện tại của container (trừ đi padding)
+            const maxWidth = lyricContainer.clientWidth - 20;
+            let currentFontSize = 1.15; // rem
+            
+            // Vòng lặp giảm font size cho đến khi chiều rộng text <= maxWidth
+            // Giới hạn nhỏ nhất là 0.7rem để vẫn có thể đọc được
+            while (lyricDisplay.offsetWidth > maxWidth && currentFontSize > 0.7) {
+                currentFontSize -= 0.05;
+                lyricDisplay.style.fontSize = currentFontSize + 'rem';
+            }
+        }
 
         function updateMediaSession() {
             if ('mediaSession' in navigator) {
@@ -405,7 +429,7 @@
             
             lyrics = [];
             lastLyric = "";
-            lyricDisplay.innerText = "Đang kết nối...";
+            adjustLyricFontSize("Đang kết nối...");
             progressBar.style.width = '0%';
 
             try {
@@ -413,7 +437,7 @@
                 if (res.ok) lyrics = parseLRC(await res.text());
             } catch (e) {}
             
-            if (lyrics.length === 0) lyricDisplay.innerText = "XuanKen Official";
+            if (lyrics.length === 0) adjustLyricFontSize("XuanKen Official");
             renderPlaylist();
             updateMediaSession();
             
@@ -487,7 +511,7 @@
                 const active = lyrics.findLast(l => cur >= l.time);
                 if (active && lastLyric !== active.text) {
                     lastLyric = active.text;
-                    lyricDisplay.innerText = active.text;
+                    adjustLyricFontSize(active.text);
                 }
             }
         };
@@ -546,6 +570,11 @@
             isShuffle = true;
             shuffleBtn.classList.add('active');
             renderPlaylist();
+        };
+        
+        // Cập nhật lại khi resize màn hình để lyric luôn đúng kích thước
+        window.onresize = () => {
+            if (lastLyric) adjustLyricFontSize(lastLyric);
         };
     </script>
 </body>
