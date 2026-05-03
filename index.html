@@ -306,11 +306,6 @@
     <audio id="audio-player" preload="auto" crossorigin="anonymous" playsinline></audio>
 
     <script>
-        /**
-         * DANH SÁCH BÀI HÁT
-         * link1: Link chính (ưu tiên phát trước)
-         * link2: Link dự phòng (phát khi link1 lỗi)
-         */
         const songs = [
             { 
                 title: "Ngày Em Vu Quy", 
@@ -322,7 +317,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYEMVUQUY-LYRIC.lrc",
                     link2: "https://link-du-phong-lrc-bai-1.lrc"
                 },
-                color: "#fdf2f2", accent: "#e66465" 
+                color: "#fdf2f2",
+                accent: "#fdf2f2" 
             },
             { 
                 title: "Thất Tình & Làm Bạn Anh Nhé", 
@@ -334,7 +330,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/THATTINHLAMBANANHNHE-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#f0f4ff", accent: "#4a90e2" 
+                color: "#f0f4ff",
+                accent: "#f0f4ff" 
             },
             { 
                 title: "Quên Nhau Đi Nhé", 
@@ -346,7 +343,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/QUENNHAUDINHE-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#f5f5f5", accent: "#333333" 
+                color: "#f5f5f5",
+                accent: "#f5f5f5" 
             },
             { 
                 title: "Ánh Mắt Em", 
@@ -358,7 +356,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHMATEM-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#fff9db", accent: "#f59f00" 
+                color: "#fff9db",
+                accent: "#fff9db" 
             },
             { 
                 title: "Để Em Bên Người Khác", 
@@ -370,7 +369,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DEEMBENNGUOIKHAC-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#e3faf2", accent: "#0ca678" 
+                color: "#e3faf2",
+                accent: "#e3faf2" 
             },
             { 
                 title: "Người Ở Lại Trong Tim", 
@@ -382,7 +382,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAITRONGTIM-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#f8f0fc", accent: "#ae3ec9" 
+                color: "#f8f0fc",
+                accent: "#f8f0fc" 
             },
             { 
                 title: "Dính Em Mất Rồi", 
@@ -394,7 +395,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DINHEMMATROI-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#fff0f6", accent: "#d6336c" 
+                color: "#fff0f6",
+                accent: "#fff0f6" 
             },
             { 
                 title: "Sau Cơn Mưa Là Nỗi Nhớ", 
@@ -406,7 +408,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAUCONMUALANOINHO-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#e7f5ff", accent: "#1971c2" 
+                color: "#e7f5ff",
+                accent: "#e7f5ff" 
             },
             { 
                 title: "Người Ở Lại Giữa Mưa", 
@@ -418,7 +421,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUA-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#f1f3f5", accent: "#495057" 
+                color: "#f1f3f5",
+                accent: "#f1f3f5" 
             },
             { 
                 title: "Giữa Hai Người Là Cô Đơn", 
@@ -430,7 +434,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/GIUAHAINGUOILACODON-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#fff4e6", accent: "#e67e22" 
+                color: "#fff4e6",
+                accent: "#fff4e6" 
             },
             { 
                 title: "Chúng Ta Dừng Lại Ở Đây", 
@@ -442,7 +447,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADUNGLAIODAY-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#ebfbee", accent: "#2b8a3e" 
+                color: "#ebfbee",
+                accent: "#ebfbee" 
             },
             { 
                 title: "Đến Cuối Vẫn Là Anh", 
@@ -454,7 +460,8 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DENCUOIVANLANH-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#fff5f5", accent: "#c92a2a" 
+                color: "#fff5f5",
+                accent: "#fff5f5" 
             },
             { 
                 title: "Về Quảng Ninh Với Tôi", 
@@ -466,7 +473,125 @@
                     link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/VEQUANGNINHVOITOI-LYRIC.lrc",
                     link2: ""
                 },
-                color: "#f8f9fa", accent: "#212529" 
+                color: "#f8f9fa",
+                accent: "#212529" 
+            },
+            { 
+                title: "Anh Yêu Em Sai Thời Điểm", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHYEUEMSAITHOIDIEM-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#06625d",
+                accent: "#06625d" 
+            },
+            { 
+                title: "Đợi Chờ Trong Hạnh Phúc", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DOICHOTRONGHANHPHUC-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DOICHOTRONGHANHPHUC-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#000401",
+                accent: "#000401" 
+            },
+            { 
+                title: "Em Chỉ Là Bạn Thân", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/EMCHILABANTHAN-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/EMCHILABANTHAN-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#12f5d9",
+                accent: "#12f5d9" 
+            },
+            { 
+                title: "Khi", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/KHI-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/KHI-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#ded852",
+                accent: "#ded852" 
+            },
+            { 
+                title: "Chuyến Tàu Ly Biệt (Version 1)", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV1-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV1-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#24da1f",
+                accent: "#24da1f" 
+            },
+            { 
+                title: "Chuyến Tàu Ly Biệt (Version 2)", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV2-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV2-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#33f2ba",
+                accent: "#33f2ba" 
+            },
+            { 
+                title: "50 Năm Về Sau", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/50NAMVESAU-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/50NAMVESAU-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#be8daf",
+                accent: "#be8daf" 
+            },
+            { 
+                title: "Phố Cũ Còn Em", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#17342e",
+                accent: "#17342e" 
+            },
+            { 
+                title: "Phố Cũ Còn Anh", 
+                audio: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONANH-XUANKEN.mp3",
+                    link2: ""
+                },
+                lrc: {
+                    link1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONANH-LYRIC.lrc",
+                    link2: ""
+                },
+                color: "#0ea651",
+                accent: "#0ea651" 
             }
         ];
 
@@ -549,7 +674,6 @@
         }
 
         async function fetchLyric(lrcObj) {
-            // Thử link1
             try {
                 const res = await fetch(lrcObj.link1);
                 if (res.ok) return parseLRC(await res.text());
@@ -557,7 +681,6 @@
                 console.warn("LRC Link 1 hỏng, thử Link 2...");
             }
 
-            // Thử link2 nếu có
             if (lrcObj.link2) {
                 try {
                     const res = await fetch(lrcObj.link2);
