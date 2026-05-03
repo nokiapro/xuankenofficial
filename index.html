@@ -279,9 +279,27 @@
             align-items: center;
             cursor: pointer;
         }
+
+        #toast-msg {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
+
+    <div id="toast-msg"></div>
 
     <div id="interaction-hint">
         <div class="loader mb-4 border-4 border-gray-200 border-t-black rounded-full w-12 h-12 animate-spin"></div>
@@ -341,29 +359,259 @@
 
     <script>
         const songs = [
-            { title: "Ngày Em Vu Quy", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGAYEMVUQUY-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYEMVUQUY-LYRIC.lrc" },
-            { title: "Thất Tình & Làm Bạn Anh Nhé", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/THATTINHLAMBANANHNHE-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/THATTINHLAMBANANHNHE-LYRIC.lrc" },
-            { title: "Quên Nhau Đi Nhé", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/QUENNHAUDINHE-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/QUENNHAUDINHE-LYRIC.lrc" },
-            { title: "Ánh Mắt Em", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHMATEM-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHMATEM-LYRIC.lrc" },
-            { title: "Để Em Bên Người Khác", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DEEMBENNGUOIKHAC-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DEEMBENNGUOIKHAC-LYRIC.lrc" },
-            { title: "Người Ở Lại Trong Tim", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAITRONGTIM-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAITRONGTIM-LYRIC.lrc" },
-            { title: "Dính Em Mất Rồi", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DINHEMMATROI-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DINHEMMATROI-LYRIC.lrc" },
-            { title: "Sau Cơn Mưa Là Nỗi Nhớ", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SAUCONMUALANOINHO-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAUCONMUALANOINHO-LYRIC.lrc" },
-            { title: "Người Ở Lại Giữa Mưa", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUA-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUA-LYRIC.lrc" },
-            { title: "Giữa Hai Người Là Cô Đơn", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/GIUAHAINGUOILACODON-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/GIUAHAINGUOILACODON-LYRIC.lrc" },
-            { title: "Chúng Ta Dừng Lại Ở Đây", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUNGTADUNGLAIODAY-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADUNGLAIODAY-LYRIC.lrc" },
-            { title: "Đến Cuối Vẫn Là Anh", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DENCUOIVANLAANH-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DENCUOIVANLANH-LYRIC.lrc" },
-            { title: "Về Quảng Ninh Với Tôi", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/VEQUANGNINHVOITOI-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/VEQUANGNINHVOITOI-LYRIC.lrc" },
-            { title: "Anh Yêu Em Sai Thời Điểm", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHYEUEMSAITHOIDIEM-LYRIC.lrc" },
-            { title: "Đợi Chờ Trong Hạnh Phúc", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DOICHOTRONGHANHPHUC-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DOICHOTRONGHANHPHUC-LYRIC.lrc" },
-            { title: "Em Chỉ Là Bạn Thân", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/EMCHILABANTHAN-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/EMCHILABANTHAN-LYRIC.lrc" },
-            { title: "Khi", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/KHI-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/KHI-LYRIC.lrc" },
-            { title: "Chuyến Tàu Ly Biệt (Version 1)", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV1-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV1-LYRIC.lrc" },
-            { title: "Chuyến Tàu Ly Biệt (Version 2)", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV2-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV2-LYRIC.lrc" },
-            { title: "50 Năm Về Sau", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/50NAMVESAU-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/50NAMVESAU-LYRIC.lrc" },
-            { title: "Phố Cũ Còn Em", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc" },
-            { title: "Phố Cũ Còn Anh", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONANH-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONANH-LYRIC.lrc" },
-            { title: "Người Không Ở Lại", audio: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIKHONGOLAI-XUANKEN.mp3", lrc: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIKHONGOLAI-LYRIC.lrc" }
+            {
+                title: "Ngày Em Vu Quy",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGAYEMVUQUY-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/2ix1ns96v8qc26fyizvm7/NGAYEMVUQUY-XUANKEN.mp3?rlkey=hw5ro0z9pgg4qua16ys6ofrtk&st=st9ckyf3&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYEMVUQUY-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/vd8p2aztg2oqgwvan49nh/NGAYEMVUQUY-LYRIC.lrc?rlkey=e80y122dz8ge8y60tz0e12fry&st=plt9z1sw&dl=0"
+                ]
+            },
+            {
+                title: "Thất Tình & Làm Bạn Anh Nhé",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/THATTINHLAMBANANHNHE-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/g4k5j0x9j0bbfvt3eta9t/THATTINHLAMBANANHNHE-XUANKEN.mp3?rlkey=h1s2unsb9n0ii3poub0eu43u6&st=dbwmvk8z&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/THATTINHLAMBANANHNHE-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/6bm5qyx5t5a7fq6n68p3r/THATTINHLAMBANANHNHE-LYRIC.lrc?rlkey=3hop1nkywgwso083mdwltv7z2&st=o8nh6zok&dl=0"
+                ]
+            },
+            {
+                title: "Quên Nhau Đi Nhé",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/QUENNHAUDINHE-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/y7oitkaozlf1tk1bp2lh1/QUENNHAUDINHE-XUANKEN.mp3?rlkey=y3pb2acbc5db4rgnkzdmu3bb3&st=8c1hu39q&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/QUENNHAUDINHE-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/58jy9lgo054nhgybeowpu/QUENNHAUDINHE-LYRIC.lrc?rlkey=sdsf40n4a0nddbhqpctgb2ob0&st=8ckarrkq&dl=0"
+                ]
+            },
+            {
+                title: "Ánh Mắt Em",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHMATEM-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/bjxmvn0nk43h81w1y6r8a/ANHMATEM-XUANKEN.mp3?rlkey=4tzanju49d63qkc27cdziu51g&st=mvrnng6s&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHMATEM-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/re28enq6huuyhkibdyxq6/ANHMATEM-LYRIC.lrc?rlkey=5t87c99zogg7q5a3ugss02n0u&st=fnfjr5zq&dl=0"
+                ]
+            },
+            {
+                title: "Để Em Bên Người Khác",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DEEMBENNGUOIKHAC-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/bco0g3mdeiwrjsmyqsyv6/DEEMBENNGUOIKHAC-XUANKEN.mp3?rlkey=9gto06vls3tcnc92mn050qex2&st=042c9xjv&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DEEMBENNGUOIKHAC-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/sdw6mh5s2jbo4fmv5sjqr/DEEMBENNGUOIKHAC-LYRIC.lrc?rlkey=9ztqriimvtc3dp2x9kh536ayu&st=j0wuhpoh&dl=0"
+                ]
+            },
+            {
+                title: "Người Ở Lại Trong Tim",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAITRONGTIM-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/glwck81hgjka16k9q183l/NGUOIOLAITRONGTIM-XUANKEN.mp3?rlkey=i3p7j7tr4dkpzfpo1oyz0z79h&st=mrzm37ux&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAITRONGTIM-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/nk7f9jnzixbckjxur6wiw/NGUOIOLAITRONGTIM-LYRIC.lrc?rlkey=ftjbip4j30voaiyptthhkq4hn&st=uz38oyzp&dl=0"
+                ]
+            },
+            {
+                title: "Dính Em Mất Rồi",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DINHEMMATROI-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=7r7xqg8o&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DINHEMMATROI-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=8xrbs75m&dl=0"
+                ]
+            },
+            {
+                title: "Sau Cơn Mưa Là Nỗi Nhớ",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SAUCONMUALANOINHO-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/ybt4ie8n1rkvodpzanz37/SAUCONMUALANOINHO-XUANKEN.mp3?rlkey=hqqplne8gn0pz5mpbo464m9sw&st=57lmttit&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAUCONMUALANOINHO-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/qh2y72mmiazu8zg81490p/SAUCONMUALANOINHO-LYRIC.lrc?rlkey=z1mtyfuta0jv2j16fypkfh8za&st=3ulsx4em&dl=0"
+                ]
+            },
+            {
+                title: "Người Ở Lại Giữa Mưa",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUA-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/g4x7mxd3q00pntnxgwzp9/NGUOIOLAIGIUAMUA-XUANKEN.mp3?rlkey=s1pe96tibyiwp1eq8krv12t0z&st=g22qdfog&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUA-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/qjseeej3866khpdn5jh3q/NGUOIOLAIGIUAMUA-LYRIC.lrc?rlkey=mqsly2tfhzk3ejlorry7gbxb2&st=u4ajumn2&dl=0"
+                ]
+            },
+            {
+                title: "Giữa Hai Người Là Cô Đơn",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/GIUAHAINGUOILACODON-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/uv8e3378ffc2vpc4vimc4/GIUAHAINGUOILACODON-XUANKEN.mp3?rlkey=crnbvb9vktzozmt0940ubhusw&st=817tfrhc&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/GIUAHAINGUOILACODON-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/50zvqzbm7qjcc80q4ajv3/GIUAHAINGUOILACODON-LYRIC.lrc?rlkey=rif6162gbidnq1z60kojcl515&st=ch0uu30y&dl=0"
+                ]
+            },
+            {
+                title: "Chúng Ta Dừng Lại Ở Đây",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUNGTADUNGLAIODAY-XUANKEN.mp3",
+                    "https://www.dropbox.com/scl/fi/xf7ctz25m23af8fmpcjdc/CHUNGTADUNGLAIODAY-XUANKEN.mp3?rlkey=62mr2hadwouba3vyts6us548e&st=k7efytfj&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADUNGLAIODAY-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/zt6uwa21nj4a7rf2yl5yk/CHUNGTADUNGLAIODAY-LYRIC.lrc?rlkey=1tdkw5gllx62rddklruznn0xf&st=2tkdiozi&dl=0"
+                ]
+            },
+            {
+                title: "Đến Cuối Vẫn Là Anh",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DENCUOIVANLAANH-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/k1df0ha02l6cu7zj71ez0/DENCUOIVANLAANH-XUANKEN.mp3?rlkey=51o310ybx6oooatdw4fyc2y1e&st=kanurgew&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DENCUOIVANLANH-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/owe5ld6aghuml5gejonxh/DENCUOIVANLANH-LYRIC.lrc?rlkey=gghijpfo7ijmvnzki5j33celt&st=iwwwc0fe&dl=0"
+                ]
+            },
+            {
+                title: "Về Quảng Ninh Với Tôi",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/VEQUANGNINHVOITOI-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/f306jvn3vl4p5cwygptdu/VEQUANGNINHVOITOI-XUANKEN.mp3?rlkey=36e07p5u5olykp6u3ygdzwtbf&st=fqgorzn7&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/VEQUANGNINHVOITOI-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/yjeve4nfqbvpos32vnztd/VEQUANGNINHVOITOI-LYRIC.lrc?rlkey=mwck80s4qzbjoukcmlsdblzsj&st=108lsdsf&dl=0"
+                ]
+            },
+            {
+                title: "Anh Yêu Em Sai Thời Điểm",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/4i6cgievzz4iv63p9maze/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3?rlkey=2akpj5xnjg9q2gi2pqosabm81&st=lkr9n1i5&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHYEUEMSAITHOIDIEM-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Đợi Chờ Trong Hạnh Phúc",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DOICHOTRONGHANHPHUC-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/i6knkkziozjb96llznl5x/DOICHOTRONGHANHPHUC-XUANKEN.mp3?rlkey=jn2bc2nou1kq9p61gpddtw9cx&st=w8o50bm3&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DOICHOTRONGHANHPHUC-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Em Chỉ Là Bạn Thân",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/EMCHILABANTHAN-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/g4wy0ph5xbw1xe6jiloxs/EMCHILABANTHAN-XUANKEN.mp3?rlkey=1nvjs671dua8vs5998j0l5u9e&st=hmcwhswl&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/EMCHILABANTHAN-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Khi",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/KHI-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/zhpyu4foriy96avkvtx5t/KHI-XUANKEN.mp3?rlkey=3a3tqb62axoqwnszc340j3c11&st=pmyh4n6c&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/KHI-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Chuyến Tàu Ly Biệt (Version 1)",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV1-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/itwl4qmf52swpx16zpuiw/CHUYENTAULYBIETV1-XUANKEN.mp3?rlkey=uug7me80pghelshev8alzy1mr&st=yhg50rjx&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV1-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Chuyến Tàu Ly Biệt (Version 2)",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV2-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/6si135ztin6lcxiaxjthn/CHUYENTAULYBIETV2-XUANKEN.mp3?rlkey=g0hnxr8pbemyv782edmeuvxhb&st=rzq1ianv&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV2-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "50 Năm Về Sau",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/50NAMVESAU-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/gx7lmver0no1ds2fg7xq3/50NAMVESAU-XUANKEN.mp3?rlkey=o3hrdj1nfkmts6nyll9gr6m8e&st=c3juscsq&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/50NAMVESAU-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Phố Cũ Còn Em",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/8dn5wczn5kywxwaael7hq/PHOCUCONEM-XUANKEN.mp3?rlkey=rtzxbgzwldj1xtb0qs8j5jq80&st=ek29uf7s&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Phố Cũ Còn Anh",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONANH-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/ecd36mpc0fwln8uayf1ob/PHOCUCONANH-XUANKEN.mp3?rlkey=a6cgjphx3k835fj0bsez7q0n0&st=thwtxs8o&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONANH-LYRIC.lrc",
+                    ""
+                ]
+            },
+            {
+                title: "Người Không Ở Lại",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIKHONGOLAI-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/8abmzuqfakf6fbdkg24hf/NGUOIKHONGOLAI-XUANKEN.mp3?rlkey=070shp3aupj7c279ohptidcqj&st=oox5m476&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIKHONGOLAI-LYRIC.lrc",
+                    "https://dl.dropboxusercontent.com/scl/fi/tn7hynsb1hi2galaid4cq/NGUOIKHONGOLAI-LYRIC.lrc?rlkey=za2vc3txmkxlqjqw16dkdp9hv&st=gyzupiuo&dl=0"
+                ]
+            }
         ];
 
         let index = Math.floor(Math.random() * songs.length);
@@ -382,11 +630,18 @@
         const lyricContainer = document.querySelector('.lyric-container');
         const progressBar = document.getElementById('progress-bar');
         const hint = document.getElementById('interaction-hint');
+        const toast = document.getElementById('toast-msg');
         
         const shuffleBtn = document.getElementById('shuffle-btn');
         const repeatBtn = document.getElementById('repeat-btn');
         const playlistOverlay = document.getElementById('playlist');
         const playlistHeader = document.getElementById('playlist-header');
+
+        function showToast(msg) {
+            toast.innerText = msg;
+            toast.style.opacity = "1";
+            setTimeout(() => { toast.style.opacity = "0"; }, 3000);
+        }
 
         function getRandomPastel() {
             const h = Math.floor(Math.random() * 360);
@@ -410,21 +665,14 @@
                 try {
                     if (document.visibilityState === 'visible') {
                         wakeLock = await navigator.wakeLock.request('screen');
-                        console.log('Wake Lock active');
                     }
-                } catch (err) {
-                    console.warn(`WakeLock Error: ${err.message}. Đây thường là do chính sách bảo mật của iframe.`);
-                }
+                } catch (err) {}
             }
         }
 
         function releaseWakeLock() {
             if (wakeLock !== null) {
-                wakeLock.release().then(() => {
-                    wakeLock = null;
-                }).catch(() => {
-                    wakeLock = null;
-                });
+                wakeLock.release().then(() => { wakeLock = null; }).catch(() => { wakeLock = null; });
             }
         }
 
@@ -444,13 +692,6 @@
                 navigator.mediaSession.setActionHandler('pause', () => audio.pause());
                 navigator.mediaSession.setActionHandler('previoustrack', () => prevSong());
                 navigator.mediaSession.setActionHandler('nexttrack', () => handleNextAction());
-                
-                navigator.mediaSession.setActionHandler('seekbackward', (details) => {
-                    audio.currentTime = Math.max(audio.currentTime - (details.seekOffset || 10), 0);
-                });
-                navigator.mediaSession.setActionHandler('seekforward', (details) => {
-                    audio.currentTime = Math.min(audio.currentTime + (details.seekOffset || 10), audio.duration);
-                });
             }
         }
 
@@ -488,11 +729,18 @@
             return result;
         }
 
-        async function fetchLyric(url) {
-            try {
-                const res = await fetch(url);
-                if (res.ok) return parseLRC(await res.text());
-            } catch (e) {}
+        async function fetchLyricWithFallback(urls) {
+            for (let i = 0; i < urls.length; i++) {
+                try {
+                    const res = await fetch(urls[i]);
+                    if (res.ok) {
+                        if (i > 0) console.log("Đã tải Lyric từ link dự phòng " + (i + 1));
+                        return parseLRC(await res.text());
+                    }
+                } catch (e) {
+                    console.error(`Lỗi tải Lyric link ${i+1}:`, e);
+                }
+            }
             return [];
         }
 
@@ -509,15 +757,15 @@
             document.documentElement.style.setProperty('--accent-color', colors.accent);
 
             audio.pause();
-            audio.src = song.audio;
+            audio.src = song.audios[0];
             audio.load();
             
             lyrics = [];
             lastLyric = "";
             adjustLyricFontSize("Đang tải...");
             progressBar.style.width = '0%';
-
-            lyrics = await fetchLyric(song.lrc);
+            
+            lyrics = await fetchLyricWithFallback(song.lrcs);
             if (lyrics.length === 0) adjustLyricFontSize("XuanKen Official");
             
             renderPlaylist();
@@ -528,6 +776,20 @@
             }
             isChanging = false;
         }
+
+        audio.onerror = () => {
+            const song = songs[index];
+            const currentSrc = audio.src;
+            
+            if (currentSrc === song.audios[0] && song.audios[1]) {
+                showToast("Link 1 lỗi, đang thử Link 2...");
+                audio.src = song.audios[1];
+                audio.load();
+                audio.play().catch(e => console.error("Lỗi link dự phòng:", e));
+            } else {
+                showToast("Lỗi: Không thể phát bài hát này!");
+            }
+        };
 
         function togglePlay() {
             if (audio.paused) audio.play().catch(() => {});
@@ -590,14 +852,6 @@
                 progressBar.style.width = (cur / dur * 100) + '%';
                 document.getElementById('time-current').innerText = formatTime(cur);
                 document.getElementById('time-total').innerText = formatTime(dur);
-                
-                if ('mediaSession' in navigator && 'setPositionState' in navigator.mediaSession) {
-                    navigator.mediaSession.setPositionState({
-                        duration: dur,
-                        playbackRate: audio.playbackRate,
-                        position: cur
-                    });
-                }
             }
             if (lyrics.length > 0) {
                 const active = lyrics.findLast(l => cur >= l.time);
