@@ -63,6 +63,14 @@
             z-index: 110;
         }
 
+        /* Thêm style cho nút hẹn giờ bên trái */
+        .top-left-action {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 110;
+        }
+
         .album-art {
             width: 160px;
             height: 160px;
@@ -295,6 +303,36 @@
             transition: opacity 0.3s;
             pointer-events: none;
         }
+
+        /* Sleep Timer Modal UI */
+        .timer-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+            z-index: 500;
+            display: none;
+            width: 90%;
+            max-width: 320px;
+            transition: all 0.3s;
+            opacity: 0;
+            text-align: center;
+        }
+        .timer-modal.show {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .timer-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 499;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -309,6 +347,11 @@
 
     <div class="player-container">
         <div class="header-section">
+            <!-- Nút hẹn giờ ở góc trên bên trái -->
+            <div class="top-left-action">
+                <div class="btn-icon" id="open-timer-btn" title="Hẹn giờ tắt"><i class="far fa-clock"></i></div>
+            </div>
+
             <div class="top-right-action">
                 <div class="btn-icon" id="list-btn" title="Danh sách bài hát"><i class="fas fa-list"></i></div>
             </div>
@@ -353,6 +396,19 @@
             </div>
             <div id="playlist-content"></div>
         </div>
+    </div>
+
+    <!-- Timer Modal -->
+    <div id="timer-overlay" class="timer-overlay"></div>
+    <div id="timer-modal" class="timer-modal">
+        <h3 class="text-lg font-bold uppercase tracking-widest">Hẹn giờ tắt</h3>
+        <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Chưa đặt hẹn giờ</p>
+        <div class="mt-5 flex flex-col gap-3">
+            <input type="number" id="timer-minutes" placeholder="Nhập số phút..." class="border p-3 rounded-lg text-center font-bold outline-none focus:border-black">
+            <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest">Bắt đầu</button>
+            <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest">Hủy hẹn giờ</button>
+        </div>
+        <button id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase">Đóng</button>
     </div>
 
     <audio id="audio-player" preload="auto" crossorigin="anonymous" playsinline></audio>
@@ -637,6 +693,16 @@
         const playlistOverlay = document.getElementById('playlist');
         const playlistHeader = document.getElementById('playlist-header');
 
+        // Elements cho Hẹn giờ
+        const openTimerBtn = document.getElementById('open-timer-btn');
+        const timerModal = document.getElementById('timer-modal');
+        const timerOverlay = document.getElementById('timer-overlay');
+        const timerStatus = document.getElementById('timer-status');
+        const timerInput = document.getElementById('timer-minutes');
+        const startTimerBtn = document.getElementById('start-timer-btn');
+        const cancelTimerBtn = document.getElementById('cancel-timer-btn');
+        const closeTimerBtn = document.getElementById('close-timer-modal');
+
         function showToast(msg) {
             toast.innerText = msg;
             toast.style.opacity = "1";
@@ -734,7 +800,6 @@
                 try {
                     const res = await fetch(urls[i]);
                     if (res.ok) {
-                        if (i > 0) console.log("Đã tải Lyric từ link dự phòng " + (i + 1));
                         return parseLRC(await res.text());
                     }
                 } catch (e) {
@@ -780,14 +845,13 @@
         audio.onerror = () => {
             const song = songs[index];
             const currentSrc = audio.src;
-            
             if (currentSrc === song.audios[0] && song.audios[1]) {
-                showToast("Link 1 lỗi, đang thử Link 2...");
+                showToast("Đang thử link dự phòng...");
                 audio.src = song.audios[1];
                 audio.load();
-                audio.play().catch(e => console.error("Lỗi link dự phòng:", e));
+                audio.play().catch(e => console.error(e));
             } else {
-                showToast("Lỗi: Không thể phát bài hát này!");
+                showToast("Lỗi: Không thể phát bài hát!");
             }
         };
 
@@ -830,9 +894,7 @@
             playIcon.className = 'fas fa-pause';
             art.style.animationPlayState = 'running';
             requestWakeLock(); 
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.playbackState = "playing";
-            }
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing";
         };
 
         audio.onpause = () => {
@@ -840,9 +902,7 @@
             playIcon.className = 'fas fa-play';
             art.style.animationPlayState = 'paused';
             releaseWakeLock(); 
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.playbackState = "paused";
-            }
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused";
         };
 
         audio.ontimeupdate = () => {
@@ -895,6 +955,69 @@
             if (!audio.duration) return;
             const rect = e.currentTarget.getBoundingClientRect();
             audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+        };
+
+        // Logic Hẹn giờ tắt nhạc
+        let sleepTimerId = null;
+        let remain = 0;
+
+        function toggleTimerModal() {
+            if (timerModal.classList.contains('show')) {
+                timerModal.classList.remove('show');
+                setTimeout(() => timerOverlay.style.display = 'none', 300);
+            } else {
+                timerOverlay.style.display = 'block';
+                setTimeout(() => timerModal.classList.add('show'), 10);
+            }
+        }
+
+        openTimerBtn.onclick = toggleTimerModal;
+        closeTimerBtn.onclick = toggleTimerModal;
+        timerOverlay.onclick = toggleTimerModal;
+
+        function setTimer() {
+            const mins = parseInt(timerInput.value);
+            if (!mins || mins <= 0) {
+                showToast("Vui lòng nhập số phút hợp lệ!");
+                return;
+            }
+            cancelTimer();
+            remain = mins * 60;
+            updateTimerUI();
+            sleepTimerId = setInterval(() => {
+                remain--;
+                updateTimerUI();
+                if (remain <= 0) {
+                    audio.pause();
+                    cancelTimer();
+                    showToast("Đã tự động tắt nhạc theo hẹn giờ.");
+                }
+            }, 1000);
+            toggleTimerModal();
+            openTimerBtn.classList.add('active');
+            showToast(`Đã hẹn giờ tắt nhạc sau ${mins} phút.`);
+        }
+
+        function cancelTimer() {
+            if (sleepTimerId) clearInterval(sleepTimerId);
+            sleepTimerId = null;
+            remain = 0;
+            timerStatus.innerText = "Chưa đặt hẹn giờ";
+            openTimerBtn.classList.remove('active');
+        }
+
+        function updateTimerUI() {
+            if (remain > 0) {
+                const m = Math.floor(remain / 60);
+                const s = remain % 60;
+                timerStatus.innerText = `Sẽ tắt sau: ${m} phút ${s} giây`;
+            }
+        }
+
+        startTimerBtn.onclick = setTimer;
+        cancelTimerBtn.onclick = () => {
+            cancelTimer();
+            showToast("Đã hủy hẹn giờ tắt nhạc.");
         };
 
         function renderPlaylist() {
