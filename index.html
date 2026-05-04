@@ -63,7 +63,6 @@
             z-index: 110;
         }
 
-        /* Thêm style cho nút hẹn giờ bên trái */
         .top-left-action {
             position: absolute;
             top: 15px;
@@ -304,7 +303,6 @@
             pointer-events: none;
         }
 
-        /* Sleep Timer Modal UI */
         .timer-modal {
             position: fixed;
             top: 50%; left: 50%;
@@ -347,7 +345,6 @@
 
     <div class="player-container">
         <div class="header-section">
-            <!-- Nút hẹn giờ ở góc trên bên trái -->
             <div class="top-left-action">
                 <div class="btn-icon" id="open-timer-btn" title="Hẹn giờ tắt"><i class="far fa-clock"></i></div>
             </div>
@@ -398,7 +395,6 @@
         </div>
     </div>
 
-    <!-- Timer Modal -->
     <div id="timer-overlay" class="timer-overlay"></div>
     <div id="timer-modal" class="timer-modal">
         <h3 class="text-lg font-bold uppercase tracking-widest">Hẹn giờ tắt</h3>
@@ -667,6 +663,17 @@
                     "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIKHONGOLAI-LYRIC.lrc",
                     "https://dl.dropboxusercontent.com/scl/fi/tn7hynsb1hi2galaid4cq/NGUOIKHONGOLAI-LYRIC.lrc?rlkey=za2vc3txmkxlqjqw16dkdp9hv&st=gyzupiuo&dl=0"
                 ]
+            },
+            {
+                title: "Mở Lòng Vì Ai",
+                audios: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/MOLONGVIAI-XUANKEN.mp3",
+                    "https://dl.dropboxusercontent.com/scl/fi/2zd1wjb03tb3k3ba0z3ds/MOLONGVIAI-XUANKEN.mp3?rlkey=6fauh5zswmdgf1zojg8ktoo4w&st=ap5i0b5z&dl=0"
+                ],
+                lrcs: [
+                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/MOLONGVIAI-LYRIC.lrc",
+                    ""
+                ]
             }
         ];
 
@@ -693,7 +700,6 @@
         const playlistOverlay = document.getElementById('playlist');
         const playlistHeader = document.getElementById('playlist-header');
 
-        // Elements cho Hẹn giờ
         const openTimerBtn = document.getElementById('open-timer-btn');
         const timerModal = document.getElementById('timer-modal');
         const timerOverlay = document.getElementById('timer-overlay');
@@ -957,7 +963,6 @@
             audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
         };
 
-        // Logic Hẹn giờ tắt nhạc
         let sleepTimerId = null;
         let remain = 0;
 
