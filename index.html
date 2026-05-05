@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/icon.png" rel="shortcut icon" type="image/x-icon" />
     <title>XuanKen Music Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -108,10 +108,22 @@
             letter-spacing: 0.5px;
             margin-bottom: 6px;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            overflow-x: auto;
+            overflow-y: hidden;
+            text-overflow: clip;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+            cursor: default;
+            max-width: 100%;
+            line-height: 1.3;
+            padding-bottom: 2px;
         }
-
+        
+        .song-title::-webkit-scrollbar {
+            height: 2px;
+            background: transparent;
+        }
+        
         .artist-name {
             display: block;
             color: #777;
@@ -275,6 +287,14 @@
             background: var(--bg-color);
             border-left: 5px solid var(--accent-color);
         }
+        
+        .song-item .item-title {
+            font-size: 0.85rem;
+            line-height: 1.3;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
 
         #interaction-hint {
             position: fixed;
@@ -331,6 +351,22 @@
             background: rgba(0,0,0,0.4);
             z-index: 499;
             display: none;
+        }
+
+        @media (max-width: 480px) {
+            .header-section {
+                padding: 30px 16px 25px 16px;
+            }
+            .album-art {
+                width: 140px;
+                height: 140px;
+            }
+            .controls-bar {
+                padding: 20px;
+            }
+            .song-title {
+                letter-spacing: 0.3px;
+            }
         }
     </style>
 </head>
@@ -414,300 +450,138 @@
         const songs = [
             {
                 title: "Ngày Em Vu Quy",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGAYEMVUQUY-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/2ix1ns96v8qc26fyizvm7/NGAYEMVUQUY-XUANKEN.mp3?rlkey=hw5ro0z9pgg4qua16ys6ofrtk&st=st9ckyf3&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYEMVUQUY-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/vd8p2aztg2oqgwvan49nh/NGAYEMVUQUY-LYRIC.lrc?rlkey=e80y122dz8ge8y60tz0e12fry&st=plt9z1sw&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGAYEMVUQUY-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/2ix1ns96v8qc26fyizvm7/NGAYEMVUQUY-XUANKEN.mp3?rlkey=hw5ro0z9pgg4qua16ys6ofrtk&st=st9ckyf3&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYEMVUQUY-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/vd8p2aztg2oqgwvan49nh/NGAYEMVUQUY-LYRIC.lrc?rlkey=e80y122dz8ge8y60tz0e12fry&st=plt9z1sw&dl=0"]
             },
             {
                 title: "Thất Tình & Làm Bạn Anh Nhé",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/THATTINHLAMBANANHNHE-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/g4k5j0x9j0bbfvt3eta9t/THATTINHLAMBANANHNHE-XUANKEN.mp3?rlkey=h1s2unsb9n0ii3poub0eu43u6&st=dbwmvk8z&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/THATTINHLAMBANANHNHE-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/6bm5qyx5t5a7fq6n68p3r/THATTINHLAMBANANHNHE-LYRIC.lrc?rlkey=3hop1nkywgwso083mdwltv7z2&st=o8nh6zok&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/THATTINHLAMBANANHNHE-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/g4k5j0x9j0bbfvt3eta9t/THATTINHLAMBANANHNHE-XUANKEN.mp3?rlkey=h1s2unsb9n0ii3poub0eu43u6&st=dbwmvk8z&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/THATTINHLAMBANANHNHE-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/6bm5qyx5t5a7fq6n68p3r/THATTINHLAMBANANHNHE-LYRIC.lrc?rlkey=3hop1nkywgwso083mdwltv7z2&st=o8nh6zok&dl=0"]
             },
             {
                 title: "Quên Nhau Đi Nhé",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/QUENNHAUDINHE-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/y7oitkaozlf1tk1bp2lh1/QUENNHAUDINHE-XUANKEN.mp3?rlkey=y3pb2acbc5db4rgnkzdmu3bb3&st=8c1hu39q&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/QUENNHAUDINHE-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/58jy9lgo054nhgybeowpu/QUENNHAUDINHE-LYRIC.lrc?rlkey=sdsf40n4a0nddbhqpctgb2ob0&st=8ckarrkq&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/QUENNHAUDINHE-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/y7oitkaozlf1tk1bp2lh1/QUENNHAUDINHE-XUANKEN.mp3?rlkey=y3pb2acbc5db4rgnkzdmu3bb3&st=8c1hu39q&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/QUENNHAUDINHE-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/58jy9lgo054nhgybeowpu/QUENNHAUDINHE-LYRIC.lrc?rlkey=sdsf40n4a0nddbhqpctgb2ob0&st=8ckarrkq&dl=0"]
             },
             {
                 title: "Ánh Mắt Em",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHMATEM-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/bjxmvn0nk43h81w1y6r8a/ANHMATEM-XUANKEN.mp3?rlkey=4tzanju49d63qkc27cdziu51g&st=mvrnng6s&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHMATEM-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/re28enq6huuyhkibdyxq6/ANHMATEM-LYRIC.lrc?rlkey=5t87c99zogg7q5a3ugss02n0u&st=fnfjr5zq&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHMATEM-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/bjxmvn0nk43h81w1y6r8a/ANHMATEM-XUANKEN.mp3?rlkey=4tzanju49d63qkc27cdziu51g&st=mvrnng6s&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHMATEM-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/re28enq6huuyhkibdyxq6/ANHMATEM-LYRIC.lrc?rlkey=5t87c99zogg7q5a3ugss02n0u&st=fnfjr5zq&dl=0"]
             },
             {
                 title: "Để Em Bên Người Khác",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DEEMBENNGUOIKHAC-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/bco0g3mdeiwrjsmyqsyv6/DEEMBENNGUOIKHAC-XUANKEN.mp3?rlkey=9gto06vls3tcnc92mn050qex2&st=042c9xjv&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DEEMBENNGUOIKHAC-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/sdw6mh5s2jbo4fmv5sjqr/DEEMBENNGUOIKHAC-LYRIC.lrc?rlkey=9ztqriimvtc3dp2x9kh536ayu&st=j0wuhpoh&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DEEMBENNGUOIKHAC-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/bco0g3mdeiwrjsmyqsyv6/DEEMBENNGUOIKHAC-XUANKEN.mp3?rlkey=9gto06vls3tcnc92mn050qex2&st=042c9xjv&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DEEMBENNGUOIKHAC-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/sdw6mh5s2jbo4fmv5sjqr/DEEMBENNGUOIKHAC-LYRIC.lrc?rlkey=9ztqriimvtc3dp2x9kh536ayu&st=j0wuhpoh&dl=0"]
             },
             {
                 title: "Người Ở Lại Trong Tim",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAITRONGTIM-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/glwck81hgjka16k9q183l/NGUOIOLAITRONGTIM-XUANKEN.mp3?rlkey=i3p7j7tr4dkpzfpo1oyz0z79h&st=mrzm37ux&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAITRONGTIM-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/nk7f9jnzixbckjxur6wiw/NGUOIOLAITRONGTIM-LYRIC.lrc?rlkey=ftjbip4j30voaiyptthhkq4hn&st=uz38oyzp&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAITRONGTIM-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/glwck81hgjka16k9q183l/NGUOIOLAITRONGTIM-XUANKEN.mp3?rlkey=i3p7j7tr4dkpzfpo1oyz0z79h&st=mrzm37ux&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAITRONGTIM-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/nk7f9jnzixbckjxur6wiw/NGUOIOLAITRONGTIM-LYRIC.lrc?rlkey=ftjbip4j30voaiyptthhkq4hn&st=uz38oyzp&dl=0"]
             },
             {
                 title: "Dính Em Mất Rồi",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DINHEMMATROI-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=7r7xqg8o&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DINHEMMATROI-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=8xrbs75m&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DINHEMMATROI-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=7r7xqg8o&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DINHEMMATROI-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=8xrbs75m&dl=0"]
             },
             {
                 title: "Sau Cơn Mưa Là Nỗi Nhớ",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SAUCONMUALANOINHO-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/ybt4ie8n1rkvodpzanz37/SAUCONMUALANOINHO-XUANKEN.mp3?rlkey=hqqplne8gn0pz5mpbo464m9sw&st=57lmttit&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAUCONMUALANOINHO-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/qh2y72mmiazu8zg81490p/SAUCONMUALANOINHO-LYRIC.lrc?rlkey=z1mtyfuta0jv2j16fypkfh8za&st=3ulsx4em&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SAUCONMUALANOINHO-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/ybt4ie8n1rkvodpzanz37/SAUCONMUALANOINHO-XUANKEN.mp3?rlkey=hqqplne8gn0pz5mpbo464m9sw&st=57lmttit&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAUCONMUALANOINHO-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/qh2y72mmiazu8zg81490p/SAUCONMUALANOINHO-LYRIC.lrc?rlkey=z1mtyfuta0jv2j16fypkfh8za&st=3ulsx4em&dl=0"]
             },
             {
                 title: "Người Ở Lại Giữa Mưa",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUA-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/g4x7mxd3q00pntnxgwzp9/NGUOIOLAIGIUAMUA-XUANKEN.mp3?rlkey=s1pe96tibyiwp1eq8krv12t0z&st=g22qdfog&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUA-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/qjseeej3866khpdn5jh3q/NGUOIOLAIGIUAMUA-LYRIC.lrc?rlkey=mqsly2tfhzk3ejlorry7gbxb2&st=u4ajumn2&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUA-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/g4x7mxd3q00pntnxgwzp9/NGUOIOLAIGIUAMUA-XUANKEN.mp3?rlkey=s1pe96tibyiwp1eq8krv12t0z&st=g22qdfog&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUA-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/qjseeej3866khpdn5jh3q/NGUOIOLAIGIUAMUA-LYRIC.lrc?rlkey=mqsly2tfhzk3ejlorry7gbxb2&st=u4ajumn2&dl=0"]
             },
             {
                 title: "Giữa Hai Người Là Cô Đơn",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/GIUAHAINGUOILACODON-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/uv8e3378ffc2vpc4vimc4/GIUAHAINGUOILACODON-XUANKEN.mp3?rlkey=crnbvb9vktzozmt0940ubhusw&st=817tfrhc&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/GIUAHAINGUOILACODON-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/50zvqzbm7qjcc80q4ajv3/GIUAHAINGUOILACODON-LYRIC.lrc?rlkey=rif6162gbidnq1z60kojcl515&st=ch0uu30y&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/GIUAHAINGUOILACODON-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/uv8e3378ffc2vpc4vimc4/GIUAHAINGUOILACODON-XUANKEN.mp3?rlkey=crnbvb9vktzozmt0940ubhusw&st=817tfrhc&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/GIUAHAINGUOILACODON-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/50zvqzbm7qjcc80q4ajv3/GIUAHAINGUOILACODON-LYRIC.lrc?rlkey=rif6162gbidnq1z60kojcl515&st=ch0uu30y&dl=0"]
             },
             {
                 title: "Chúng Ta Dừng Lại Ở Đây",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUNGTADUNGLAIODAY-XUANKEN.mp3",
-                    "https://www.dropbox.com/scl/fi/xf7ctz25m23af8fmpcjdc/CHUNGTADUNGLAIODAY-XUANKEN.mp3?rlkey=62mr2hadwouba3vyts6us548e&st=k7efytfj&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADUNGLAIODAY-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/zt6uwa21nj4a7rf2yl5yk/CHUNGTADUNGLAIODAY-LYRIC.lrc?rlkey=1tdkw5gllx62rddklruznn0xf&st=2tkdiozi&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUNGTADUNGLAIODAY-XUANKEN.mp3","https://www.dropbox.com/scl/fi/xf7ctz25m23af8fmpcjdc/CHUNGTADUNGLAIODAY-XUANKEN.mp3?rlkey=62mr2hadwouba3vyts6us548e&st=k7efytfj&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADUNGLAIODAY-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/zt6uwa21nj4a7rf2yl5yk/CHUNGTADUNGLAIODAY-LYRIC.lrc?rlkey=1tdkw5gllx62rddklruznn0xf&st=2tkdiozi&dl=0"]
             },
             {
                 title: "Đến Cuối Vẫn Là Anh",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DENCUOIVANLAANH-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/k1df0ha02l6cu7zj71ez0/DENCUOIVANLAANH-XUANKEN.mp3?rlkey=51o310ybx6oooatdw4fyc2y1e&st=kanurgew&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DENCUOIVANLANH-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/owe5ld6aghuml5gejonxh/DENCUOIVANLANH-LYRIC.lrc?rlkey=gghijpfo7ijmvnzki5j33celt&st=iwwwc0fe&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DENCUOIVANLAANH-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/k1df0ha02l6cu7zj71ez0/DENCUOIVANLAANH-XUANKEN.mp3?rlkey=51o310ybx6oooatdw4fyc2y1e&st=kanurgew&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DENCUOIVANLANH-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/owe5ld6aghuml5gejonxh/DENCUOIVANLANH-LYRIC.lrc?rlkey=gghijpfo7ijmvnzki5j33celt&st=iwwwc0fe&dl=0"]
             },
             {
                 title: "Về Quảng Ninh Với Tôi",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/VEQUANGNINHVOITOI-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/f306jvn3vl4p5cwygptdu/VEQUANGNINHVOITOI-XUANKEN.mp3?rlkey=36e07p5u5olykp6u3ygdzwtbf&st=fqgorzn7&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/VEQUANGNINHVOITOI-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/yjeve4nfqbvpos32vnztd/VEQUANGNINHVOITOI-LYRIC.lrc?rlkey=mwck80s4qzbjoukcmlsdblzsj&st=108lsdsf&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/VEQUANGNINHVOITOI-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/f306jvn3vl4p5cwygptdu/VEQUANGNINHVOITOI-XUANKEN.mp3?rlkey=36e07p5u5olykp6u3ygdzwtbf&st=fqgorzn7&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/VEQUANGNINHVOITOI-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/yjeve4nfqbvpos32vnztd/VEQUANGNINHVOITOI-LYRIC.lrc?rlkey=mwck80s4qzbjoukcmlsdblzsj&st=108lsdsf&dl=0"]
             },
             {
                 title: "Anh Yêu Em Sai Thời Điểm",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/4i6cgievzz4iv63p9maze/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3?rlkey=2akpj5xnjg9q2gi2pqosabm81&st=lkr9n1i5&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHYEUEMSAITHOIDIEM-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/4i6cgievzz4iv63p9maze/ANHYEUEMSAITHOIDIEM-XUANKEN.mp3?rlkey=2akpj5xnjg9q2gi2pqosabm81&st=lkr9n1i5&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHYEUEMSAITHOIDIEM-LYRIC.lrc",""]
             },
             {
                 title: "Đợi Chờ Trong Hạnh Phúc",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DOICHOTRONGHANHPHUC-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/i6knkkziozjb96llznl5x/DOICHOTRONGHANHPHUC-XUANKEN.mp3?rlkey=jn2bc2nou1kq9p61gpddtw9cx&st=w8o50bm3&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DOICHOTRONGHANHPHUC-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DOICHOTRONGHANHPHUC-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/i6knkkziozjb96llznl5x/DOICHOTRONGHANHPHUC-XUANKEN.mp3?rlkey=jn2bc2nou1kq9p61gpddtw9cx&st=w8o50bm3&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DOICHOTRONGHANHPHUC-LYRIC.lrc",""]
             },
             {
                 title: "Em Chỉ Là Bạn Thân",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/EMCHILABANTHAN-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/g4wy0ph5xbw1xe6jiloxs/EMCHILABANTHAN-XUANKEN.mp3?rlkey=1nvjs671dua8vs5998j0l5u9e&st=hmcwhswl&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/EMCHILABANTHAN-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/EMCHILABANTHAN-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/g4wy0ph5xbw1xe6jiloxs/EMCHILABANTHAN-XUANKEN.mp3?rlkey=1nvjs671dua8vs5998j0l5u9e&st=hmcwhswl&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/EMCHILABANTHAN-LYRIC.lrc",""]
             },
             {
                 title: "Khi",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/KHI-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/zhpyu4foriy96avkvtx5t/KHI-XUANKEN.mp3?rlkey=3a3tqb62axoqwnszc340j3c11&st=pmyh4n6c&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/KHI-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/KHI-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/zhpyu4foriy96avkvtx5t/KHI-XUANKEN.mp3?rlkey=3a3tqb62axoqwnszc340j3c11&st=pmyh4n6c&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/KHI-LYRIC.lrc",""]
             },
             {
                 title: "Chuyến Tàu Ly Biệt (Version 1)",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV1-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/itwl4qmf52swpx16zpuiw/CHUYENTAULYBIETV1-XUANKEN.mp3?rlkey=uug7me80pghelshev8alzy1mr&st=yhg50rjx&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV1-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV1-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/itwl4qmf52swpx16zpuiw/CHUYENTAULYBIETV1-XUANKEN.mp3?rlkey=uug7me80pghelshev8alzy1mr&st=yhg50rjx&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV1-LYRIC.lrc",""]
             },
             {
                 title: "Chuyến Tàu Ly Biệt (Version 2)",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV2-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/6si135ztin6lcxiaxjthn/CHUYENTAULYBIETV2-XUANKEN.mp3?rlkey=g0hnxr8pbemyv782edmeuvxhb&st=rzq1ianv&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV2-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUYENTAULYBIETV2-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/6si135ztin6lcxiaxjthn/CHUYENTAULYBIETV2-XUANKEN.mp3?rlkey=g0hnxr8pbemyv782edmeuvxhb&st=rzq1ianv&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUYENTAULYBIETV2-LYRIC.lrc",""]
             },
             {
                 title: "50 Năm Về Sau",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/50NAMVESAU-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/gx7lmver0no1ds2fg7xq3/50NAMVESAU-XUANKEN.mp3?rlkey=o3hrdj1nfkmts6nyll9gr6m8e&st=c3juscsq&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/50NAMVESAU-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/50NAMVESAU-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/gx7lmver0no1ds2fg7xq3/50NAMVESAU-XUANKEN.mp3?rlkey=o3hrdj1nfkmts6nyll9gr6m8e&st=c3juscsq&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/50NAMVESAU-LYRIC.lrc",""]
             },
             {
                 title: "Phố Cũ Còn Em",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/8dn5wczn5kywxwaael7hq/PHOCUCONEM-XUANKEN.mp3?rlkey=rtzxbgzwldj1xtb0qs8j5jq80&st=ek29uf7s&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/8dn5wczn5kywxwaael7hq/PHOCUCONEM-XUANKEN.mp3?rlkey=rtzxbgzwldj1xtb0qs8j5jq80&st=ek29uf7s&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc",""]
             },
             {
                 title: "Phố Cũ Còn Anh",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONANH-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/ecd36mpc0fwln8uayf1ob/PHOCUCONANH-XUANKEN.mp3?rlkey=a6cgjphx3k835fj0bsez7q0n0&st=thwtxs8o&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONANH-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONANH-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/ecd36mpc0fwln8uayf1ob/PHOCUCONANH-XUANKEN.mp3?rlkey=a6cgjphx3k835fj0bsez7q0n0&st=thwtxs8o&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONANH-LYRIC.lrc",""]
             },
             {
                 title: "Người Không Ở Lại",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIKHONGOLAI-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/8abmzuqfakf6fbdkg24hf/NGUOIKHONGOLAI-XUANKEN.mp3?rlkey=070shp3aupj7c279ohptidcqj&st=oox5m476&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIKHONGOLAI-LYRIC.lrc",
-                    "https://dl.dropboxusercontent.com/scl/fi/tn7hynsb1hi2galaid4cq/NGUOIKHONGOLAI-LYRIC.lrc?rlkey=za2vc3txmkxlqjqw16dkdp9hv&st=gyzupiuo&dl=0"
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIKHONGOLAI-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/8abmzuqfakf6fbdkg24hf/NGUOIKHONGOLAI-XUANKEN.mp3?rlkey=070shp3aupj7c279ohptidcqj&st=oox5m476&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIKHONGOLAI-LYRIC.lrc","https://dl.dropboxusercontent.com/scl/fi/tn7hynsb1hi2galaid4cq/NGUOIKHONGOLAI-LYRIC.lrc?rlkey=za2vc3txmkxlqjqw16dkdp9hv&st=gyzupiuo&dl=0"]
             },
             {
                 title: "Mở Lòng Vì Ai",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/MOLONGVIAI-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/2zd1wjb03tb3k3ba0z3ds/MOLONGVIAI-XUANKEN.mp3?rlkey=6fauh5zswmdgf1zojg8ktoo4w&st=ap5i0b5z&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/MOLONGVIAI-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/MOLONGVIAI-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/2zd1wjb03tb3k3ba0z3ds/MOLONGVIAI-XUANKEN.mp3?rlkey=6fauh5zswmdgf1zojg8ktoo4w&st=ap5i0b5z&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/MOLONGVIAI-LYRIC.lrc",""]
             },
             {
                 title: "Anh Thua Anh Ta",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHTHUAANHTA-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/ks07aijjdbrhig5emukf2/ANHTHUAANHTA-XUANKEN.mp3?rlkey=e99e54mwuq8371pot2bqtonuv&st=oeebbrr1&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHTHUAANHTA-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/ANHTHUAANHTA-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/ks07aijjdbrhig5emukf2/ANHTHUAANHTA-XUANKEN.mp3?rlkey=e99e54mwuq8371pot2bqtonuv&st=oeebbrr1&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/ANHTHUAANHTA-LYRIC.lrc",""]
             },
             {
                 title: "Có Chút Ngọt Ngào (Version Nữ)",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONU-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/jj0rfg3hgn29kan17yw3d/COCHUTNGOTNGAONU-XUANKEN.mp3?rlkey=sl25xj6o977i4ec9r12hfsfon&st=8j4svwjf&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONU-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONU-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/jj0rfg3hgn29kan17yw3d/COCHUTNGOTNGAONU-XUANKEN.mp3?rlkey=sl25xj6o977i4ec9r12hfsfon&st=8j4svwjf&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONU-LYRIC.lrc",""]
             },
             {
                 title: "Có Chút Ngọt Ngào (Version Nam)",
-                audios: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONAM-XUANKEN.mp3",
-                    "https://dl.dropboxusercontent.com/scl/fi/ia8dyq8rsc98fikfce0zr/COCHUTNGOTNGAONAM-XUANKEN.mp3?rlkey=6zknjbdoglz86pga5k2zy45wz&st=e2hjfkdg&dl=0"
-                ],
-                lrcs: [
-                    "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONAM-LYRIC.lrc",
-                    ""
-                ]
+                audios: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONAM-XUANKEN.mp3","https://dl.dropboxusercontent.com/scl/fi/ia8dyq8rsc98fikfce0zr/COCHUTNGOTNGAONAM-XUANKEN.mp3?rlkey=6zknjbdoglz86pga5k2zy45wz&st=e2hjfkdg&dl=0"],
+                lrcs: ["https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONAM-LYRIC.lrc",""]
             }
         ];
 
@@ -733,16 +607,34 @@
         const repeatBtn = document.getElementById('repeat-btn');
         const playlistOverlay = document.getElementById('playlist');
         const playlistHeader = document.getElementById('playlist-header');
+        const songTitleEl = document.getElementById('current-title');
 
-        const openTimerBtn = document.getElementById('open-timer-btn');
-        const timerModal = document.getElementById('timer-modal');
-        const timerOverlay = document.getElementById('timer-overlay');
-        const timerStatus = document.getElementById('timer-status');
-        const timerInput = document.getElementById('timer-minutes');
-        const startTimerBtn = document.getElementById('start-timer-btn');
-        const cancelTimerBtn = document.getElementById('cancel-timer-btn');
-        const closeTimerBtn = document.getElementById('close-timer-modal');
-
+        function autoScaleSongTitle() {
+            if (!songTitleEl) return;
+            const containerWidth = songTitleEl.parentElement?.clientWidth || window.innerWidth - 80;
+            let originalFontSize = 1.4;
+            songTitleEl.style.fontSize = originalFontSize + 'rem';
+            songTitleEl.style.whiteSpace = 'nowrap';
+            songTitleEl.style.overflowX = 'auto';
+            let currentFontSize = originalFontSize;
+            while (songTitleEl.scrollWidth > containerWidth && currentFontSize > 0.7) {
+                currentFontSize -= 0.05;
+                songTitleEl.style.fontSize = currentFontSize + 'rem';
+            }
+            if (songTitleEl.scrollWidth > containerWidth && currentFontSize <= 0.7) {
+                songTitleEl.style.whiteSpace = 'normal';
+                songTitleEl.style.wordBreak = 'break-word';
+                songTitleEl.style.fontSize = '0.75rem';
+            } else {
+                songTitleEl.style.whiteSpace = 'nowrap';
+                songTitleEl.style.overflowX = 'auto';
+            }
+        }
+        
+        const observer = new ResizeObserver(() => autoScaleSongTitle());
+        if (songTitleEl) observer.observe(songTitleEl.parentElement);
+        window.addEventListener('resize', () => autoScaleSongTitle());
+        
         function showToast(msg) {
             toast.innerText = msg;
             toast.style.opacity = "1";
@@ -751,10 +643,7 @@
 
         function getRandomPastel() {
             const h = Math.floor(Math.random() * 360);
-            return {
-                bg: `hsl(${h}, 70%, 94%)`,
-                accent: `hsl(${h}, 60%, 40%)`
-            };
+            return { bg: `hsl(${h}, 70%, 94%)`, accent: `hsl(${h}, 60%, 40%)` };
         }
 
         function scrollToActiveTop() {
@@ -768,32 +657,15 @@
 
         async function requestWakeLock() {
             if ('wakeLock' in navigator) {
-                try {
-                    if (document.visibilityState === 'visible') {
-                        wakeLock = await navigator.wakeLock.request('screen');
-                    }
-                } catch (err) {}
+                try { if (document.visibilityState === 'visible') wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
             }
         }
-
-        function releaseWakeLock() {
-            if (wakeLock !== null) {
-                wakeLock.release().then(() => { wakeLock = null; }).catch(() => { wakeLock = null; });
-            }
-        }
+        function releaseWakeLock() { if (wakeLock) { wakeLock.release().catch(()=>{}); wakeLock = null; } }
 
         function updateMediaSession() {
             if ('mediaSession' in navigator) {
                 const song = songs[index];
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: song.title,
-                    artist: 'XuanKen Official',
-                    album: 'XuanKen Music Collection',
-                    artwork: [
-                        { src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '512x512', type: 'image/png' }
-                    ]
-                });
-
+                navigator.mediaSession.metadata = new MediaMetadata({ title: song.title, artist: 'XuanKen Official', album: 'XuanKen Music Collection', artwork: [{ src: 'https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png', sizes: '512x512', type: 'image/png' }] });
                 navigator.mediaSession.setActionHandler('play', () => audio.play());
                 navigator.mediaSession.setActionHandler('pause', () => audio.pause());
                 navigator.mediaSession.setActionHandler('previoustrack', () => prevSong());
@@ -812,281 +684,74 @@
             }
         }
 
-        function formatTime(sec) {
-            if (!sec || isNaN(sec)) return "00:00";
-            let m = Math.floor(sec / 60);
-            let s = Math.floor(sec % 60);
-            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function parseLRC(text) {
-            const lines = text.split('\n');
-            const result = [];
-            const timeReg = /\[(\d+):(\d+\.\d+)\]/;
-            lines.forEach(line => {
-                const match = timeReg.exec(line);
-                if (match) {
-                    result.push({
-                        time: parseInt(match[1]) * 60 + parseFloat(match[2]),
-                        text: line.replace(timeReg, '').trim()
-                    });
-                }
-            });
-            return result;
-        }
-
-        async function fetchLyricWithFallback(urls) {
-            for (let i = 0; i < urls.length; i++) {
-                try {
-                    const res = await fetch(urls[i]);
-                    if (res.ok) {
-                        return parseLRC(await res.text());
-                    }
-                } catch (e) {
-                    console.error(`Lỗi tải Lyric link ${i+1}:`, e);
-                }
-            }
-            return [];
-        }
+        function formatTime(sec) { if (!sec || isNaN(sec)) return "00:00"; let m = Math.floor(sec / 60); let s = Math.floor(sec % 60); return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`; }
+        function parseLRC(text) { const lines = text.split('\n'); const result = []; const timeReg = /\[(\d+):(\d+\.\d+)\]/; lines.forEach(line => { const match = timeReg.exec(line); if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); }); return result; }
+        async function fetchLyricWithFallback(urls) { for (let i = 0; i < urls.length; i++) { try { const res = await fetch(urls[i]); if (res.ok) return parseLRC(await res.text()); } catch(e) { console.error(e); } } return []; }
 
         async function loadSong(i) {
             if (isChanging) return;
             isChanging = true;
             index = i;
             const song = songs[index];
-            
-            document.getElementById('current-title').innerText = song.title;
-            
+            songTitleEl.innerText = song.title;
+            autoScaleSongTitle();
             const colors = getRandomPastel();
             document.documentElement.style.setProperty('--bg-color', colors.bg);
             document.documentElement.style.setProperty('--accent-color', colors.accent);
-
             audio.pause();
             audio.src = song.audios[0];
             audio.load();
-            
             lyrics = [];
             lastLyric = "";
             adjustLyricFontSize("Đang tải...");
             progressBar.style.width = '0%';
-            
             lyrics = await fetchLyricWithFallback(song.lrcs);
             if (lyrics.length === 0) adjustLyricFontSize("XuanKen Official");
-            
             renderPlaylist();
             updateMediaSession();
-            
-            if (playlistOverlay.classList.contains('active')) {
-                setTimeout(scrollToActiveTop, 100);
-            }
+            if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
             isChanging = false;
         }
 
-        audio.onerror = () => {
-            const song = songs[index];
-            const currentSrc = audio.src;
-            if (currentSrc === song.audios[0] && song.audios[1]) {
-                showToast("Đang thử link dự phòng...");
-                audio.src = song.audios[1];
-                audio.load();
-                audio.play().catch(e => console.error(e));
-            } else {
-                showToast("Lỗi: Không thể phát bài hát!");
-            }
-        };
-
-        function togglePlay() {
-            if (audio.paused) audio.play().catch(() => {});
-            else audio.pause();
-        }
-
-        function changeSong(i) {
-            loadSong(i).then(() => audio.play().catch(() => {}));
-        }
-
-        function selectSongFromList(i) {
-            playlistOverlay.classList.remove('active');
-            changeSong(i);
-        }
-
-        function handleNextAction() {
-            if (isRepeatOne) {
-                audio.currentTime = 0;
-                audio.play();
-            } else {
-                let next;
-                if (isShuffle) {
-                    do { next = Math.floor(Math.random() * songs.length); } while (next === index && songs.length > 1);
-                } else {
-                    next = (index + 1) % songs.length;
-                }
-                changeSong(next);
-            }
-        }
-
-        function prevSong() {
-            let prev = isShuffle ? Math.floor(Math.random() * songs.length) : (index - 1 + songs.length) % songs.length;
-            changeSong(prev);
-        }
-
-        audio.onplay = () => {
-            isPlaying = true;
-            playIcon.className = 'fas fa-pause';
-            art.style.animationPlayState = 'running';
-            requestWakeLock(); 
-            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing";
-        };
-
-        audio.onpause = () => {
-            isPlaying = false;
-            playIcon.className = 'fas fa-play';
-            art.style.animationPlayState = 'paused';
-            releaseWakeLock(); 
-            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused";
-        };
-
-        audio.ontimeupdate = () => {
-            const cur = audio.currentTime;
-            const dur = audio.duration;
-            if (dur) {
-                progressBar.style.width = (cur / dur * 100) + '%';
-                document.getElementById('time-current').innerText = formatTime(cur);
-                document.getElementById('time-total').innerText = formatTime(dur);
-            }
-            if (lyrics.length > 0) {
-                const active = lyrics.findLast(l => cur >= l.time);
-                if (active && lastLyric !== active.text) {
-                    lastLyric = active.text;
-                    adjustLyricFontSize(active.text);
-                }
-            }
-        };
-
+        audio.onerror = () => { const song = songs[index]; const currentSrc = audio.src; if (currentSrc === song.audios[0] && song.audios[1]) { showToast("Đang thử link dự phòng..."); audio.src = song.audios[1]; audio.load(); audio.play().catch(e=>console.error(e)); } else showToast("Lỗi: Không thể phát bài hát!"); };
+        function togglePlay() { if (audio.paused) audio.play().catch(()=>{}); else audio.pause(); }
+        function changeSong(i) { loadSong(i).then(() => audio.play().catch(()=>{})); }
+        function selectSongFromList(i) { playlistOverlay.classList.remove('active'); changeSong(i); }
+        function handleNextAction() { if (isRepeatOne) { audio.currentTime = 0; audio.play(); } else { let next; if (isShuffle) { do { next = Math.floor(Math.random() * songs.length); } while (next === index && songs.length > 1); } else { next = (index + 1) % songs.length; } changeSong(next); } }
+        function prevSong() { let prev = isShuffle ? Math.floor(Math.random() * songs.length) : (index - 1 + songs.length) % songs.length; changeSong(prev); }
+        audio.onplay = () => { isPlaying = true; playIcon.className = 'fas fa-pause'; art.style.animationPlayState = 'running'; requestWakeLock(); if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing"; };
+        audio.onpause = () => { isPlaying = false; playIcon.className = 'fas fa-play'; art.style.animationPlayState = 'paused'; releaseWakeLock(); if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused"; };
+        audio.ontimeupdate = () => { const cur = audio.currentTime; const dur = audio.duration; if (dur) { progressBar.style.width = (cur / dur * 100) + '%'; document.getElementById('time-current').innerText = formatTime(cur); document.getElementById('time-total').innerText = formatTime(dur); } if (lyrics.length > 0) { const active = lyrics.findLast(l => cur >= l.time); if (active && lastLyric !== active.text) { lastLyric = active.text; adjustLyricFontSize(active.text); } } };
         audio.onended = handleNextAction;
-
-        hint.onclick = () => {
-            hint.style.display = 'none';
-            changeSong(index);
-        };
-
+        hint.onclick = () => { hint.style.display = 'none'; changeSong(index); };
         document.getElementById('play-pause-btn').onclick = togglePlay;
         document.getElementById('next-btn').onclick = handleNextAction;
         document.getElementById('prev-btn').onclick = prevSong;
-
-        document.getElementById('list-btn').onclick = (e) => {
-            e.stopPropagation();
-            playlistOverlay.classList.add('active');
-            setTimeout(scrollToActiveTop, 450);
-        };
-        
+        document.getElementById('list-btn').onclick = (e) => { e.stopPropagation(); playlistOverlay.classList.add('active'); setTimeout(scrollToActiveTop, 450); };
         document.getElementById('close-playlist-btn').onclick = () => playlistOverlay.classList.remove('active');
-        
-        shuffleBtn.onclick = function() {
-            isShuffle = !isShuffle;
-            this.classList.toggle('active', isShuffle);
-        };
-
-        repeatBtn.onclick = function() {
-            isRepeatOne = !isRepeatOne;
-            this.classList.toggle('active', isRepeatOne);
-        };
-
-        document.getElementById('progress-area').onclick = (e) => {
-            if (!audio.duration) return;
-            const rect = e.currentTarget.getBoundingClientRect();
-            audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-        };
-
-        let sleepTimerId = null;
-        let remain = 0;
-
-        function toggleTimerModal() {
-            if (timerModal.classList.contains('show')) {
-                timerModal.classList.remove('show');
-                setTimeout(() => timerOverlay.style.display = 'none', 300);
-            } else {
-                timerOverlay.style.display = 'block';
-                setTimeout(() => timerModal.classList.add('show'), 10);
-            }
-        }
-
-        openTimerBtn.onclick = toggleTimerModal;
-        closeTimerBtn.onclick = toggleTimerModal;
-        timerOverlay.onclick = toggleTimerModal;
-
-        function setTimer() {
-            const mins = parseInt(timerInput.value);
-            if (!mins || mins <= 0) {
-                showToast("Vui lòng nhập số phút hợp lệ!");
-                return;
-            }
-            cancelTimer();
-            remain = mins * 60;
-            updateTimerUI();
-            sleepTimerId = setInterval(() => {
-                remain--;
-                updateTimerUI();
-                if (remain <= 0) {
-                    audio.pause();
-                    cancelTimer();
-                    showToast("Đã tự động tắt nhạc theo hẹn giờ.");
-                }
-            }, 1000);
-            toggleTimerModal();
-            openTimerBtn.classList.add('active');
-            showToast(`Đã hẹn giờ tắt nhạc sau ${mins} phút.`);
-        }
-
-        function cancelTimer() {
-            if (sleepTimerId) clearInterval(sleepTimerId);
-            sleepTimerId = null;
-            remain = 0;
-            timerStatus.innerText = "Chưa đặt hẹn giờ";
-            openTimerBtn.classList.remove('active');
-        }
-
-        function updateTimerUI() {
-            if (remain > 0) {
-                const m = Math.floor(remain / 60);
-                const s = remain % 60;
-                timerStatus.innerText = `Sẽ tắt sau: ${m} phút ${s} giây`;
-            }
-        }
-
-        startTimerBtn.onclick = setTimer;
-        cancelTimerBtn.onclick = () => {
-            cancelTimer();
-            showToast("Đã hủy hẹn giờ tắt nhạc.");
-        };
-
-        function renderPlaylist() {
-            const list = document.getElementById('playlist-content');
-            list.innerHTML = songs.map((s, i) => `
-                <div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})">
-                    <div class="flex-1">
-                        <div class="item-title text-sm uppercase font-bold">${s.title}</div>
-                        <div class="text-xs text-gray-500">XuanKen Official</div>
-                    </div>
-                    ${i === index ? '<i class="fas fa-volume-up text-xs text-black"></i>' : ''}
-                </div>
-            `).join('');
-        }
-
-        document.addEventListener('visibilitychange', async () => {
-            if (document.visibilityState === 'visible' && !audio.paused) {
-                await requestWakeLock();
-            }
-        });
-
-        window.onload = () => {
-            isShuffle = true;
-            shuffleBtn.classList.add('active');
-            renderPlaylist();
-        };
-        
-        window.onresize = () => {
-            if (lastLyric) adjustLyricFontSize(lastLyric);
-        };
+        shuffleBtn.onclick = function() { isShuffle = !isShuffle; this.classList.toggle('active', isShuffle); };
+        repeatBtn.onclick = function() { isRepeatOne = !isRepeatOne; this.classList.toggle('active', isRepeatOne); };
+        document.getElementById('progress-area').onclick = (e) => { if (!audio.duration) return; const rect = e.currentTarget.getBoundingClientRect(); audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration; };
+        let sleepTimerId = null, remain = 0;
+        function toggleTimerModal() { if (timerModal.classList.contains('show')) { timerModal.classList.remove('show'); setTimeout(() => timerOverlay.style.display = 'none', 300); } else { timerOverlay.style.display = 'block'; setTimeout(() => timerModal.classList.add('show'), 10); } }
+        const openTimerBtn = document.getElementById('open-timer-btn');
+        const timerModal = document.getElementById('timer-modal');
+        const timerOverlay = document.getElementById('timer-overlay');
+        const timerStatus = document.getElementById('timer-status');
+        const timerInput = document.getElementById('timer-minutes');
+        const startTimerBtn = document.getElementById('start-timer-btn');
+        const cancelTimerBtn = document.getElementById('cancel-timer-btn');
+        const closeTimerBtn = document.getElementById('close-timer-modal');
+        openTimerBtn.onclick = toggleTimerModal; closeTimerBtn.onclick = toggleTimerModal; timerOverlay.onclick = toggleTimerModal;
+        function setTimer() { const mins = parseInt(timerInput.value); if (!mins || mins <= 0) { showToast("Vui lòng nhập số phút hợp lệ!"); return; } cancelTimer(); remain = mins * 60; updateTimerUI(); sleepTimerId = setInterval(() => { remain--; updateTimerUI(); if (remain <= 0) { audio.pause(); cancelTimer(); showToast("Đã tự động tắt nhạc theo hẹn giờ."); } }, 1000); toggleTimerModal(); openTimerBtn.classList.add('active'); showToast(`Đã hẹn giờ tắt nhạc sau ${mins} phút.`); }
+        function cancelTimer() { if (sleepTimerId) clearInterval(sleepTimerId); sleepTimerId = null; remain = 0; timerStatus.innerText = "Chưa đặt hẹn giờ"; openTimerBtn.classList.remove('active'); }
+        function updateTimerUI() { if (remain > 0) { const m = Math.floor(remain / 60); const s = remain % 60; timerStatus.innerText = `Sẽ tắt sau: ${m} phút ${s} giây`; } }
+        startTimerBtn.onclick = setTimer; cancelTimerBtn.onclick = () => { cancelTimer(); showToast("Đã hủy hẹn giờ tắt nhạc."); };
+        function renderPlaylist() { const list = document.getElementById('playlist-content'); list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${s.title}</div><div class="text-xs text-gray-500">XuanKen Official</div></div>${i === index ? '<i class="fas fa-volume-up text-xs text-black"></i>' : ''}</div>`).join(''); }
+        document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && !audio.paused) await requestWakeLock(); });
+        window.onload = () => { isShuffle = true; shuffleBtn.classList.add('active'); renderPlaylist(); autoScaleSongTitle(); };
+        window.onresize = () => { if (lastLyric) adjustLyricFontSize(lastLyric); autoScaleSongTitle(); };
+        window.selectSongFromList = selectSongFromList;
     </script>
 </body>
 </html>
