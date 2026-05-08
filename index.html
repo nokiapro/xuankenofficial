@@ -138,7 +138,6 @@
             margin-bottom: 15px;
         }
 
-        /* Container chứa lyric - căn giữa tuyệt đối */
         .lyric-container {
             min-height: 50px;
             display: flex;
@@ -150,7 +149,6 @@
             overflow: visible;
         }
 
-        /* Lyric - luôn căn giữa hoàn hảo */
         .current-lyric {
             color: #333;
             font-weight: 400;
@@ -669,10 +667,16 @@
                 audio2: "https://dl.dropboxusercontent.com/scl/fi/qiduzyfsjh7vvgvhgpdo4/SAULOIHUA-XUANKEN.mp3?rlkey=gov4w3tm22y5xdnin806niyc7&st=vy0hfcl1&dl=0",
                 lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAULOIHUA-LYRIC.lrc",
                 lrc2: "https://dl.dropboxusercontent.com/scl/fi/tiunqs1qhabr74w3bz4th/SAULOIHUA-LYRIC.lrc?rlkey=ynkwurnc3kltl30g442fwfcmb&st=ozlkxqj5&dl=0"
+            },
+            {
+                name: "Tình Khuyết",
+                audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TINHKHUYET-XUANKEN.mp3",
+                audio2: "https://dl.dropboxusercontent.com/scl/fi/ci7itof2vac38n6u28bti/TINHKHUYET-XUANKEN.mp3?rlkey=r7cxbmpd952r0xy7y41r5b0cw&st=twj1m549&dl=0",
+                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TINHKHUYET-LYRIC.lrc",
+                lrc2: ""
             }
         ];
 
-        // ================== THUẬT TOÁN SHUFFLE THÔNG MINH ==================
         let shuffleHistory = [];      
         let remainingQueue = [];      
         let currentShuffleCycle = []; 
@@ -744,7 +748,6 @@
             }
             return prevTrack;
         }
-        // ================== KẾT THÚC LOGIC SHUFFLE ==================
         
         let index = 0;
         let isPlaying = false;
@@ -841,9 +844,7 @@
             }
         }
 
-        // ========== LYRIC: CO CHỮ, CĂN GIỮA TUYỆT ĐỐI ==========
         function adjustLyricFontSize(text) {
-            // Reset hoàn toàn
             lyricDisplay.style.transform = 'none';
             lyricDisplay.style.fontSize = '16px';
             lyricDisplay.innerText = text;
@@ -853,7 +854,6 @@
             
             const textWidth = lyricDisplay.scrollWidth;
             
-            // Nếu text rộng hơn container, co lại nhưng vẫn giữ căn giữa
             if (textWidth > containerWidth - 20) {
                 const scale = (containerWidth - 20) / textWidth;
                 const finalScale = Math.max(scale, 0.5);
@@ -861,7 +861,6 @@
                 lyricDisplay.style.fontSize = '16px';
             } else {
                 lyricDisplay.style.transform = 'none';
-                // Tăng font nếu còn nhiều chỗ trống
                 let currentFontSize = 16;
                 const maxFontSize = Math.min(20, 16 + (containerWidth - textWidth) / 10);
                 while (lyricDisplay.scrollWidth < containerWidth - 30 && currentFontSize < maxFontSize) {
@@ -870,7 +869,6 @@
                 }
             }
         }
-        // ==========================================================
 
         function formatTime(sec) { if (!sec || isNaN(sec)) return "00:00"; let m = Math.floor(sec / 60); let s = Math.floor(sec % 60); return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`; }
         function parseLRC(text) { const lines = text.split('\n'); const result = []; const timeReg = /\[(\d+):(\d+\.\d+)\]/; lines.forEach(line => { const match = timeReg.exec(line); if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); }); return result; }
@@ -1001,7 +999,6 @@
             if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused"; 
         };
         
-        // Khởi tạo với shuffle thông minh
         const initIdx = getInitialShuffleIndex();
         index = initIdx;
         
