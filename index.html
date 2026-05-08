@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/icon.png" rel="shortcut icon" type="image/x-icon" />
-    <title>XuanKen Music Official - Shuffle không lặp</title>
+    <title>XuanKen Music Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -142,16 +142,17 @@
             padding: 0 10px;
         }
 
+        /* SỬA LẠI LYRIC: CHỈ 1 DÒNG, TỰ ĐỘNG CO CHỮ */
         .current-lyric {
             color: #333;
-            font-size: 1.15rem;
             font-weight: 400;
             text-align: center;
             opacity: 1;
-            transition: opacity 0.1s ease-in-out, font-size 0.2s ease;
-            white-space: nowrap;
+            transition: opacity 0.1s ease-in-out, font-size 0.1s ease;
+            white-space: nowrap;       /* Cấm xuống dòng */
             display: inline-block;
             max-width: 100%;
+            overflow-x: visible;
         }
 
         .controls-bar {
@@ -363,9 +364,6 @@
             }
             .controls-bar {
                 padding: 20px;
-            }
-            .song-title {
-                letter-spacing: 0.3px;
             }
         }
     </style>
@@ -648,7 +646,7 @@
                 name: "Bên Tách Trà Thơm (Version Nam)",
                 audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/BENTACHTRATHOMNAM-XUANKEN.mp3",
                 audio2: "https://dl.dropboxusercontent.com/scl/fi/am7ldgzplcftj3y27lnod/BENTACHTRATHOMNAM-XUANKEN.mp3?rlkey=et4mpw2qixg2ve7dzsw4k3dlt&st=y2g4vw76&dl=0",
-                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNU-LYRIC.lrc",
+                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNAM-LYRIC.lrc",
                 lrc2: "https://dl.dropboxusercontent.com/scl/fi/8w2l5akni8rvqtn1vlljk/BENTACHTRATHOMNAM-LYRIC.lrc?rlkey=yt8a0sdi0uo7ywhjrmel48euz&st=wzntz7xo&dl=0"
             },
             {
@@ -667,13 +665,11 @@
             }
         ];
 
-        // ================== THUẬT TOÁN SHUFFLE THÔNG MINH KHÔNG LẶP NHIỀU ==================
-        // Tạo một mảng chứa chỉ số bài hát được xáo trộn hoàn toàn, tránh lặp lại bài liên tục
-        let shuffleHistory = [];      // lưu lịch sử các bài đã phát gần đây (dùng để chống lặp)
-        let remainingQueue = [];      // hàng đợi các bài chưa phát trong chu kỳ shuffle hiện tại
-        let currentShuffleCycle = []; // bản sao đã được xáo trộn của toàn bộ danh sách
+        // ================== THUẬT TOÁN SHUFFLE THÔNG MINH ==================
+        let shuffleHistory = [];      
+        let remainingQueue = [];      
+        let currentShuffleCycle = []; 
         
-        // Hàm tạo một mảng xáo trộn mới (Fisher-Yates)
         function createShuffledArray() {
             const arr = [...Array(songs.length).keys()];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -683,50 +679,33 @@
             return arr;
         }
         
-        // Làm mới chu kỳ shuffle: tạo một chu kỳ mới được xáo trộn hoàn toàn
         function refreshShuffleCycle() {
             currentShuffleCycle = createShuffledArray();
             remainingQueue = [...currentShuffleCycle];
-            // Đảm bảo nếu có lịch sử, bài đầu tiên không bị trùng với bài vừa phát trước đó quá nhiều
             if (shuffleHistory.length > 0 && remainingQueue.length > 0 && remainingQueue[0] === shuffleHistory[shuffleHistory.length - 1]) {
-                // Nếu trùng với bài cuối cùng vừa phát, hoán đổi vị trí đầu tiên với một vị trí khác
                 if (remainingQueue.length > 1) {
                     [remainingQueue[0], remainingQueue[1]] = [remainingQueue[1], remainingQueue[0]];
                 }
             }
         }
         
-        // Lấy bài tiếp theo từ cơ chế shuffle thông minh (không lặp vòng lặp ngẫu nhiên)
         function getNextShuffleIndex(currentIndex) {
-            // Nếu hàng đợi shuffle trống hoặc chưa được khởi tạo, làm mới chu kỳ
             if (!remainingQueue.length || remainingQueue.length === 0) {
                 refreshShuffleCycle();
             }
-            
-            // Lấy bài đầu tiên từ hàng đợi
             const nextIndex = remainingQueue.shift();
-            
-            // Lưu vào lịch sử
             shuffleHistory.push(nextIndex);
-            // Giới hạn lịch sử (chỉ giữ lại tối đa 5 bài để tránh trùng lặp)
             if (shuffleHistory.length > 10) shuffleHistory.shift();
-            
-            // Nếu hàng đợi sắp hết và số bài còn lại dưới 20% tổng số, làm mới chu kỳ mới
-            // để luôn có một chu kỳ xáo trộn hoàn chỉnh kế tiếp
             if (remainingQueue.length === 0) {
                 refreshShuffleCycle();
             }
-            
             return nextIndex;
         }
         
-        // Reset toàn bộ trạng thái shuffle (khi người dùng bật/tắt shuffle, hoặc muốn reset)
         function resetShuffleState() {
             refreshShuffleCycle();
             shuffleHistory = [];
-            // Loại bỏ bài hiện tại khỏi hàng đợi để tránh phát lại ngay
             if (remainingQueue.length > 0 && remainingQueue[0] === index) {
-                // Nếu bài hiện tại đang ở đầu hàng đợi, ta có thể xoay vòng
                 if (remainingQueue.length > 1) {
                     const first = remainingQueue.shift();
                     remainingQueue.push(first);
@@ -740,36 +719,27 @@
             }
         }
         
-        // Hàm tạo bài đầu tiên khi bắt đầu: random nhưng đảm bảo thuật toán shuffle
         function getInitialShuffleIndex() {
             refreshShuffleCycle();
-            // Lấy bài đầu tiên từ chu kỳ xáo trộn
             const initIdx = remainingQueue.shift();
             shuffleHistory = [initIdx];
             return initIdx;
         }
         
-        // Lấy bài trước đó trong chế độ shuffle (sử dụng lịch sử)
         function getPrevShuffleIndex() {
             if (shuffleHistory.length < 2) {
-                // Nếu không có lịch sử đủ, quay lại bài random an toàn
                 return getNextShuffleIndex(index);
             }
-            // Lấy bài trước đó từ lịch sử (bỏ qua bài hiện tại)
             const prevTrack = shuffleHistory[shuffleHistory.length - 2];
-            // Xóa bài hiện tại khỏi lịch sử để tránh lặp
             shuffleHistory.pop();
-            // Thêm bài trở lại hàng đợi hiện tại? Cần xử lý để đảm bảo không phá vỡ chu kỳ
-            // Đơn giản: đẩy bài hiện tại vào lại đầu hàng đợi (nhưng phải đảm bảo không gây lặp)
             if (remainingQueue.length > 0 && !remainingQueue.includes(index)) {
                 remainingQueue.unshift(index);
             }
             return prevTrack;
         }
+        // ================== KẾT THÚC LOGIC SHUFFLE ==================
         
-        // ================== Kết thúc thuật toán shuffle thông minh ==================
-        
-        let index = 0;          // sẽ gán sau khi khởi tạo shuffle
+        let index = 0;
         let isPlaying = false;
         let isShuffle = true; 
         let isRepeatOne = false;
@@ -864,16 +834,24 @@
             }
         }
 
+        // ========== CẢI TIẾN HIỂN THỊ LYRIC: CHỈ 1 DÒNG, TỰ ĐỘNG CO CHỮ ==========
         function adjustLyricFontSize(text) {
+            // Reset font size về mặc định trước khi đo
             lyricDisplay.style.fontSize = '1.15rem';
             lyricDisplay.innerText = text;
-            const maxWidth = lyricContainer.clientWidth - 20;
-            let currentFontSize = 1.15;
-            while (lyricDisplay.offsetWidth > maxWidth && currentFontSize > 0.7) {
+            
+            const containerWidth = lyricContainer.clientWidth - 20; // trừ padding
+            if (containerWidth <= 0) return;
+            
+            let currentFontSize = 1.15; // rem
+            // Co chữ dần cho đến khi vừa với khung (hoặc chạm ngưỡng tối thiểu 0.7rem)
+            while (lyricDisplay.scrollWidth > containerWidth && currentFontSize > 0.7) {
                 currentFontSize -= 0.05;
                 lyricDisplay.style.fontSize = currentFontSize + 'rem';
             }
+            // Đảm bảo nếu vẫn chưa vừa thì giữ nguyên, nhưng không xuống dòng (white-space: nowrap đã được set)
         }
+        // =================================================================
 
         function formatTime(sec) { if (!sec || isNaN(sec)) return "00:00"; let m = Math.floor(sec / 60); let s = Math.floor(sec % 60); return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`; }
         function parseLRC(text) { const lines = text.split('\n'); const result = []; const timeReg = /\[(\d+):(\d+\.\d+)\]/; lines.forEach(line => { const match = timeReg.exec(line); if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); }); return result; }
