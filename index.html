@@ -6,7 +6,7 @@
     <link href="https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/icon.png" rel="shortcut icon" type="image/x-icon" />
     <title>XuanKen Music Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v7.2.0/css/pro.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
         
@@ -125,7 +125,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Nút play đặc biệt */
         .play-btn {
             background: #000;
             color: #fff !important;
@@ -617,11 +616,11 @@
     <div id="timer-modal" class="timer-modal">
         <i class="far fa-clock text-3xl mb-2 text-black"></i>
         <h3 class="text-lg font-bold uppercase tracking-widest">HẸN GIỜ TẮT</h3>
-        <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">⏰ Chưa đặt hẹn giờ</p>
+        <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Chưa đặt hẹn giờ</p>
         <div class="mt-5 flex flex-col gap-3">
             <input type="number" id="timer-minutes" placeholder="Nhập số phút..." class="border p-3 rounded-lg text-center font-bold outline-none focus:border-black">
-            <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest transition-all hover:bg-gray-800">▶ BẮT ĐẦU</button>
-            <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all hover:text-red-600">❌ HỦY HẸN GIỜ</button>
+            <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest transition-all hover:bg-gray-800">BẮT ĐẦU</button>
+            <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all hover:text-red-600">HỦY HẸN GIỜ</button>
         </div>
         <button id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase transition-all hover:text-gray-600">Đóng</button>
     </div>
@@ -1085,7 +1084,7 @@
             adjustLyricFontSize("Đang tải lời bài hát...");
             progressBar.style.width = '0%';
             lyrics = await fetchLyricWithFallback(song.lrc1, song.lrc2);
-            if (lyrics.length === 0) adjustLyricFontSize("🎤 XuanKen Official 🎤");
+            if (lyrics.length === 0) adjustLyricFontSize("<i class="fa-solid fa-microphone-lines"> XuanKen Official <i class="fa-solid fa-microphone-lines">");
             renderPlaylist();
             updateMediaSession();
             if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
@@ -1239,7 +1238,7 @@
         
         function renderPlaylist() { 
             const list = document.getElementById('playlist-content'); 
-            list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500">🎤 XuanKen Official</div></div>${i === index ? '<i class="fas fa-music text-xs text-black"></i>' : ''}</div>`).join(''); 
+            list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fa-solid fa-microphone-lines"></i> XuanKen Official</div></div>${i === index ? '<i class="fa-sharp fa-solid fa-music text-xs text-black"></i>' : ''}</div>`).join(''); 
         }
         
         document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && !audio.paused) await requestWakeLock(); });
