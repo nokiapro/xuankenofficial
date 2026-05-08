@@ -77,6 +77,91 @@
             z-index: 110;
         }
 
+        .btn-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #666;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .btn-icon:active::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn-icon:hover {
+            transform: scale(1.05);
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-icon:active {
+            transform: scale(0.92);
+        }
+
+        .btn-icon.active {
+            color: #000;
+            background: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Nút play đặc biệt */
+        .play-btn {
+            background: #000;
+            color: #fff !important;
+            width: 55px;
+            height: 55px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: #1a1a1a;
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .top-right-action .btn-icon,
+        .top-left-action .btn-icon {
+            background: rgba(0, 0, 0, 0.03);
+            backdrop-filter: blur(4px);
+        }
+
+        .top-right-action .btn-icon:hover,
+        .top-left-action .btn-icon:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .top-right-action .btn-icon:active,
+        .top-left-action .btn-icon:active {
+            transform: rotate(0deg) scale(0.92);
+        }
+
         .album-art {
             width: 160px;
             height: 160px;
@@ -86,6 +171,11 @@
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             border: 5px solid #fff;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .album-art:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
         }
 
         .album-art img {
@@ -94,6 +184,7 @@
             object-fit: cover;
             animation: rotate 15s linear infinite;
             animation-play-state: paused;
+            transition: transform 0.3s ease;
         }
 
         @keyframes rotate {
@@ -154,7 +245,7 @@
             font-weight: 400;
             text-align: center;
             opacity: 1;
-            transition: opacity 0.1s ease-in-out;
+            transition: opacity 0.2s ease-in-out;
             white-space: nowrap;
             display: inline-block;
             transform-origin: center center;
@@ -177,6 +268,7 @@
             border-radius: 10px;
             margin-bottom: 8px;
             transition: background-color 0.8s ease;
+            overflow: hidden;
         }
 
         .progress-filled {
@@ -185,6 +277,25 @@
             width: 0%;
             border-radius: 10px;
             transition: width 0.1s linear, background-color 0.8s ease;
+            position: relative;
+        }
+
+        .progress-filled::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .progress-bar-container:hover .progress-filled::after {
+            opacity: 1;
         }
 
         .time-info {
@@ -199,30 +310,15 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 5px;
         }
 
-        .btn-icon {
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: #666;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            transition: 0.2s;
+        .main-actions .btn-icon {
+            transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        .btn-icon:active { transform: scale(0.9); }
-        .btn-icon.active { color: #000; background: rgba(0,0,0,0.05); }
-
-        .play-btn {
-            background: #000;
-            color: #fff !important;
-            width: 55px;
-            height: 55px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .main-actions .btn-icon:active {
+            transform: scale(0.9);
         }
 
         .playlist {
@@ -265,6 +361,16 @@
             justify-content: center;
             align-items: center;
             border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .close-playlist:hover {
+            background: rgba(0, 0, 0, 0.05);
+            transform: rotate(90deg);
+        }
+
+        .close-playlist:active {
+            transform: rotate(90deg) scale(0.9);
         }
 
         .playlist-title {
@@ -284,10 +390,34 @@
             padding: 14px 20px;
             cursor: pointer;
             border-bottom: 1px solid var(--border-color);
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .song-item:hover { background: #f9f9f9; }
+        .song-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.03);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .song-item:hover::before {
+            width: 100%;
+        }
+
+        .song-item:hover {
+            padding-left: 25px;
+        }
+
+        .song-item:active {
+            transform: scale(0.98);
+        }
 
         .song-item.active {
             background: var(--bg-color);
@@ -312,6 +442,16 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            transition: opacity 0.5s ease;
+        }
+
+        #interaction-hint .loader {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         #toast-msg {
@@ -319,15 +459,18 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
             z-index: 9999;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
             pointer-events: none;
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+            font-weight: 500;
         }
 
         .timer-modal {
@@ -336,13 +479,13 @@
             transform: translate(-50%, -50%) scale(0.9);
             background: white;
             padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             z-index: 500;
             display: none;
             width: 90%;
             max-width: 320px;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             opacity: 0;
             text-align: center;
         }
@@ -357,6 +500,25 @@
             background: rgba(0,0,0,0.4);
             z-index: 499;
             display: none;
+            backdrop-filter: blur(2px);
+        }
+
+        .timer-modal input {
+            transition: all 0.2s ease;
+        }
+
+        .timer-modal input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+        }
+
+        .timer-modal button {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .timer-modal button:active {
+            transform: scale(0.97);
         }
 
         @media (max-width: 480px) {
@@ -380,17 +542,21 @@
     <div id="interaction-hint">
         <div class="loader mb-4 border-4 border-gray-200 border-t-black rounded-full w-12 h-12 animate-spin"></div>
         <p class="font-bold text-2xl text-center px-4 tracking-tighter">XUANKEN MUSIC OFFICIAL</p>
-        <p class="text-gray-500 text-sm mt-2">Chạm để bắt đầu nghe nhạc</p>
+        <p class="text-gray-500 text-sm mt-2">✨ Chạm để bắt đầu nghe nhạc ✨</p>
     </div>
 
     <div class="player-container">
         <div class="header-section">
             <div class="top-left-action">
-                <div class="btn-icon" id="open-timer-btn" title="Hẹn giờ tắt"><i class="far fa-clock"></i></div>
+                <div class="btn-icon" id="open-timer-btn" title="Hẹn giờ tắt">
+                    <i class="far fa-clock"></i>
+                </div>
             </div>
 
             <div class="top-right-action">
-                <div class="btn-icon" id="list-btn" title="Danh sách bài hát"><i class="fas fa-list"></i></div>
+                <div class="btn-icon" id="list-btn" title="Danh sách bài hát">
+                    <i class="fas fa-list"></i>
+                </div>
             </div>
             
             <div class="album-art">
@@ -400,7 +566,7 @@
                 <span class="song-title" id="current-title">Sẵn sàng</span>
                 <span class="artist-name" id="current-artist">XuanKen Official</span>
                 <div class="lyric-container" id="lyric-container">
-                    <div class="current-lyric" id="lyric-text">Chọn bài hát để phát</div>
+                    <div class="current-lyric" id="lyric-text">✨ Chọn bài hát để phát ✨</div>
                 </div>
             </div>
         </div>
@@ -417,18 +583,30 @@
             </div>
 
             <div class="main-actions">
-                <div class="btn-icon" id="shuffle-btn" title="Phát ngẫu nhiên"><i class="fas fa-random"></i></div>
-                <div class="btn-icon" id="prev-btn"><i class="fas fa-step-backward"></i></div>
-                <div class="btn-icon play-btn" id="play-pause-btn"><i class="fas fa-play" id="play-icon"></i></div>
-                <div class="btn-icon" id="next-btn"><i class="fas fa-step-forward"></i></div>
-                <div class="btn-icon" id="repeat-btn" title="Lặp lại 1 bài"><i class="fas fa-redo-alt"></i><sub style="font-size: 10px; margin-left: -4px;">1</sub></div>
+                <div class="btn-icon" id="shuffle-btn" title="Phát ngẫu nhiên">
+                    <i class="fas fa-random"></i>
+                </div>
+                <div class="btn-icon" id="prev-btn" title="Bài trước">
+                    <i class="fas fa-step-backward"></i>
+                </div>
+                <div class="btn-icon play-btn" id="play-pause-btn" title="Phát / Tạm dừng">
+                    <i class="fas fa-play" id="play-icon"></i>
+                </div>
+                <div class="btn-icon" id="next-btn" title="Bài tiếp">
+                    <i class="fas fa-step-forward"></i>
+                </div>
+                <div class="btn-icon" id="repeat-btn" title="Lặp lại 1 bài">
+                    <i class="fas fa-redo-alt"></i>
+                </div>
             </div>
         </div>
 
         <div class="playlist" id="playlist">
             <div class="playlist-header" id="playlist-header">
-                <div class="close-playlist" id="close-playlist-btn"><i class="fas fa-times"></i></div>
-                <div class="playlist-title">Danh sách bài hát</div>
+                <div class="close-playlist" id="close-playlist-btn">
+                    <i class="fas fa-times"></i>
+                </div>
+                <div class="playlist-title">🎵 DANH SÁCH BÀI HÁT 🎵</div>
                 <div style="width: 40px;"></div> 
             </div>
             <div id="playlist-content"></div>
@@ -437,14 +615,15 @@
 
     <div id="timer-overlay" class="timer-overlay"></div>
     <div id="timer-modal" class="timer-modal">
-        <h3 class="text-lg font-bold uppercase tracking-widest">Hẹn giờ tắt</h3>
-        <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Chưa đặt hẹn giờ</p>
+        <i class="far fa-clock text-3xl mb-2 text-black"></i>
+        <h3 class="text-lg font-bold uppercase tracking-widest">HẸN GIỜ TẮT</h3>
+        <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">⏰ Chưa đặt hẹn giờ</p>
         <div class="mt-5 flex flex-col gap-3">
             <input type="number" id="timer-minutes" placeholder="Nhập số phút..." class="border p-3 rounded-lg text-center font-bold outline-none focus:border-black">
-            <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest">Bắt đầu</button>
-            <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest">Hủy hẹn giờ</button>
+            <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest transition-all hover:bg-gray-800">▶ BẮT ĐẦU</button>
+            <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all hover:text-red-600">❌ HỦY HẸN GIỜ</button>
         </div>
-        <button id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase">Đóng</button>
+        <button id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase transition-all hover:text-gray-600">Đóng</button>
     </div>
 
     <audio id="audio-player" preload="auto" crossorigin="anonymous" playsinline></audio>
@@ -903,10 +1082,10 @@
             audio.load();
             lyrics = [];
             lastLyric = "";
-            adjustLyricFontSize("Đang tải...");
+            adjustLyricFontSize("Đang tải lời bài hát...");
             progressBar.style.width = '0%';
             lyrics = await fetchLyricWithFallback(song.lrc1, song.lrc2);
-            if (lyrics.length === 0) adjustLyricFontSize("XuanKen Official");
+            if (lyrics.length === 0) adjustLyricFontSize("🎤 XuanKen Official 🎤");
             renderPlaylist();
             updateMediaSession();
             if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
@@ -1060,7 +1239,7 @@
         
         function renderPlaylist() { 
             const list = document.getElementById('playlist-content'); 
-            list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500">XuanKen Official</div></div>${i === index ? '<i class="fas fa-volume-up text-xs text-black"></i>' : ''}</div>`).join(''); 
+            list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500">🎤 XuanKen Official</div></div>${i === index ? '<i class="fas fa-music text-xs text-black"></i>' : ''}</div>`).join(''); 
         }
         
         document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && !audio.paused) await requestWakeLock(); });
