@@ -133,26 +133,27 @@
         }
 
         .lyric-container {
-            height: 50px;
+            min-height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
             width: 100%;
             padding: 0 10px;
+            position: relative;
+            overflow: visible;
         }
 
-        /* SỬA LẠI LYRIC: CHỈ 1 DÒNG, TỰ ĐỘNG CO CHỮ */
+        /* SỬA LẠI LYRIC: CHỈ 1 DÒNG, CO CHỮ, KHÔNG CUỘN NGANG */
         .current-lyric {
             color: #333;
             font-weight: 400;
             text-align: center;
             opacity: 1;
-            transition: opacity 0.1s ease-in-out, font-size 0.1s ease;
-            white-space: nowrap;       /* Cấm xuống dòng */
+            transition: opacity 0.1s ease-in-out;
+            white-space: nowrap;
             display: inline-block;
+            transform-origin: center center;
             max-width: 100%;
-            overflow-x: visible;
         }
 
         .controls-bar {
@@ -394,7 +395,7 @@
             <div class="song-info-main">
                 <span class="song-title" id="current-title">Sẵn sàng</span>
                 <span class="artist-name" id="current-artist">XuanKen Official</span>
-                <div class="lyric-container">
+                <div class="lyric-container" id="lyric-container">
                     <div class="current-lyric" id="lyric-text">Chọn bài hát để phát</div>
                 </div>
             </div>
@@ -646,7 +647,7 @@
                 name: "Bên Tách Trà Thơm (Version Nam)",
                 audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/BENTACHTRATHOMNAM-XUANKEN.mp3",
                 audio2: "https://dl.dropboxusercontent.com/scl/fi/am7ldgzplcftj3y27lnod/BENTACHTRATHOMNAM-XUANKEN.mp3?rlkey=et4mpw2qixg2ve7dzsw4k3dlt&st=y2g4vw76&dl=0",
-                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNAM-LYRIC.lrc",
+                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNU-LYRIC.lrc",
                 lrc2: "https://dl.dropboxusercontent.com/scl/fi/8w2l5akni8rvqtn1vlljk/BENTACHTRATHOMNAM-LYRIC.lrc?rlkey=yt8a0sdi0uo7ywhjrmel48euz&st=wzntz7xo&dl=0"
             },
             {
@@ -752,7 +753,7 @@
         const playIcon = document.getElementById('play-icon');
         const art = document.getElementById('current-art');
         const lyricDisplay = document.getElementById('lyric-text');
-        const lyricContainer = document.querySelector('.lyric-container');
+        const lyricContainer = document.getElementById('lyric-container');
         const progressBar = document.getElementById('progress-bar');
         const hint = document.getElementById('interaction-hint');
         const toast = document.getElementById('toast-msg');
@@ -834,24 +835,35 @@
             }
         }
 
-        // ========== CẢI TIẾN HIỂN THỊ LYRIC: CHỈ 1 DÒNG, TỰ ĐỘNG CO CHỮ ==========
+        // ========== GIẢI PHÁP LYRIC: CO CHỮ, KHÔNG CUỘN NGANG ==========
         function adjustLyricFontSize(text) {
-            // Reset font size về mặc định trước khi đo
-            lyricDisplay.style.fontSize = '1.15rem';
+            // Reset về trạng thái ban đầu
+            lyricDisplay.style.transform = 'scale(1)';
+            lyricDisplay.style.fontSize = '16px';
             lyricDisplay.innerText = text;
             
-            const containerWidth = lyricContainer.clientWidth - 20; // trừ padding
+            const containerWidth = lyricContainer.clientWidth - 20;
             if (containerWidth <= 0) return;
             
-            let currentFontSize = 1.15; // rem
-            // Co chữ dần cho đến khi vừa với khung (hoặc chạm ngưỡng tối thiểu 0.7rem)
-            while (lyricDisplay.scrollWidth > containerWidth && currentFontSize > 0.7) {
-                currentFontSize -= 0.05;
-                lyricDisplay.style.fontSize = currentFontSize + 'rem';
+            const textWidth = lyricDisplay.scrollWidth;
+            
+            // Nếu text rộng hơn container, co lại
+            if (textWidth > containerWidth) {
+                const scale = containerWidth / textWidth;
+                const finalScale = Math.max(scale, 0.5);
+                lyricDisplay.style.transform = `scale(${finalScale})`;
+                lyricDisplay.style.fontSize = '16px';
+            } else {
+                lyricDisplay.style.transform = 'scale(1)';
+                // Tăng nhẹ font nếu còn dư chỗ
+                let currentFontSize = 16;
+                while (lyricDisplay.scrollWidth < containerWidth - 10 && currentFontSize < 20) {
+                    currentFontSize += 1;
+                    lyricDisplay.style.fontSize = currentFontSize + 'px';
+                }
             }
-            // Đảm bảo nếu vẫn chưa vừa thì giữ nguyên, nhưng không xuống dòng (white-space: nowrap đã được set)
         }
-        // =================================================================
+        // ==========================================================
 
         function formatTime(sec) { if (!sec || isNaN(sec)) return "00:00"; let m = Math.floor(sec / 60); let s = Math.floor(sec % 60); return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`; }
         function parseLRC(text) { const lines = text.split('\n'); const result = []; const timeReg = /\[(\d+):(\d+\.\d+)\]/; lines.forEach(line => { const match = timeReg.exec(line); if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); }); return result; }
