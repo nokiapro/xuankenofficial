@@ -16,6 +16,12 @@
             --border-color: #f0f0f0;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Roboto Condensed', sans-serif;
             background-color: var(--bg-color);
@@ -143,7 +149,7 @@
             overflow: visible;
         }
 
-        /* SỬA LẠI LYRIC: CHỈ 1 DÒNG, CO CHỮ, KHÔNG CUỘN NGANG */
+        /* CĂN GIỮA LYRIC HOÀN HẢO TRÊN MỌI MÀN HÌNH */
         .current-lyric {
             color: #333;
             font-weight: 400;
@@ -154,6 +160,10 @@
             display: inline-block;
             transform-origin: center center;
             max-width: 100%;
+            position: relative;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
         }
 
         .controls-bar {
@@ -647,7 +657,7 @@
                 name: "Bên Tách Trà Thơm (Version Nam)",
                 audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/BENTACHTRATHOMNAM-XUANKEN.mp3",
                 audio2: "https://dl.dropboxusercontent.com/scl/fi/am7ldgzplcftj3y27lnod/BENTACHTRATHOMNAM-XUANKEN.mp3?rlkey=et4mpw2qixg2ve7dzsw4k3dlt&st=y2g4vw76&dl=0",
-                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNU-LYRIC.lrc",
+                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNAM-LYRIC.lrc",
                 lrc2: "https://dl.dropboxusercontent.com/scl/fi/8w2l5akni8rvqtn1vlljk/BENTACHTRATHOMNAM-LYRIC.lrc?rlkey=yt8a0sdi0uo7ywhjrmel48euz&st=wzntz7xo&dl=0"
             },
             {
@@ -835,7 +845,7 @@
             }
         }
 
-        // ========== GIẢI PHÁP LYRIC: CO CHỮ, KHÔNG CUỘN NGANG ==========
+        // ========== LYRIC: CO CHỮ, CĂN GIỮA, KHÔNG CUỘN NGANG ==========
         function adjustLyricFontSize(text) {
             // Reset về trạng thái ban đầu
             lyricDisplay.style.transform = 'scale(1)';
@@ -855,15 +865,19 @@
                 lyricDisplay.style.fontSize = '16px';
             } else {
                 lyricDisplay.style.transform = 'scale(1)';
-                // Tăng nhẹ font nếu còn dư chỗ
+                // Tăng nhẹ font nếu còn dư chỗ (tối đa 20px)
                 let currentFontSize = 16;
                 while (lyricDisplay.scrollWidth < containerWidth - 10 && currentFontSize < 20) {
                     currentFontSize += 1;
                     lyricDisplay.style.fontSize = currentFontSize + 'px';
                 }
             }
+            
+            // Đảm bảo căn giữa
+            lyricDisplay.style.display = 'inline-block';
+            lyricDisplay.style.margin = '0 auto';
         }
-        // ==========================================================
+        // ===============================================================
 
         function formatTime(sec) { if (!sec || isNaN(sec)) return "00:00"; let m = Math.floor(sec / 60); let s = Math.floor(sec % 60); return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`; }
         function parseLRC(text) { const lines = text.split('\n'); const result = []; const timeReg = /\[(\d+):(\d+\.\d+)\]/; lines.forEach(line => { const match = timeReg.exec(line); if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); }); return result; }
