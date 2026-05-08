@@ -674,7 +674,7 @@
             {
                 name: "Dính Em Mất Rồi",
                 audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DINHEMMATROI-XUANKEN.mp3",
-                audio2: "https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=7r7xqg8o&dl=0",
+                audio2: "https://dl.dropboxusercontent.com/scl/fi/8m7n5q4r2s9t3v1w6x8y9/DINHEMMATROI-XUANKEN.mp3?rlkey=abc123&st=xyz789&dl=0",
                 lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DINHEMMATROI-LYRIC.lrc",
                 lrc2: "https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=8xrbs75m&dl=0"
             },
@@ -702,7 +702,7 @@
             {
                 name: "Chúng Ta Dừng Lại Ở Đây",
                 audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUNGTADUNGLAIODAY-XUANKEN.mp3",
-                audio2: "https://www.dropbox.com/scl/fi/xf7ctz25m23af8fmpcjdc/CHUNGTADUNGLAIODAY-XUANKEN.mp3?rlkey=62mr2hadwouba3vyts6us548e&st=k7efytfj&dl=0",
+                audio2: "https://dl.dropboxusercontent.com/scl/fi/xf7ctz25m23af8fmpcjdc/CHUNGTADUNGLAIODAY-XUANKEN.mp3?rlkey=62mr2hadwouba3vyts6us548e&st=k7efytfj&dl=0",
                 lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADUNGLAIODAY-LYRIC.lrc",
                 lrc2: "https://dl.dropboxusercontent.com/scl/fi/zt6uwa21nj4a7rf2yl5yk/CHUNGTADUNGLAIODAY-LYRIC.lrc?rlkey=1tdkw5gllx62rddklruznn0xf&st=2tkdiozi&dl=0"
             },
@@ -898,16 +898,16 @@
             return nextIndex;
         }
         
-        function resetShuffleState() {
+        function resetShuffleState(currentIdx) {
             refreshShuffleCycle();
             shuffleHistory = [];
-            if (remainingQueue.length > 0 && remainingQueue[0] === index) {
+            if (remainingQueue.length > 0 && remainingQueue[0] === currentIdx) {
                 if (remainingQueue.length > 1) {
                     const first = remainingQueue.shift();
                     remainingQueue.push(first);
                 } else {
                     refreshShuffleCycle();
-                    if (remainingQueue[0] === index && remainingQueue.length > 1) {
+                    if (remainingQueue[0] === currentIdx && remainingQueue.length > 1) {
                         const first = remainingQueue.shift();
                         remainingQueue.push(first);
                     }
@@ -1084,7 +1084,7 @@
             adjustLyricFontSize("Đang tải lời bài hát...");
             progressBar.style.width = '0%';
             lyrics = await fetchLyricWithFallback(song.lrc1, song.lrc2);
-            if (lyrics.length === 0) adjustLyricFontSize("<i class="fa-solid fa-microphone-lines"> XuanKen Official <i class="fa-solid fa-microphone-lines">");
+            if (lyrics.length === 0) adjustLyricFontSize("🎤 XuanKen Official 🎤");
             renderPlaylist();
             updateMediaSession();
             if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
@@ -1198,7 +1198,7 @@
             isShuffle = !isShuffle; 
             this.classList.toggle('active', isShuffle);
             if (isShuffle) {
-                resetShuffleState();
+                resetShuffleState(index);
                 showToast("Đã bật xáo trộn thông minh (không lặp bài liên tục)");
             } else {
                 showToast("Đã tắt xáo trộn, phát tuần tự");
