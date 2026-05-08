@@ -138,6 +138,7 @@
             margin-bottom: 15px;
         }
 
+        /* Container chứa lyric - căn giữa tuyệt đối */
         .lyric-container {
             min-height: 50px;
             display: flex;
@@ -149,7 +150,7 @@
             overflow: visible;
         }
 
-        /* CĂN GIỮA LYRIC HOÀN HẢO TRÊN MỌI MÀN HÌNH */
+        /* Lyric - luôn căn giữa hoàn hảo */
         .current-lyric {
             color: #333;
             font-weight: 400;
@@ -159,11 +160,6 @@
             white-space: nowrap;
             display: inline-block;
             transform-origin: center center;
-            max-width: 100%;
-            position: relative;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
         }
 
         .controls-bar {
@@ -845,39 +841,36 @@
             }
         }
 
-        // ========== LYRIC: CO CHỮ, CĂN GIỮA, KHÔNG CUỘN NGANG ==========
+        // ========== LYRIC: CO CHỮ, CĂN GIỮA TUYỆT ĐỐI ==========
         function adjustLyricFontSize(text) {
-            // Reset về trạng thái ban đầu
-            lyricDisplay.style.transform = 'scale(1)';
+            // Reset hoàn toàn
+            lyricDisplay.style.transform = 'none';
             lyricDisplay.style.fontSize = '16px';
             lyricDisplay.innerText = text;
             
-            const containerWidth = lyricContainer.clientWidth - 20;
+            const containerWidth = lyricContainer.clientWidth;
             if (containerWidth <= 0) return;
             
             const textWidth = lyricDisplay.scrollWidth;
             
-            // Nếu text rộng hơn container, co lại
-            if (textWidth > containerWidth) {
-                const scale = containerWidth / textWidth;
+            // Nếu text rộng hơn container, co lại nhưng vẫn giữ căn giữa
+            if (textWidth > containerWidth - 20) {
+                const scale = (containerWidth - 20) / textWidth;
                 const finalScale = Math.max(scale, 0.5);
                 lyricDisplay.style.transform = `scale(${finalScale})`;
                 lyricDisplay.style.fontSize = '16px';
             } else {
-                lyricDisplay.style.transform = 'scale(1)';
-                // Tăng nhẹ font nếu còn dư chỗ (tối đa 20px)
+                lyricDisplay.style.transform = 'none';
+                // Tăng font nếu còn nhiều chỗ trống
                 let currentFontSize = 16;
-                while (lyricDisplay.scrollWidth < containerWidth - 10 && currentFontSize < 20) {
+                const maxFontSize = Math.min(20, 16 + (containerWidth - textWidth) / 10);
+                while (lyricDisplay.scrollWidth < containerWidth - 30 && currentFontSize < maxFontSize) {
                     currentFontSize += 1;
                     lyricDisplay.style.fontSize = currentFontSize + 'px';
                 }
             }
-            
-            // Đảm bảo căn giữa
-            lyricDisplay.style.display = 'inline-block';
-            lyricDisplay.style.margin = '0 auto';
         }
-        // ===============================================================
+        // ==========================================================
 
         function formatTime(sec) { if (!sec || isNaN(sec)) return "00:00"; let m = Math.floor(sec / 60); let s = Math.floor(sec % 60); return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`; }
         function parseLRC(text) { const lines = text.split('\n'); const result = []; const timeReg = /\[(\d+):(\d+\.\d+)\]/; lines.forEach(line => { const match = timeReg.exec(line); if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); }); return result; }
