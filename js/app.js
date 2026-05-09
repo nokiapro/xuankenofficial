@@ -140,14 +140,14 @@ const songs = [
         lrc2: ""
     },
     {
-        name: "Phố Cũ Còn Em",
+        name: "Phố Cũ Còn Em (Version Nam)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/8dn5wczn5kywxwaael7hq/PHOCUCONEM-XUANKEN.mp3?rlkey=rtzxbgzwldj1xtb0qs8j5jq80&st=ek29uf7s&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc",
         lrc2: ""
     },
     {
-        name: "Phố Cũ Còn Anh",
+        name: "Phố Cũ Còn Anh (Version Nữ)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONANH-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/ecd36mpc0fwln8uayf1ob/PHOCUCONANH-XUANKEN.mp3?rlkey=a6cgjphx3k835fj0bsez7q0n0&st=thwtxs8o&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONANH-LYRIC.lrc",
@@ -231,10 +231,17 @@ const songs = [
         lrc2: ""
     },
     {
-        name: "Tiêu Dao Tuyệt Nhất",
-        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TIEUDAOTUYETNHAT-XUANKEN.mp3",
-        audio2: "https://dl.dropboxusercontent.com/scl/fi/ld980diejeofykttnxkoo/TIEUDAOTUYETNHAT-XUANKEN.mp3?rlkey=36rqkvzjra48zjul5mwqapxmu&st=10rmgfd3&dl=0",
-        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TIEUDAOTUYETNHAT-LYRIC.lrc",
+        name: "Tiêu Dao Tuyệt Nhất (Version Nữ)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TIEUDAOTUYETNHATNU-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/0tyy5hyl9hkns6cvobb03/TIEUDAOTUYETNHATNU-XUANKEN.mp3?rlkey=9roii9h3gkytex2pnoeksdgqq&st=zdoy5osc&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TIEUDAOTUYETNHATNU-LYRIC.lrc",
+        lrc2: ""
+    },
+    {
+        name: "Tiêu Dao Tuyệt Nhất (Version Nam)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TIEUDAOTUYETNHATNAM-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/nh33b9axnj1y96hbhh0a6/TIEUDAOTUYETNHATNAM-XUANKEN.mp3?rlkey=u0zdtwjtb6rqrxkahnmd65kl4&st=3twzmajs&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TIEUDAOTUYETNHATNAM-LYRIC.lrc",
         lrc2: ""
     }
 ];
@@ -472,7 +479,7 @@ async function loadSong(i) {
     adjustLyricFontSize("Đang tải lời bài hát...");
     progressBar.style.width = '0%';
     lyrics = await fetchLyricWithFallback(song.lrc1, song.lrc2);
-    if (lyrics.length === 0) adjustLyricFontSize("🎤 XuanKen Official 🎤");
+    if (lyrics.length === 0) adjustLyricFontSize("🎙 XuanKen Official 🎙");
     renderPlaylist();
     updateMediaSession();
     if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
