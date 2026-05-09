@@ -243,6 +243,13 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/nh33b9axnj1y96hbhh0a6/TIEUDAOTUYETNHATNAM-XUANKEN.mp3?rlkey=u0zdtwjtb6rqrxkahnmd65kl4&st=3twzmajs&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TIEUDAOTUYETNHATNAM-LYRIC.lrc",
         lrc2: ""
+    },
+    {
+        name: "Người Ở Lại Giữa Mưa (Version 2)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUAVER2-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/44c09c51exat9668nhtww/NGUOIOLAIGIUAMUAVER2-XUANKEN.mp3?rlkey=y14l1nnrdjx0onu8xmke0r18i&st=qj8di2ur&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUAVER2-LYRIC.lrc",
+        lrc2: ""
     }
 ];
 
