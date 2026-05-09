@@ -6,7 +6,7 @@
     <link href="https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/icon.png" rel="shortcut icon" type="image/x-icon" />
     <title>XuanKen Music Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v7.2.0/css/pro.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
         
@@ -674,7 +674,7 @@
             {
                 name: "Dính Em Mất Rồi",
                 audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DINHEMMATROI-XUANKEN.mp3",
-                audio2: "https://dl.dropboxusercontent.com/scl/fi/8m7n5q4r2s9t3v1w6x8y9/DINHEMMATROI-XUANKEN.mp3?rlkey=abc123&st=xyz789&dl=0",
+                audio2: "https://dl.dropboxusercontent.com/scl/fi/cfqtazmwwi5uetvuz8sgk/DINHEMMATROI-XUANKEN.mp3?rlkey=k48q2oh8gof6da5gkqnp55n1v&st=6jssy0zf&dl=0",
                 lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DINHEMMATROI-LYRIC.lrc",
                 lrc2: "https://dl.dropboxusercontent.com/scl/fi/l34neac0q9979eba51trr/DINHEMMATROI-LYRIC.lrc?rlkey=c14ci8ghv3ukslx30ngso68be&st=8xrbs75m&dl=0"
             },
@@ -859,12 +859,28 @@
                 audio2: "https://dl.dropboxusercontent.com/scl/fi/s8vomb8b9qkb4pxo05lkw/NGOIBENEM-XUANKEN.mp3?rlkey=ckrqm58my2zx30jtoh74016nr&st=174y8syy&dl=0",
                 lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGOIBENEM-LYRIC.lrc",
                 lrc2: ""
+            },
+            {
+                name: "Tiêu Dao Tuyệt Nhất",
+                audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TIEUDAOTUYETNHAT-XUANKEN.mp3",
+                audio2: "https://dl.dropboxusercontent.com/scl/fi/ld980diejeofykttnxkoo/TIEUDAOTUYETNHAT-XUANKEN.mp3?rlkey=36rqkvzjra48zjul5mwqapxmu&st=10rmgfd3&dl=0",
+                lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TIEUDAOTUYETNHAT-LYRIC.lrc",
+                lrc2: ""
             }
         ];
 
         let shuffleHistory = [];      
         let remainingQueue = [];      
         let currentShuffleCycle = []; 
+        let currentIndex = 0;
+        let isPlaying = false;
+        let isShuffle = true; 
+        let isRepeatOne = false;
+        let isChanging = false;
+        let lyrics = [];
+        let lastLyric = "";
+        let wakeLock = null; 
+        let isLoopingHandled = false;
         
         function createShuffledArray() {
             const arr = [...Array(songs.length).keys()];
@@ -885,7 +901,7 @@
             }
         }
         
-        function getNextShuffleIndex(currentIndex) {
+        function getNextShuffleIndex(currentIdx) {
             if (!remainingQueue.length || remainingQueue.length === 0) {
                 refreshShuffleCycle();
             }
@@ -924,24 +940,15 @@
         
         function getPrevShuffleIndex() {
             if (shuffleHistory.length < 2) {
-                return getNextShuffleIndex(index);
+                return getNextShuffleIndex(currentIndex);
             }
             const prevTrack = shuffleHistory[shuffleHistory.length - 2];
             shuffleHistory.pop();
-            if (remainingQueue.length > 0 && !remainingQueue.includes(index)) {
-                remainingQueue.unshift(index);
+            if (remainingQueue.length > 0 && !remainingQueue.includes(currentIndex)) {
+                remainingQueue.unshift(currentIndex);
             }
             return prevTrack;
         }
-        
-        let index = 0;
-        let isPlaying = false;
-        let isShuffle = true; 
-        let isRepeatOne = false;
-        let isChanging = false;
-        let lyrics = [];
-        let lastLyric = "";
-        let wakeLock = null; 
         
         const audio = document.getElementById('audio-player');
         const playIcon = document.getElementById('play-icon');
@@ -958,34 +965,6 @@
         const playlistHeader = document.getElementById('playlist-header');
         const songTitleEl = document.getElementById('current-title');
 
-        let isLoopingHandled = false;
-
-        function autoScaleSongTitle() {
-            if (!songTitleEl) return;
-            const containerWidth = songTitleEl.parentElement?.clientWidth || window.innerWidth - 80;
-            let originalFontSize = 1.4;
-            songTitleEl.style.fontSize = originalFontSize + 'rem';
-            songTitleEl.style.whiteSpace = 'nowrap';
-            songTitleEl.style.overflowX = 'auto';
-            let currentFontSize = originalFontSize;
-            while (songTitleEl.scrollWidth > containerWidth && currentFontSize > 0.7) {
-                currentFontSize -= 0.05;
-                songTitleEl.style.fontSize = currentFontSize + 'rem';
-            }
-            if (songTitleEl.scrollWidth > containerWidth && currentFontSize <= 0.7) {
-                songTitleEl.style.whiteSpace = 'normal';
-                songTitleEl.style.wordBreak = 'break-word';
-                songTitleEl.style.fontSize = '0.75rem';
-            } else {
-                songTitleEl.style.whiteSpace = 'nowrap';
-                songTitleEl.style.overflowX = 'auto';
-            }
-        }
-        
-        const observer = new ResizeObserver(() => autoScaleSongTitle());
-        if (songTitleEl) observer.observe(songTitleEl.parentElement);
-        window.addEventListener('resize', () => autoScaleSongTitle());
-        
         function showToast(msg) {
             toast.innerText = msg;
             toast.style.opacity = "1";
@@ -1015,7 +994,7 @@
 
         function updateMediaSession() {
             if ('mediaSession' in navigator) {
-                const song = songs[index];
+                const song = songs[currentIndex];
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: song.name,
                     artist: 'XuanKen Official',
@@ -1056,21 +1035,60 @@
         }
 
         function formatTime(sec) { if (!sec || isNaN(sec)) return "00:00"; let m = Math.floor(sec / 60); let s = Math.floor(sec % 60); return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`; }
-        function parseLRC(text) { const lines = text.split('\n'); const result = []; const timeReg = /\[(\d+):(\d+\.\d+)\]/; lines.forEach(line => { const match = timeReg.exec(line); if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); }); return result; }
+        
+        function parseLRC(text) { 
+            const lines = text.split('\n'); 
+            const result = []; 
+            const timeReg = /\[(\d+):(\d+\.\d+)\]/; 
+            lines.forEach(line => { 
+                const match = timeReg.exec(line); 
+                if (match) result.push({ time: parseInt(match[1]) * 60 + parseFloat(match[2]), text: line.replace(timeReg, '').trim() }); 
+            }); 
+            return result; 
+        }
         
         async function fetchLyricWithFallback(lrc1, lrc2) {
             const urls = [lrc1, lrc2].filter(url => url && url.trim() !== "");
             for (let i = 0; i < urls.length; i++) {
-                try { const res = await fetch(urls[i]); if (res.ok) return parseLRC(await res.text()); } catch(e) { console.error(e); }
+                try { 
+                    const res = await fetch(urls[i]); 
+                    if (res.ok) return parseLRC(await res.text()); 
+                } catch(e) { console.error(e); }
             }
             return [];
         }
 
+        function autoScaleSongTitle() {
+            if (!songTitleEl) return;
+            const containerWidth = songTitleEl.parentElement?.clientWidth || window.innerWidth - 80;
+            let originalFontSize = 1.4;
+            songTitleEl.style.fontSize = originalFontSize + 'rem';
+            songTitleEl.style.whiteSpace = 'nowrap';
+            songTitleEl.style.overflowX = 'auto';
+            let currentFontSize = originalFontSize;
+            while (songTitleEl.scrollWidth > containerWidth && currentFontSize > 0.7) {
+                currentFontSize -= 0.05;
+                songTitleEl.style.fontSize = currentFontSize + 'rem';
+            }
+            if (songTitleEl.scrollWidth > containerWidth && currentFontSize <= 0.7) {
+                songTitleEl.style.whiteSpace = 'normal';
+                songTitleEl.style.wordBreak = 'break-word';
+                songTitleEl.style.fontSize = '0.75rem';
+            } else {
+                songTitleEl.style.whiteSpace = 'nowrap';
+                songTitleEl.style.overflowX = 'auto';
+            }
+        }
+        
+        const observer = new ResizeObserver(() => autoScaleSongTitle());
+        if (songTitleEl) observer.observe(songTitleEl.parentElement);
+        window.addEventListener('resize', () => autoScaleSongTitle());
+
         async function loadSong(i) {
             if (isChanging) return;
             isChanging = true;
-            index = i;
-            const song = songs[index];
+            currentIndex = i;
+            const song = songs[currentIndex];
             songTitleEl.innerText = song.name;
             autoScaleSongTitle();
             const colors = getRandomPastel();
@@ -1092,7 +1110,7 @@
         }
 
         audio.onerror = () => { 
-            const song = songs[index]; 
+            const song = songs[currentIndex]; 
             const currentSrc = audio.src; 
             if (currentSrc === song.audio1 && song.audio2 && song.audio2.trim() !== "") { 
                 showToast("Đang thử link dự phòng..."); 
@@ -1120,9 +1138,9 @@
             } else { 
                 let next;
                 if (isShuffle) {
-                    next = getNextShuffleIndex(index);
+                    next = getNextShuffleIndex(currentIndex);
                 } else {
-                    next = (index + 1) % songs.length;
+                    next = (currentIndex + 1) % songs.length;
                 }
                 changeSong(next); 
             } 
@@ -1138,7 +1156,7 @@
             if (isShuffle) {
                 prev = getPrevShuffleIndex();
             } else {
-                prev = (index - 1 + songs.length) % songs.length;
+                prev = (currentIndex - 1 + songs.length) % songs.length;
             }
             changeSong(prev); 
         }
@@ -1185,9 +1203,9 @@
         };
         
         const initIdx = getInitialShuffleIndex();
-        index = initIdx;
+        currentIndex = initIdx;
         
-        hint.onclick = () => { hint.style.display = 'none'; changeSong(index); };
+        hint.onclick = () => { hint.style.display = 'none'; changeSong(currentIndex); };
         document.getElementById('play-pause-btn').onclick = togglePlay;
         document.getElementById('next-btn').onclick = handleNextAction;
         document.getElementById('prev-btn').onclick = prevSong;
@@ -1198,7 +1216,7 @@
             isShuffle = !isShuffle; 
             this.classList.toggle('active', isShuffle);
             if (isShuffle) {
-                resetShuffleState(index);
+                resetShuffleState(currentIndex);
                 showToast("Đã bật xáo trộn thông minh (không lặp bài liên tục)");
             } else {
                 showToast("Đã tắt xáo trộn, phát tuần tự");
@@ -1206,6 +1224,7 @@
         };
         
         repeatBtn.onclick = function() { isRepeatOne = !isRepeatOne; this.classList.toggle('active', isRepeatOne); isLoopingHandled = false; showToast(isRepeatOne ? "Đã bật lặp lại 1 bài" : "Đã tắt lặp lại 1 bài"); };
+        
         document.getElementById('progress-area').onclick = (e) => { if (!audio.duration) return; const rect = e.currentTarget.getBoundingClientRect(); audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration; };
         
         let sleepTimerId = null, remain = 0;
@@ -1238,11 +1257,19 @@
         
         function renderPlaylist() { 
             const list = document.getElementById('playlist-content'); 
-            list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fa-solid fa-microphone-lines"></i> XuanKen Official</div></div>${i === index ? '<i class="fa-sharp fa-solid fa-music text-xs text-black"></i>' : ''}</div>`).join(''); 
+            list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === currentIndex ? 'active' : ''}" onclick="window.selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fas fa-microphone-alt"></i> XuanKen Official</div></div>${i === currentIndex ? '<i class="fas fa-music text-xs text-black"></i>' : ''}</div>`).join(''); 
         }
         
         document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && !audio.paused) await requestWakeLock(); });
-        window.onload = () => { isShuffle = true; shuffleBtn.classList.add('active'); renderPlaylist(); autoScaleSongTitle(); if ('mediaSession' in navigator) updateMediaSession(); };
+        
+        window.onload = () => { 
+            isShuffle = true; 
+            shuffleBtn.classList.add('active'); 
+            renderPlaylist(); 
+            autoScaleSongTitle(); 
+            if ('mediaSession' in navigator) updateMediaSession(); 
+        };
+        
         window.onresize = () => { if (lastLyric) adjustLyricFontSize(lastLyric); autoScaleSongTitle(); };
         window.selectSongFromList = selectSongFromList;
     </script>
