@@ -194,10 +194,9 @@ body {
     letter-spacing: 0.5px;
     margin-bottom: 6px;
     white-space: nowrap;
-    overflow-x: auto;
+    overflow-x: visible;
     overflow-y: hidden;
     text-overflow: clip;
-    scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
     cursor: default;
     max-width: 100%;
