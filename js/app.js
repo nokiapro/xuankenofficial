@@ -419,7 +419,7 @@ function autoScaleSongTitle() {
     let originalFontSize = 1.4;
     songTitleEl.style.fontSize = originalFontSize + 'rem';
     songTitleEl.style.whiteSpace = 'nowrap';
-    songTitleEl.style.overflowX = 'auto';
+    songTitleEl.style.overflowX = 'visible';
     let currentFontSize = originalFontSize;
     while (songTitleEl.scrollWidth > containerWidth && currentFontSize > 0.7) {
         currentFontSize -= 0.05;
@@ -431,7 +431,7 @@ function autoScaleSongTitle() {
         songTitleEl.style.fontSize = '0.75rem';
     } else {
         songTitleEl.style.whiteSpace = 'nowrap';
-        songTitleEl.style.overflowX = 'auto';
+        songTitleEl.style.overflowX = 'visible';
     }
 }
 
