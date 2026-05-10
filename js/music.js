@@ -778,12 +778,12 @@ function setTimer(minutes) {
     showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
 }
 
-// Xử lý chọn nút nhanh (15p, 30p, 60p)
-timerPresetBtns.forEach(btn => {
+// Xử lý nút bấm nhanh 15 - 30 - 60
+document.querySelectorAll('.timer-preset-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        const mins = parseInt(btn.getAttribute('data-minutes'));
-        if (!isNaN(mins)) {
-            timerMinutesInput.value = mins;
+        const minutes = parseInt(btn.getAttribute('data-minutes'));
+        if (!isNaN(minutes)) {
+            document.getElementById('timer-minutes').value = minutes;
         }
     });
 });
