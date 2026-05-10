@@ -685,6 +685,7 @@ const cancelTimerBtn = document.getElementById('cancel-timer-btn');
 const closeTimerModalBtn = document.getElementById('close-timer-modal');
 const timerPresetBtns = document.querySelectorAll('.timer-preset');
 
+// Mở/đóng modal
 function toggleTimerModal() {
     if (timerModal.classList.contains('show')) {
         timerModal.classList.remove('show');
@@ -701,6 +702,7 @@ function toggleTimerModal() {
     }
 }
 
+// Hủy hẹn giờ
 function cancelTimer() {
     if (sleepTimerId) {
         clearTimeout(sleepTimerId);
@@ -711,22 +713,24 @@ function cancelTimer() {
         countdownInterval = null;
     }
     remainSeconds = 0;
-    timerStatus.innerHTML = 'CHƯA ĐẶT HẸN GIỜ';
+    timerStatus.innerHTML = '⏳ Chưa đặt hẹn giờ';
     openTimerBtn.classList.remove('active');
 }
 
+// Cập nhật giao diện khi còn thời gian
 function updateTimerDisplay() {
     if (remainSeconds > 0) {
         const mins = Math.floor(remainSeconds / 60);
         const secs = remainSeconds % 60;
-        timerStatus.innerHTML = `TẮT SAU: <strong>${mins}</strong> PHÚT <strong>${secs}</strong> GIÂY`;
+        timerStatus.innerHTML = `⏰ Tắt sau: <strong>${mins}</strong> phút <strong>${secs}</strong> giây`;
         openTimerBtn.classList.add('active');
     } else {
-        timerStatus.innerHTML = 'CHƯA ĐẶT HẸN GIỜ';
+        timerStatus.innerHTML = '⏳ Chưa đặt hẹn giờ';
         openTimerBtn.classList.remove('active');
     }
 }
 
+// Bắt đầu đếm ngược
 function startCountdown(seconds) {
     if (countdownInterval) clearInterval(countdownInterval);
     remainSeconds = seconds;
@@ -741,8 +745,8 @@ function startCountdown(seconds) {
                 sleepTimerId = null;
             }
             audio.pause();
-            showToast('ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!');
-            timerStatus.innerHTML = 'ĐÃ TẮT NHẠC';
+            showToast('⏰ Đã tự động tắt nhạc theo hẹn giờ!');
+            timerStatus.innerHTML = '🔇 Đã tắt nhạc';
             openTimerBtn.classList.remove('active');
         } else {
             remainSeconds--;
@@ -751,6 +755,7 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
+// Đặt hẹn giờ
 function setTimer(minutes) {
     if (!minutes || minutes <= 0) {
         showToast('VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!');
@@ -770,9 +775,10 @@ function setTimer(minutes) {
 
     startCountdown(seconds);
     toggleTimerModal();
-    showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} phút.`);
+    showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
 }
 
+// Xử lý chọn nút nhanh (15p, 30p, 60p)
 timerPresetBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         const mins = parseInt(btn.getAttribute('data-minutes'));
@@ -782,6 +788,7 @@ timerPresetBtns.forEach(btn => {
     });
 });
 
+// Gán sự kiện
 openTimerBtn.onclick = toggleTimerModal;
 closeTimerModalBtn.onclick = toggleTimerModal;
 timerOverlay.onclick = toggleTimerModal;
@@ -791,7 +798,7 @@ startTimerBtn.onclick = () => {
 };
 cancelTimerBtn.onclick = () => {
     cancelTimer();
-    showToast('ĐÃ HỦY HẸN GIỜ TẮT NHẠC.');
+    showToast('ĐÃ HUỶ HẸN GIỜ TẮT NHẠC.');
     toggleTimerModal();
 };
 
