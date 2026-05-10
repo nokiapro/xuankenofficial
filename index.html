@@ -88,17 +88,25 @@
     </div>
 
     <div id="timer-overlay" class="timer-overlay"></div>
-    <div id="timer-modal" class="timer-modal">
-        <i class="far fa-clock text-3xl mb-2 text-black"></i>
-        <h3 class="text-lg font-bold uppercase tracking-widest">HẸN GIỜ TẮT</h3>
-        <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Chưa đặt hẹn giờ</p>
-        <div class="mt-5 flex flex-col gap-3">
-            <input type="number" id="timer-minutes" placeholder="Nhập số phút..." class="border p-3 rounded-lg text-center font-bold outline-none focus:border-black">
-            <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest transition-all hover:bg-gray-800">BẮT ĐẦU</button>
-            <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all hover:text-red-600">HỦY HẸN GIỜ</button>
-        </div>
-        <button id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase transition-all hover:text-gray-600">Đóng</button>
+<div id="timer-modal" class="timer-modal">
+    <i class="far fa-clock text-3xl mb-2 text-black"></i>
+    <h3 class="text-lg font-bold uppercase tracking-widest">HẸN GIỜ TẮT</h3>
+    <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Chưa đặt hẹn giờ</p>
+    
+    <!-- Nút bấm nhanh 15 - 30 - 60 phút -->
+    <div class="flex justify-center gap-2 mt-4">
+        <button class="timer-preset-btn" data-minutes="15" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer;">15p</button>
+        <button class="timer-preset-btn" data-minutes="30" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer;">30p</button>
+        <button class="timer-preset-btn" data-minutes="60" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer;">60p</button>
     </div>
+    
+    <div class="mt-5 flex flex-col gap-3">
+        <input type="number" id="timer-minutes" placeholder="Hoặc nhập số phút..." class="border p-3 rounded-lg text-center font-bold outline-none focus:border-black">
+        <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest transition-all hover:bg-gray-800">BẮT ĐẦU</button>
+        <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all hover:text-red-600">HỦY HẸN GIỜ</button>
+    </div>
+    <button id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase transition-all hover:text-gray-600">Đóng</button>
+</div>
 
     <audio id="audio-player" preload="auto" crossorigin="anonymous" playsinline></audio>
 
