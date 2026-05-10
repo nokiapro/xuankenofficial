@@ -271,6 +271,13 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/c8hf7evi016i7alew1xz0/DENCUOIVANLAANHREMAKE-XUANKEN.mp3?rlkey=nlnsdomphrlv3ste7xbofhm3u&st=b3l7wdlo&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DENCUOIVANLAANHREMAKE-LYRIC.lrc",
         lrc2: ""
+    },
+    {
+        name: "Lo Người Ướt Áo",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/LONGUOIUOTAO-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/m5y2g1dg6zyyyjejvmkab/LONGUOIUOTAO-XUANKEN.mp3?rlkey=dtx7v8qbzz5kwroqb70rxbf8k&st=al9tsqi6&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/LONGUOIUOTAO-LYRIC.lrc",
+        lrc2: ""
     }
 ];
 
