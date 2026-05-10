@@ -245,10 +245,31 @@ const songs = [
         lrc2: ""
     },
     {
-        name: "Người Ở Lại Giữa Mưa (Version 2)",
-        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUAVER2-XUANKEN.mp3",
-        audio2: "https://dl.dropboxusercontent.com/scl/fi/44c09c51exat9668nhtww/NGUOIOLAIGIUAMUAVER2-XUANKEN.mp3?rlkey=y14l1nnrdjx0onu8xmke0r18i&st=qj8di2ur&dl=0",
-        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUAVER2-LYRIC.lrc",
+        name: "Người Ở Lại Giữa Mưa (Remake)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUAREMAKE-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/xcb88dzoba7jqhdioqr26/NGUOIOLAIGIUAMUAREMAKE-XUANKEN.mp3?rlkey=s64xw2cf1tu1ge6t1nif3fgkh&st=4ak2r3lx&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGUOIOLAIGIUAMUAREMAKE-LYRIC.lrc",
+        lrc2: ""
+    },
+    {
+        name: "Sau Cơn Mưa Là Nỗi Nhớ (Remake)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SAUCONMUALANOINHOREMAKE-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/4nhyf9wfo22zcf8kepvos/SAUCONMUALANOINHOREMAKE-XUANKEN.mp3?rlkey=qnn35aewi5kkbz8iesz6dyyev&st=qzktv3d1&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAUCONMUALANOINHOREMAKE-LYRIC.lrc",
+        lrc2: ""
+    },
+    {
+        name: "Giữa Những Ngày Không Em (Remake)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/GIUANHUNGNGAYKHONGEMREMAKE-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/6zuwv2yodirdkjvim82vt/GIUANHUNGNGAYKHONGEMREMAKE-XUANKEN.mp3?rlkey=iherk1r703qn5tqth0trrlc2x&st=0epeuuql&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/GIUANHUNGNGAYKHONGEMREMAKE-LYRIC.lrc",
+        lrc2: ""
+    },
+    {
+        name: "Đến Cuối Vẫn Là Anh (Remake)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DENCUOIVANLAANHREMAKE-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/c8hf7evi016i7alew1xz0/DENCUOIVANLAANHREMAKE-XUANKEN.mp3?rlkey=nlnsdomphrlv3ste7xbofhm3u&st=b3l7wdlo&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/DENCUOIVANLAANHREMAKE-LYRIC.lrc",
         lrc2: ""
     }
 ];
