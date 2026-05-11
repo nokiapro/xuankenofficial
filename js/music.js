@@ -471,6 +471,7 @@ function autoScaleSongTitle() {
 }
 
 function adjustLyricFontSize(text) {
+    if (!lyricDisplay || !lyricContainer) return;
     lyricDisplay.style.transform = 'none';
     lyricDisplay.style.fontSize = '16px';
     lyricDisplay.innerText = text;
@@ -501,7 +502,7 @@ async function loadSong(i) {
     isChanging = true;
     index = i;
     const song = songs[index];
-    songTitleEl.innerText = song.name;
+    if (songTitleEl) songTitleEl.innerText = song.name;
     autoScaleSongTitle();
     const colors = getRandomPastel();
     document.documentElement.style.setProperty('--bg-color', colors.bg);
@@ -526,7 +527,7 @@ function changeSong(i) {
 }
 
 function selectSongFromList(i) {
-    playlistOverlay.classList.remove('active');
+    if (playlistOverlay) playlistOverlay.classList.remove('active');
     changeSong(i);
 }
 
@@ -581,8 +582,10 @@ audio.ontimeupdate = () => {
     const dur = audio.duration;
     if (dur) {
         progressBar.style.width = (cur / dur * 100) + '%';
-        document.getElementById('time-current').innerText = formatTime(cur);
-        document.getElementById('time-total').innerText = formatTime(dur);
+        const timeCurrent = document.getElementById('time-current');
+        const timeTotal = document.getElementById('time-total');
+        if (timeCurrent) timeCurrent.innerText = formatTime(cur);
+        if (timeTotal) timeTotal.innerText = formatTime(dur);
     }
     if (lyrics.length > 0) {
         const active = lyrics.findLast(l => cur >= l.time);
@@ -609,16 +612,16 @@ audio.onended = () => {
 
 audio.onplay = () => {
     isPlaying = true;
-    playIcon.className = 'fas fa-pause';
-    art.style.animationPlayState = 'running';
+    if (playIcon) playIcon.className = 'fas fa-pause';
+    if (art) art.style.animationPlayState = 'running';
     requestWakeLock();
     if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing";
 };
 
 audio.onpause = () => {
     isPlaying = false;
-    playIcon.className = 'fas fa-play';
-    art.style.animationPlayState = 'paused';
+    if (playIcon) playIcon.className = 'fas fa-play';
+    if (art) art.style.animationPlayState = 'paused';
     releaseWakeLock();
     if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused";
 };
@@ -634,43 +637,64 @@ function escapeHtml(str) {
 
 function renderPlaylist() {
     const list = document.getElementById('playlist-content');
-    list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fas fa-microphone-alt"></i> XuanKen Official</div></div>${i === index ? '<i class="fas fa-music text-xs text-black"></i>' : ''}</div>`).join('');
+    if (!list) return;
+    list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="window.selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fas fa-microphone-alt"></i> XuanKen Official</div></div>${i === index ? '<i class="fas fa-music text-xs text-black"></i>' : ''}</div>`).join('');
 }
 
 const initIdx = getInitialShuffleIndex();
 index = initIdx;
 
-hint.onclick = () => { hint.style.display = 'none'; changeSong(index); };
-document.getElementById('play-pause-btn').onclick = togglePlay;
-document.getElementById('next-btn').onclick = handleNextAction;
-document.getElementById('prev-btn').onclick = prevSong;
-document.getElementById('list-btn').onclick = (e) => { e.stopPropagation(); renderPlaylist(); playlistOverlay.classList.add('active'); setTimeout(scrollToActiveTop, 150); };
-document.getElementById('close-playlist-btn').onclick = () => playlistOverlay.classList.remove('active');
+if (hint) hint.onclick = () => { hint.style.display = 'none'; changeSong(index); };
 
-shuffleBtn.onclick = function () {
-    isShuffle = !isShuffle;
-    this.classList.toggle('active', isShuffle);
-    if (isShuffle) {
-        resetShuffleState(index);
-        showToast("ĐÃ BẬT XÁO TRỘN THÔNG MINH");
-    } else {
-        showToast("ĐÃ TẮT XÁO TRỘN, PHÁT TUẦN TỰ");
-    }
-};
+const playPauseBtn = document.getElementById('play-pause-btn');
+if (playPauseBtn) playPauseBtn.onclick = togglePlay;
 
-repeatBtn.onclick = function () {
-    isRepeatOne = !isRepeatOne;
-    this.classList.toggle('active', isRepeatOne);
-    isLoopingHandled = false;
-    showToast(isRepeatOne ? "BẠN ĐÃ BẬT LẶP LẠI 1 BÀI" : "BẠN ĐÃ TẮT LẶP LẠI");
-};
+const nextBtn = document.getElementById('next-btn');
+if (nextBtn) nextBtn.onclick = handleNextAction;
 
-document.getElementById('progress-area').onclick = (e) => {
-    if (!audio.duration) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-};
+const prevBtn = document.getElementById('prev-btn');
+if (prevBtn) prevBtn.onclick = prevSong;
 
+const listBtn = document.getElementById('list-btn');
+if (listBtn) {
+    listBtn.onclick = (e) => { e.stopPropagation(); renderPlaylist(); if (playlistOverlay) playlistOverlay.classList.add('active'); setTimeout(scrollToActiveTop, 150); };
+}
+
+const closePlaylistBtn = document.getElementById('close-playlist-btn');
+if (closePlaylistBtn && playlistOverlay) closePlaylistBtn.onclick = () => playlistOverlay.classList.remove('active');
+
+if (shuffleBtn) {
+    shuffleBtn.onclick = function () {
+        isShuffle = !isShuffle;
+        this.classList.toggle('active', isShuffle);
+        if (isShuffle) {
+            resetShuffleState(index);
+            showToast("ĐÃ BẬT XÁO TRỘN THÔNG MINH");
+        } else {
+            showToast("ĐÃ TẮT XÁO TRỘN, PHÁT TUẦN TỰ");
+        }
+    };
+}
+
+if (repeatBtn) {
+    repeatBtn.onclick = function () {
+        isRepeatOne = !isRepeatOne;
+        this.classList.toggle('active', isRepeatOne);
+        isLoopingHandled = false;
+        showToast(isRepeatOne ? "BẠN ĐÃ BẬT LẶP LẠI 1 BÀI" : "BẠN ĐÃ TẮT LẶP LẠI");
+    };
+}
+
+const progressArea = document.getElementById('progress-area');
+if (progressArea) {
+    progressArea.onclick = (e) => {
+        if (!audio.duration) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+    };
+}
+
+// ==================== TIMER SECTION - ĐÃ SỬA HOÀN CHỈNH ====================
 let sleepTimerId = null;
 let countdownInterval = null;
 let remainSeconds = 0;
@@ -682,9 +706,10 @@ const startTimerBtn = document.getElementById('start-timer-btn');
 const cancelTimerBtn = document.getElementById('cancel-timer-btn');
 const timerMinutesInput = document.getElementById('timer-minutes');
 const timerStatus = document.getElementById('timer-status');
+const closeTimerModalBtn = document.getElementById('close-timer-modal');
 
 // Lấy tất cả nút preset
-const presetBtns = document.querySelectorAll('.timer-preset');
+const presetBtns = document.querySelectorAll('.timer-preset, .timer-preset-btn');
 console.log('Đã tìm thấy', presetBtns.length, 'nút hẹn giờ');
 
 function toggleTimerModal() {
@@ -779,24 +804,18 @@ function setTimer(minutes) {
     }, seconds * 1000);
 
     startCountdown(seconds);
-    toggleTimerModal(); // Tự động đóng modal
+    toggleTimerModal();
     showToast(`✅ ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
 }
 
-// ===== XỬ LÝ NÚT PRESET - QUAN TRỌNG =====
+// ===== XỬ LÝ NÚT PRESET - TỰ ĐỘNG BẮT ĐẦU =====
 presetBtns.forEach(btn => {
-    // Xóa hết event cũ (nếu có)
-    btn.removeEventListener('click', () => {});
-    
-    // Thêm event mới
     btn.addEventListener('click', function(e) {
         e.stopPropagation();
         console.log('Đã click vào nút:', this.textContent);
         
-        // Lấy số phút từ data-minutes
         let minutes = parseInt(this.getAttribute('data-minutes'));
         
-        // Nếu không có data-minutes, lấy từ text
         if (isNaN(minutes)) {
             const text = this.textContent;
             if (text.includes('30')) minutes = 30;
@@ -809,9 +828,7 @@ presetBtns.forEach(btn => {
         console.log('Số phút lấy được:', minutes);
         
         if (minutes > 0) {
-            // Cập nhật input
             if (timerMinutesInput) timerMinutesInput.value = minutes;
-            // TỰ ĐỘNG BẮT ĐẦU
             setTimer(minutes);
         } else {
             console.error('Không lấy được số phút');
@@ -820,12 +837,10 @@ presetBtns.forEach(btn => {
     });
 });
 
-// Event cho nút mở modal
-if (openTimerBtn) {
-    openTimerBtn.onclick = toggleTimerModal;
-}
+if (openTimerBtn) openTimerBtn.onclick = toggleTimerModal;
+if (closeTimerModalBtn) closeTimerModalBtn.onclick = toggleTimerModal;
+if (timerOverlay) timerOverlay.onclick = toggleTimerModal;
 
-// Event cho nút bắt đầu (từ input)
 if (startTimerBtn) {
     startTimerBtn.onclick = () => {
         const mins = parseInt(timerMinutesInput?.value);
@@ -837,7 +852,6 @@ if (startTimerBtn) {
     };
 }
 
-// Event cho nút hủy
 if (cancelTimerBtn) {
     cancelTimerBtn.onclick = () => {
         cancelTimer();
@@ -846,18 +860,13 @@ if (cancelTimerBtn) {
     };
 }
 
-// Đóng modal khi click overlay
-if (timerOverlay) {
-    timerOverlay.onclick = toggleTimerModal;
-}
-
-// Ngăn đóng khi click vào modal
 if (timerModal) {
     timerModal.addEventListener('click', (e) => {
         e.stopPropagation();
     });
 }
 
+// Observer và các event listener
 const observer = new ResizeObserver(() => autoScaleSongTitle());
 if (songTitleEl) observer.observe(songTitleEl.parentElement);
 window.addEventListener('resize', () => autoScaleSongTitle());
@@ -865,7 +874,7 @@ document.addEventListener('visibilitychange', async () => { if (document.visibil
 
 window.onload = () => {
     isShuffle = true;
-    shuffleBtn.classList.add('active');
+    if (shuffleBtn) shuffleBtn.classList.add('active');
     renderPlaylist();
     autoScaleSongTitle();
     if ('mediaSession' in navigator) updateMediaSession();
