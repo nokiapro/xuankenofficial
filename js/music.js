@@ -694,7 +694,6 @@ if (progressArea) {
     };
 }
 
-// ==================== TIMER SECTION ====================
 let sleepTimerId = null;
 let countdownInterval = null;
 let remainSeconds = 0;
@@ -708,9 +707,7 @@ const timerMinutesInput = document.getElementById('timer-minutes');
 const timerStatus = document.getElementById('timer-status');
 const closeTimerModalBtn = document.getElementById('close-timer-modal');
 
-// Lấy tất cả nút preset
 const presetBtns = document.querySelectorAll('.timer-preset');
-console.log('Đã tìm thấy', presetBtns.length, 'nút hẹn giờ');
 
 function toggleTimerModal() {
     if (!timerModal || !timerOverlay) return;
@@ -782,10 +779,7 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
-// Hàm setTimer - QUAN TRỌNG
 window.setTimer = function(minutes) {
-    console.log('setTimer được gọi với:', minutes, 'phút');
-    
     if (!minutes || minutes <= 0) {
         showToast('VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!');
         return;
@@ -806,14 +800,12 @@ window.setTimer = function(minutes) {
 
     startCountdown(seconds);
     toggleTimerModal();
-    showToast(`✅ ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
+    showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
 };
 
-// Xử lý nút preset - TỰ ĐỘNG BẮT ĐẦU
 presetBtns.forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.stopPropagation();
-        console.log('Đã click vào nút:', this.textContent);
         
         let minutes = parseInt(this.getAttribute('data-minutes'));
         
@@ -826,19 +818,15 @@ presetBtns.forEach(btn => {
             else if (text.includes('120')) minutes = 120;
         }
         
-        console.log('Số phút lấy được:', minutes);
-        
         if (minutes > 0) {
             if (timerMinutesInput) timerMinutesInput.value = minutes;
             window.setTimer(minutes);
         } else {
-            console.error('Không lấy được số phút');
-            showToast('⚠️ Không xác định được số phút');
+            showToast('KHÔNG XÁC ĐỊNH ĐƯỢC SỐ PHÚT');
         }
     });
 });
 
-// Event listeners
 if (openTimerBtn) openTimerBtn.onclick = toggleTimerModal;
 if (closeTimerModalBtn) closeTimerModalBtn.onclick = toggleTimerModal;
 if (timerOverlay) timerOverlay.onclick = toggleTimerModal;
@@ -868,9 +856,6 @@ if (timerModal) {
     });
 }
 
-console.log('Timer đã sẵn sàng!');
-
-// Observer và các event listener
 const observer = new ResizeObserver(() => autoScaleSongTitle());
 if (songTitleEl) observer.observe(songTitleEl.parentElement);
 window.addEventListener('resize', () => autoScaleSongTitle());
