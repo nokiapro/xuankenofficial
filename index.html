@@ -8,6 +8,57 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* Style đảm bảo nút timer hoạt động */
+        .timer-preset {
+            background: #f0f0f0 !important;
+            border: none !important;
+            padding: 8px 16px !important;
+            border-radius: 40px !important;
+            font-weight: 600 !important;
+            font-size: 0.8rem !important;
+            cursor: pointer !important;
+            color: #333 !important;
+            transition: all 0.2s ease !important;
+            pointer-events: auto !important;
+        }
+        
+        .timer-preset:hover {
+            background: #e0e0e0 !important;
+            transform: scale(1.02) !important;
+        }
+        
+        .timer-preset:active {
+            transform: scale(0.98) !important;
+        }
+        
+        #start-timer-btn,
+        #cancel-timer-btn,
+        #close-timer-modal {
+            cursor: pointer !important;
+        }
+        
+        #cancel-timer-btn,
+        #close-timer-modal {
+            background: transparent !important;
+            border: none !important;
+        }
+        
+        /* Đảm bảo modal không bị chặn */
+        .timer-modal {
+            pointer-events: auto !important;
+            z-index: 1000 !important;
+        }
+        
+        .timer-modal button {
+            pointer-events: auto !important;
+        }
+        
+        .timer-overlay {
+            z-index: 999 !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -87,31 +138,63 @@
         </div>
     </div>
 
+    <!-- Timer Modal - ĐÃ SỬA HOÀN CHỈNH -->
     <div id="timer-overlay" class="timer-overlay"></div>
-<div id="timer-modal" class="timer-modal">
-    <i class="far fa-clock text-3xl mb-2 text-black"></i>
-    <h3 class="text-lg font-bold uppercase tracking-widest">HẸN GIỜ TẮT</h3>
-    <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">CHƯA ĐẶT HẸN GIỜ</p>
-    
-    <!-- QUAN TRỌNG: Thêm class 'timer-preset' và inline style để đảm bảo hiển thị -->
-    <div class="flex justify-center gap-2 mt-4 flex-wrap">
-        <button class="timer-preset" data-minutes="15" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; color: #333;">15P</button>
-        <button class="timer-preset" data-minutes="30" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; color: #333;">30P</button>
-        <button class="timer-preset" data-minutes="60" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; color: #333;">60P</button>
-        <button class="timer-preset" data-minutes="90" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; color: #333;">90P</button>
-        <button class="timer-preset" data-minutes="120" style="background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; color: #333;">120P</button>
+    <div id="timer-modal" class="timer-modal">
+        <i class="far fa-clock text-3xl mb-2 text-black"></i>
+        <h3 class="text-lg font-bold uppercase tracking-widest">HẸN GIỜ TẮT</h3>
+        <p id="timer-status" class="text-[10px] text-gray-400 font-bold uppercase mt-1">CHƯA ĐẶT HẸN GIỜ</p>
+        
+        <div class="flex justify-center gap-2 mt-4 flex-wrap">
+            <button type="button" class="timer-preset" data-minutes="15">15P</button>
+            <button type="button" class="timer-preset" data-minutes="30">30P</button>
+            <button type="button" class="timer-preset" data-minutes="60">60P</button>
+            <button type="button" class="timer-preset" data-minutes="90">90P</button>
+            <button type="button" class="timer-preset" data-minutes="120">120P</button>
+        </div>
+        
+        <div class="mt-5 flex flex-col gap-3">
+            <input type="number" id="timer-minutes" placeholder="HOẶC NHẬP SỐ PHÚT..." class="border p-3 rounded-lg text-center font-bold outline-none focus:border-black">
+            <button type="button" id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest transition-all hover:bg-gray-800">BẮT ĐẦU</button>
+            <button type="button" id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all hover:text-red-600" style="background: none; border: none;">HỦY HẸN GIỜ</button>
+        </div>
+        <button type="button" id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase transition-all hover:text-gray-600" style="background: none; border: none;">Đóng</button>
     </div>
-    
-    <div class="mt-5 flex flex-col gap-3">
-        <input type="number" id="timer-minutes" placeholder="HOẶC NHẬP SỐ PHÚT..." class="border p-3 rounded-lg text-center font-bold outline-none focus:border-black">
-        <button id="start-timer-btn" class="bg-black text-white font-bold py-3 rounded-lg text-xs uppercase tracking-widest transition-all hover:bg-gray-800" style="cursor: pointer;">BẮT ĐẦU</button>
-        <button id="cancel-timer-btn" class="text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all hover:text-red-600" style="cursor: pointer; background: none;">HỦY HẸN GIỜ</button>
-    </div>
-    <button id="close-timer-modal" class="mt-4 text-gray-400 text-[10px] font-bold uppercase transition-all hover:text-gray-600" style="cursor: pointer; background: none;">Đóng</button>
-</div>
 
     <audio id="audio-player" preload="auto" crossorigin="anonymous" playsinline></audio>
 
     <script src="js/music.js"></script>
+    
+    <!-- Script kiểm tra và debug -->
+    <script>
+        (function() {
+            console.log('=== KIỂM TRA TIMER ===');
+            
+            // Kiểm tra xem các phần tử có tồn tại không
+            setTimeout(function() {
+                const presetBtns = document.querySelectorAll('.timer-preset');
+                console.log('Số lượng nút timer tìm thấy:', presetBtns.length);
+                
+                if (presetBtns.length === 0) {
+                    console.error('KHÔNG TÌM THẤY NÚT TIMER!');
+                } else {
+                    console.log('Đã tìm thấy các nút:', Array.from(presetBtns).map(btn => btn.textContent));
+                }
+                
+                // Kiểm tra hàm setTimer
+                if (typeof setTimer !== 'undefined') {
+                    console.log('Hàm setTimer đã được định nghĩa');
+                } else {
+                    console.error('Hàm setTimer chưa được định nghĩa! Kiểm tra file music.js');
+                }
+                
+                // Kiểm tra modal
+                const modal = document.getElementById('timer-modal');
+                const overlay = document.getElementById('timer-overlay');
+                console.log('Modal tồn tại:', !!modal);
+                console.log('Overlay tồn tại:', !!overlay);
+            }, 500);
+        })();
+    </script>
 </body>
 </html>
