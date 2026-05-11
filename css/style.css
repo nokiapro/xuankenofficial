@@ -797,3 +797,61 @@ body {
     background-image: linear-gradient(-45deg, #f1b586, #9f81ca, #c20175, #b33cea, #17adca, #dd4809, #ad9199);
     border-radius: 50px;
 }
+
+.timer-preset {
+    position: relative;
+    overflow: visible !important;
+}
+
+.timer-preset::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px) scale(0.9);
+    background: linear-gradient(135deg, #1a1a1a, #000);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10000;
+    font-family: 'Quicksand', sans-serif;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.timer-preset::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px) scale(0.9);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #000 transparent transparent transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10000;
+}
+
+.timer-preset:hover::before,
+.timer-preset:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.timer-preset:hover::before {
+    transform: translateX(-50%) translateY(-12px) scale(1);
+}
+
+.timer-preset:hover::after {
+    transform: translateX(-50%) translateY(8px) scale(1);
+}
