@@ -786,7 +786,7 @@ body {
 }
 
 .playlist::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
 }
 
 .playlist::-webkit-scrollbar-track {
