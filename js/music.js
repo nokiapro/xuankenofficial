@@ -703,6 +703,15 @@ function toggleTimerModal() {
     }
 }
 
+document.querySelectorAll('.timer-preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const minutes = parseInt(btn.getAttribute('data-minutes'));
+        if (!isNaN(minutes)) {
+            document.getElementById('timer-minutes').value = minutes;
+        }
+    });
+});
+
 function cancelTimer() {
     if (sleepTimerId) {
         clearTimeout(sleepTimerId);
