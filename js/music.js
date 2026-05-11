@@ -682,8 +682,10 @@ const startTimerBtn = document.getElementById('start-timer-btn');
 const cancelTimerBtn = document.getElementById('cancel-timer-btn');
 const timerMinutesInput = document.getElementById('timer-minutes');
 const timerStatus = document.getElementById('timer-status');
+
+// Lấy tất cả nút preset
 const presetBtns = document.querySelectorAll('.timer-preset');
-const closeTimerModalBtn = document.getElementById('close-timer-modal');
+console.log('Đã tìm thấy', presetBtns.length, 'nút hẹn giờ');
 
 function toggleTimerModal() {
     if (!timerModal || !timerOverlay) return;
@@ -702,15 +704,6 @@ function toggleTimerModal() {
         }, 10);
     }
 }
-
-document.querySelectorAll('.timer-preset-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const minutes = parseInt(btn.getAttribute('data-minutes'));
-        if (!isNaN(minutes)) {
-            document.getElementById('timer-minutes').value = minutes;
-        }
-    });
-});
 
 function cancelTimer() {
     if (sleepTimerId) {
@@ -765,6 +758,8 @@ function startCountdown(seconds) {
 }
 
 function setTimer(minutes) {
+    console.log('setTimer được gọi với:', minutes, 'phút');
+    
     if (!minutes || minutes <= 0) {
         showToast('VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!');
         return;
@@ -784,34 +779,53 @@ function setTimer(minutes) {
     }, seconds * 1000);
 
     startCountdown(seconds);
-    toggleTimerModal();
-    showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
+    toggleTimerModal(); // Tự động đóng modal
+    showToast(`✅ ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
 }
 
+// ===== XỬ LÝ NÚT PRESET - QUAN TRỌNG =====
 presetBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        let minutes = parseInt(btn.getAttribute('data-minutes'));
+    // Xóa hết event cũ (nếu có)
+    btn.removeEventListener('click', () => {});
+    
+    // Thêm event mới
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        console.log('Đã click vào nút:', this.textContent);
         
+        // Lấy số phút từ data-minutes
+        let minutes = parseInt(this.getAttribute('data-minutes'));
+        
+        // Nếu không có data-minutes, lấy từ text
         if (isNaN(minutes)) {
-            const btnText = btn.textContent;
-            if (btnText.includes('15')) minutes = 15;
-            else if (btnText.includes('30')) minutes = 30;
-            else if (btnText.includes('60')) minutes = 60;
-            else if (btnText.includes('90')) minutes = 90;
-            else if (btnText.includes('120')) minutes = 120;
+            const text = this.textContent;
+            if (text.includes('30')) minutes = 30;
+            else if (text.includes('60')) minutes = 60;
+            else if (text.includes('15')) minutes = 15;
+            else if (text.includes('90')) minutes = 90;
+            else if (text.includes('120')) minutes = 120;
         }
         
-        if (!isNaN(minutes) && minutes > 0) {
+        console.log('Số phút lấy được:', minutes);
+        
+        if (minutes > 0) {
+            // Cập nhật input
             if (timerMinutesInput) timerMinutesInput.value = minutes;
+            // TỰ ĐỘNG BẮT ĐẦU
             setTimer(minutes);
+        } else {
+            console.error('Không lấy được số phút');
+            showToast('⚠️ Không xác định được số phút');
         }
     });
 });
 
-if (openTimerBtn) openTimerBtn.onclick = toggleTimerModal;
-if (closeTimerModalBtn) closeTimerModalBtn.onclick = toggleTimerModal;
-if (timerOverlay) timerOverlay.onclick = toggleTimerModal;
+// Event cho nút mở modal
+if (openTimerBtn) {
+    openTimerBtn.onclick = toggleTimerModal;
+}
 
+// Event cho nút bắt đầu (từ input)
 if (startTimerBtn) {
     startTimerBtn.onclick = () => {
         const mins = parseInt(timerMinutesInput?.value);
@@ -823,6 +837,7 @@ if (startTimerBtn) {
     };
 }
 
+// Event cho nút hủy
 if (cancelTimerBtn) {
     cancelTimerBtn.onclick = () => {
         cancelTimer();
@@ -831,6 +846,12 @@ if (cancelTimerBtn) {
     };
 }
 
+// Đóng modal khi click overlay
+if (timerOverlay) {
+    timerOverlay.onclick = toggleTimerModal;
+}
+
+// Ngăn đóng khi click vào modal
 if (timerModal) {
     timerModal.addEventListener('click', (e) => {
         e.stopPropagation();
