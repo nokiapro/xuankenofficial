@@ -532,26 +532,16 @@ function selectSongFromList(i) {
 }
 
 function handleNextAction() {
-    if (isRepeatOne) {
-        audio.currentTime = 0;
-        audio.play().catch(e => { setTimeout(() => audio.play(), 50); });
+    let next;
+    if (isShuffle) {
+        next = getNextShuffleIndex(index);
     } else {
-        let next;
-        if (isShuffle) {
-            next = getNextShuffleIndex(index);
-        } else {
-            next = (index + 1) % songs.length;
-        }
-        changeSong(next);
+        next = (index + 1) % songs.length;
     }
+    changeSong(next);
 }
 
 function prevSong() {
-    if (isRepeatOne) {
-        audio.currentTime = 0;
-        audio.play().catch(() => { });
-        return;
-    }
     let prev;
     if (isShuffle) {
         prev = getPrevShuffleIndex(index);
@@ -607,7 +597,9 @@ audio.onended = () => {
         isLoopingHandled = true;
         audio.currentTime = 0;
         setTimeout(() => { audio.play().catch(e => { audio.load(); setTimeout(() => audio.play(), 50); }); }, 10);
-    } else { handleNextAction(); }
+    } else { 
+        handleNextAction(); 
+    }
 };
 
 audio.onplay = () => {
@@ -707,7 +699,7 @@ const timerMinutesInput = document.getElementById('timer-minutes');
 const timerStatus = document.getElementById('timer-status');
 const closeTimerModalBtn = document.getElementById('close-timer-modal');
 
-const presetBtns = document.querySelectorAll('.timer-preset');
+const presetBtns = document.querySelectorAll('.timer-preset, .timer-preset-btn');
 
 function toggleTimerModal() {
     if (!timerModal || !timerOverlay) return;
@@ -800,7 +792,7 @@ window.setTimer = function(minutes) {
 
     startCountdown(seconds);
     toggleTimerModal();
-    showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
+    showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT`);
 };
 
 presetBtns.forEach(btn => {
@@ -845,7 +837,7 @@ if (startTimerBtn) {
 if (cancelTimerBtn) {
     cancelTimerBtn.onclick = () => {
         cancelTimer();
-        showToast('ĐÃ HUỶ HẸN GIỜ TẮT NHẠC.');
+        showToast('ĐÃ HUỶ HẸN GIỜ TẮT NHẠC');
         toggleTimerModal();
     };
 }
