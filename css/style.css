@@ -561,26 +561,38 @@ body {
     flex-wrap: wrap;
 }
 
-.timer-preset {
-    background: #f2f2f2;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    color: #333;
+.timer-preset, 
+.timer-preset-btn {
+    background: #f0f0f0 !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 40px !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    cursor: pointer !important;
+    color: #333 !important;
+    transition: all 0.2s ease !important;
+    pointer-events: auto !important;
+    z-index: 1000 !important;
 }
 
-.timer-preset:hover {
-    background: #e6e6e6;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+.timer-preset:hover, 
+.timer-preset-btn:hover {
+    background: #e0e0e0 !important;
+    transform: scale(1.02) !important;
 }
 
-.timer-preset:active {
-    transform: scale(0.96);
+.timer-preset:active, 
+.timer-preset-btn:active {
+    transform: scale(0.98) !important;
+}
+
+.timer-modal {
+    pointer-events: auto !important;
+}
+
+.timer-modal button {
+    pointer-events: auto !important;
 }
 
 .timer-modal input {
