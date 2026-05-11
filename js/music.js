@@ -694,13 +694,13 @@ if (progressArea) {
     };
 }
 
-// ==================== TIMER SECTION - ĐÃ SỬA HOÀN CHỈNH ====================
+// ==================== TIMER SECTION ====================
 let sleepTimerId = null;
 let countdownInterval = null;
 let remainSeconds = 0;
 
-const timerModal = document.getElementById('timerModal');
-const timerOverlay = document.getElementById('timerOverlay');
+const timerModal = document.getElementById('timer-modal');
+const timerOverlay = document.getElementById('timer-overlay');
 const openTimerBtn = document.getElementById('open-timer-btn');
 const startTimerBtn = document.getElementById('start-timer-btn');
 const cancelTimerBtn = document.getElementById('cancel-timer-btn');
@@ -709,7 +709,7 @@ const timerStatus = document.getElementById('timer-status');
 const closeTimerModalBtn = document.getElementById('close-timer-modal');
 
 // Lấy tất cả nút preset
-const presetBtns = document.querySelectorAll('.timer-preset, .timer-preset-btn');
+const presetBtns = document.querySelectorAll('.timer-preset');
 console.log('Đã tìm thấy', presetBtns.length, 'nút hẹn giờ');
 
 function toggleTimerModal() {
@@ -782,7 +782,8 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
-function setTimer(minutes) {
+// Hàm setTimer - QUAN TRỌNG
+window.setTimer = function(minutes) {
     console.log('setTimer được gọi với:', minutes, 'phút');
     
     if (!minutes || minutes <= 0) {
@@ -806,9 +807,9 @@ function setTimer(minutes) {
     startCountdown(seconds);
     toggleTimerModal();
     showToast(`✅ ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT.`);
-}
+};
 
-// ===== XỬ LÝ NÚT PRESET - TỰ ĐỘNG BẮT ĐẦU =====
+// Xử lý nút preset - TỰ ĐỘNG BẮT ĐẦU
 presetBtns.forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -829,7 +830,7 @@ presetBtns.forEach(btn => {
         
         if (minutes > 0) {
             if (timerMinutesInput) timerMinutesInput.value = minutes;
-            setTimer(minutes);
+            window.setTimer(minutes);
         } else {
             console.error('Không lấy được số phút');
             showToast('⚠️ Không xác định được số phút');
@@ -837,6 +838,7 @@ presetBtns.forEach(btn => {
     });
 });
 
+// Event listeners
 if (openTimerBtn) openTimerBtn.onclick = toggleTimerModal;
 if (closeTimerModalBtn) closeTimerModalBtn.onclick = toggleTimerModal;
 if (timerOverlay) timerOverlay.onclick = toggleTimerModal;
@@ -845,7 +847,7 @@ if (startTimerBtn) {
     startTimerBtn.onclick = () => {
         const mins = parseInt(timerMinutesInput?.value);
         if (!isNaN(mins) && mins > 0) {
-            setTimer(mins);
+            window.setTimer(mins);
         } else {
             showToast('VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!');
         }
@@ -865,6 +867,8 @@ if (timerModal) {
         e.stopPropagation();
     });
 }
+
+console.log('Timer đã sẵn sàng!');
 
 // Observer và các event listener
 const observer = new ResizeObserver(() => autoScaleSongTitle());
