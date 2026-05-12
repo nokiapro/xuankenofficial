@@ -278,6 +278,13 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/m5y2g1dg6zyyyjejvmkab/LONGUOIUOTAO-XUANKEN.mp3?rlkey=dtx7v8qbzz5kwroqb70rxbf8k&st=al9tsqi6&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/LONGUOIUOTAO-LYRIC.lrc",
         lrc2: ""
+    },
+	{
+        name: "Cầu Vồng Tình Yêu",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CAUVONGTINHYEU-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/cuei0bsf4ytosz2ylxc4w/CAUVONGTINHYEU-XUANKEN.mp3?rlkey=0kd5k7wmyqxqdm9ke0gamgafu&st=wvyrs5jj&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CAUVONGTINHYEU-LYRIC.lrc",
+        lrc2: ""
     }
 ];
 
