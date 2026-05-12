@@ -44,64 +44,28 @@ body {
 }
 
 @media (max-width: 360px) {
-    body {
-        padding: 8px;
-    }
-    
-    .player-container {
-        border-radius: 24px;
-    }
-    
-    .header-section {
-        padding: 20px 16px 20px 16px;
-    }
-    
-    .album-art {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .song-title {
-        font-size: 1rem;
-    }
+    body { padding: 8px; }
+    .player-container { border-radius: 24px; }
+    .header-section { padding: 20px 16px 20px 16px; }
+    .album-art { width: 120px; height: 120px; }
+    .song-title { font-size: 1rem; }
 }
 
 @media (min-width: 361px) and (max-width: 480px) {
-    .header-section {
-        padding: 30px 16px 25px 16px;
-    }
-    .album-art {
-        width: 140px;
-        height: 140px;
-    }
-    .controls-bar {
-        padding: 20px;
-    }
-    .btn-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 1rem;
-    }
-    .play-btn {
-        width: 52px;
-        height: 52px;
-    }
-    .song-title {
-        font-size: 1.2rem;
-    }
+    .header-section { padding: 30px 16px 25px 16px; }
+    .album-art { width: 140px; height: 140px; }
+    .controls-bar { padding: 20px; }
+    .btn-icon { width: 38px; height: 38px; font-size: 1rem; }
+    .play-btn { width: 52px; height: 52px; }
+    .song-title { font-size: 1.2rem; }
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
-    .player-container {
-        width: 90%;
-        max-width: 420px;
-    }
+    .player-container { width: 90%; max-width: 420px; }
 }
 
 @media (min-width: 769px) {
-    .player-container {
-        width: 450px;
-    }
+    .player-container { width: 450px; }
 }
 
 .header-section {
@@ -549,11 +513,30 @@ body {
     white-space: nowrap;
 }
 
+.timer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    z-index: 499;
+    display: none;
+    transition: background 0.25s ease-out, backdrop-filter 0.25s ease-out;
+}
+
+.timer-overlay.show {
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
 .timer-modal {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.92);
+    transform: translate(-50%, -50%) scale(0.96);
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(24px);
     padding: 28px 24px;
@@ -563,39 +546,17 @@ body {
     display: none;
     width: 90%;
     max-width: 350px;
-    transition: all 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+    transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.2s ease;
     opacity: 0;
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.5);
+    will-change: transform, opacity;
 }
 
 .timer-modal.show {
     display: block;
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
-}
-
-.timer-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    z-index: 499;
-    display: none;
-    transition: all 0.3s ease;
-}
-
-.timer-overlay.show {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
 }
 
 .timer-modal h3 {
@@ -606,13 +567,6 @@ body {
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-}
-
-.timer-sub {
-    font-size: 0.8rem;
-    color: #888;
-    margin-bottom: 22px;
-    font-weight: 400;
 }
 
 .timer-preset-group {
@@ -649,14 +603,6 @@ body {
     transform: scale(0.98) !important;
 }
 
-.timer-modal {
-    pointer-events: auto !important;
-}
-
-.timer-modal button {
-    pointer-events: auto !important;
-}
-
 .timer-modal input {
     width: 100%;
     padding: 14px;
@@ -678,34 +624,25 @@ body {
     transform: scale(1.01);
 }
 
-.timer-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 18px;
-}
-
-.timer-actions button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 60px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    font-size: 0.9rem;
-}
-
 #start-timer-btn {
-    background: #000;
+    background: linear-gradient(135deg, #000, #333);
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-weight: bold;
+    padding: 14px;
+    border-radius: 60px;
+    text-align: center;
+    margin-bottom: 12px;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.25s;
+    cursor: pointer;
+    width: 100%;
+    border: none;
 }
 
 #start-timer-btn:hover {
-    background: #222;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #222, #444);
+    transform: translateY(-2px);
 }
 
 #start-timer-btn:active {
@@ -716,6 +653,13 @@ body {
     background: rgba(239, 68, 68, 0.1) !important;
     border-radius: 40px !important;
     transition: all 0.2s ease !important;
+    color: #ef4444 !important;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 #cancel-timer-btn:hover {
@@ -731,6 +675,12 @@ body {
     background: #f5f5f5 !important;
     border-radius: 40px !important;
     transition: all 0.2s ease !important;
+    color: #666 !important;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
 }
 
 #close-timer-modal:hover {
@@ -748,67 +698,10 @@ body {
     padding: 10px 14px;
     border-radius: 60px;
     margin-top: 8px;
+    margin-bottom: 16px;
     color: #333;
     font-weight: 600;
     border: 1px solid #eee;
-}
-
-.timer-preset {
-    position: relative;
-    overflow: hidden;
-}
-
-.timer-preset::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.1);
-    transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s;
-}
-
-.timer-preset:active::after {
-    width: 100%;
-    height: 100%;
-}
-
-#timer-minutes {
-    font-size: 1rem;
-    letter-spacing: 1px;
-}
-
-#timer-minutes::placeholder {
-    font-size: 0.7rem;
-    letter-spacing: 0.5px;
-}
-
-#start-timer-btn {
-    background: linear-gradient(135deg, #000, #333);
-    transition: all 0.3s ease;
-}
-
-#start-timer-btn:hover {
-    background: linear-gradient(135deg, #222, #444);
-    transform: translateY(-2px);
-}
-
-.timer-modal.show {
-    animation: modalPop 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
-
-@keyframes modalPop {
-    0% {
-        transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0;
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
 }
 
 #open-timer-btn.active {
@@ -816,19 +709,12 @@ body {
     color: white !important;
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% {
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
-    }
-    50% {
-        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
-    }
-}
-
-#open-timer-btn.active {
-    animation: pulse 1.5s infinite;
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2); }
+    50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); }
 }
 
 .playlist::-webkit-scrollbar {
@@ -844,15 +730,7 @@ body {
     border-radius: 50px;
 }
 
-.timer-preset {
-    position: relative;
-    overflow: visible !important;
-}
-
-.timer-preset::before {
-    display: none !important;
-}
-
+.timer-preset::before,
 .timer-preset::after {
     display: none !important;
 }
