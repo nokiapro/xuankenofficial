@@ -722,14 +722,15 @@ function toggleTimerModal() {
         timerModal.classList.remove('show');
         timerOverlay.classList.remove('show');
         setTimeout(() => {
-            timerOverlay.style.display = 'none';
+            if (!timerModal.classList.contains('show')) {
+                timerOverlay.style.display = 'none';
+            }
         }, 300);
     } else {
         timerOverlay.style.display = 'block';
-        setTimeout(() => {
-            timerOverlay.classList.add('show');
-            timerModal.classList.add('show');
-        }, 10);
+        void timerOverlay.offsetHeight;
+        timerOverlay.classList.add('show');
+        timerModal.classList.add('show');
     }
 }
 
