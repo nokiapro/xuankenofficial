@@ -567,6 +567,10 @@ body {
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+    line-height: 1.4 !important;
+    padding: 4px;
+    overflow: visible !important;
+    height: auto !important;
 }
 
 .timer-preset-group {
