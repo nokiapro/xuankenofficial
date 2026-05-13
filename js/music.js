@@ -888,4 +888,89 @@ window.onresize = () => {
     autoScaleSongTitle();
 };
 
-window.selectSongFromList = selectSongFromList;
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('xuanken_theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        document.body.classList.add('dark');
+        if (themeIcon) {
+            themeIcon.className = 'fal fa-moon';
+        }
+    } else {
+        document.body.classList.remove('dark');
+        if (themeIcon) {
+            themeIcon.className = 'fal fa-sun';
+        }
+    }
+}
+
+function toggleTheme() {
+    if (document.body.classList.contains('dark')) {
+        document.body.classList.remove('dark');
+        localStorage.setItem('xuanken_theme', 'light');
+        if (themeIcon) {
+            themeIcon.className = 'fal fa-sun';
+        }
+        showToast('🌞 ĐÃ CHUYỂN SANG GIAO DIỆN SÁNG');
+    } else {
+        document.body.classList.add('dark');
+        localStorage.setItem('xuanken_theme', 'dark');
+        if (themeIcon) {
+            themeIcon.className = 'fal fa-moon';
+        }
+        showToast('🌙 ĐÃ CHUYỂN SANG GIAO DIỆN TỐI');
+    }
+}
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+}
+
+loadTheme();
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const savedTheme = localStorage.getItem('xuanken_theme');
+    if (!savedTheme) {
+        if (e.matches) {
+            document.body.classList.add('dark');
+            if (themeIcon) themeIcon.className = 'fal fa-moon';
+        } else {
+            document.body.classList.remove('dark');
+            if (themeIcon) themeIcon.className = 'fal fa-sun';
+        }
+    }
+});
+
+const originalAdjustLyricFontSize = adjustLyricFontSize;
+window.adjustLyricFontSize = function(text) {
+    if (!lyricDisplay || !lyricContainer) return;
+    lyricDisplay.style.transform = 'none';
+    lyricDisplay.style.fontSize = '16px';
+    lyricDisplay.innerText = text;
+
+    const containerWidth = lyricContainer.clientWidth;
+    if (containerWidth <= 0) return;
+
+    const textWidth = lyricDisplay.scrollWidth;
+
+    if (textWidth > containerWidth - 20) {
+        const scale = (containerWidth - 20) / textWidth;
+        const finalScale = Math.max(scale, 0.5);
+        lyricDisplay.style.transform = `scale(${finalScale})`;
+        lyricDisplay.style.fontSize = '16px';
+    } else {
+        lyricDisplay.style.transform = 'none';
+        let currentFontSize = 16;
+        const maxFontSize = Math.min(20, 16 + (containerWidth - textWidth) / 10);
+        while (lyricDisplay.scrollWidth < containerWidth - 30 && currentFontSize < maxFontSize) {
+            currentFontSize += 1;
+            lyricDisplay.style.fontSize = currentFontSize + 'px';
+        }
+    }
+};
+
+window.adjustLyricFontSize = adjustLyricFontSize;
