@@ -299,6 +299,20 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/0h0msp09nb4p3y7emkok6/CHUCEMHANHPHUC-XUANKEN.mp3?rlkey=ajwjfdvotwpnk1c5gos4mbrdm&st=mkqi288c&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUCEMHANHPHUC-LYRIC.lrc",
         lrc2: ""
+    },
+    {
+        name: "Sinh Nhật Là Phải Vui",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SINHNHATLAPHAIVUI-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/nsgmll1afh3kv7y9wzcm1/SINHNHATLAPHAIVUI-XUANKEN.mp3?rlkey=f0ko1d7ljwurgywgseuqi7j12&st=c779fwr1&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SINHNHATLAPHAIVUI-LYRIC.lrc",
+        lrc2: "https://dl.dropboxusercontent.com/scl/fi/kcvy5md9s3unktrdcqb3u/SINHNHATLAPHAIVUI-LYRIC.lrc?rlkey=mtfmy4ojc1hyayck23l68pwek&st=ji3qirzg&dl=0"
+    },
+    {
+        name: "Sau Lời Tạm Biệt",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SAULOITAMBIET-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/p524zta5w1bgjtvib9m7p/SAULOITAMBIET-XUANKEN.mp3?rlkey=tvmpqbysyztan8p8fc6qh5g7p&st=vo0z8tk1&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAULOITAMBIET-LYRIC.lrc",
+        lrc2: "https://dl.dropboxusercontent.com/scl/fi/ur3cyl6i7u4c52o1fqyil/SAULOITAMBIET-LYRIC.lrc?rlkey=ws6mpq9vfqtquec85nrnpdfnz&st=5hc55xk2&dl=0"
     }
 ];
 
