@@ -915,14 +915,14 @@ function toggleTheme() {
         if (themeIcon) {
             themeIcon.className = 'fal fa-sun';
         }
-        showToast('🌞 ĐÃ CHUYỂN SANG GIAO DIỆN SÁNG');
+        showToast('ĐÃ CHUYỂN SANG GIAO DIỆN SÁNG');
     } else {
         document.body.classList.add('dark');
         localStorage.setItem('xuanken_theme', 'dark');
         if (themeIcon) {
             themeIcon.className = 'fal fa-moon';
         }
-        showToast('🌙 ĐÃ CHUYỂN SANG GIAO DIỆN TỐI');
+        showToast('ĐÃ CHUYỂN SANG GIAO DIỆN TỐI');
     }
 }
 
