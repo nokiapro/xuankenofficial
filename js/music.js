@@ -721,6 +721,7 @@ if (progressArea) {
     };
 }
 
+// ==================== TIMER CODE ĐÃ SỬA ====================
 let sleepTimerId = null;
 let countdownInterval = null;
 let remainSeconds = 0;
@@ -794,6 +795,7 @@ function startCountdown(seconds) {
                 clearTimeout(sleepTimerId);
                 sleepTimerId = null;
             }
+            // TẮT NHẠC
             if (audio && !audio.paused) {
                 audio.pause();
             }
@@ -813,19 +815,26 @@ window.setTimer = function(minutes) {
         return;
     }
 
-    cancelTimer();
+    cancelTimer(); // Xóa timer cũ trước khi đặt mới
+
     const seconds = minutes * 60;
 
+    // Đặt timeout tắt nhạc sau seconds giây
     sleepTimerId = setTimeout(() => {
         if (audio && !audio.paused) {
             audio.pause();
         }
-        if (countdownInterval) clearInterval(countdownInterval);
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
         showToast('ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!');
         if (timerStatus) timerStatus.innerHTML = 'ĐÃ TẮT NHẠC';
         if (openTimerBtn) openTimerBtn.classList.remove('active');
+        remainSeconds = 0;
     }, seconds * 1000);
 
+    // Chạy đếm ngược hiển thị
     startCountdown(seconds);
     toggleTimerModal();
     showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT`);
@@ -883,6 +892,7 @@ if (timerModal) {
         e.stopPropagation();
     });
 }
+// ==================== END TIMER CODE ====================
 
 const observer = new ResizeObserver(() => autoScaleSongTitle());
 if (songTitleEl) observer.observe(songTitleEl.parentElement);
@@ -958,33 +968,5 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
         }
     }
 });
-
-const originalAdjustLyricFontSize = adjustLyricFontSize;
-window.adjustLyricFontSize = function(text) {
-    if (!lyricDisplay || !lyricContainer) return;
-    lyricDisplay.style.transform = 'none';
-    lyricDisplay.style.fontSize = '16px';
-    lyricDisplay.innerText = text;
-
-    const containerWidth = lyricContainer.clientWidth;
-    if (containerWidth <= 0) return;
-
-    const textWidth = lyricDisplay.scrollWidth;
-
-    if (textWidth > containerWidth - 20) {
-        const scale = (containerWidth - 20) / textWidth;
-        const finalScale = Math.max(scale, 0.5);
-        lyricDisplay.style.transform = `scale(${finalScale})`;
-        lyricDisplay.style.fontSize = '16px';
-    } else {
-        lyricDisplay.style.transform = 'none';
-        let currentFontSize = 16;
-        const maxFontSize = Math.min(20, 16 + (containerWidth - textWidth) / 10);
-        while (lyricDisplay.scrollWidth < containerWidth - 30 && currentFontSize < maxFontSize) {
-            currentFontSize += 1;
-            lyricDisplay.style.fontSize = currentFontSize + 'px';
-        }
-    }
-};
 
 window.adjustLyricFontSize = adjustLyricFontSize;
