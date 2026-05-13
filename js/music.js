@@ -292,6 +292,13 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/9o84fhb69n8hf8lvdl4o7/MIMCUOITRONGEMTHATDEP-XUANKEN.mp3?rlkey=z8y7eo5n3gdfkagq0biwptu3x&st=nms6ahbn&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/MIMCUOITRONGEMTHATDEP-LYRIC.lrc",
         lrc2: ""
+    },
+	{
+        name: "Chúc Em Hạnh Phúc",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUCEMHANHPHUC-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/0h0msp09nb4p3y7emkok6/CHUCEMHANHPHUC-XUANKEN.mp3?rlkey=ajwjfdvotwpnk1c5gos4mbrdm&st=mkqi288c&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUCEMHANHPHUC-LYRIC.lrc",
+        lrc2: ""
     }
 ];
 
@@ -529,7 +536,7 @@ async function loadSong(i) {
     adjustLyricFontSize("ĐANG TẢI LỜI BÀI HÁT...");
     progressBar.style.width = '0%';
     lyrics = await fetchLyricWithFallback(song.lrc1, song.lrc2);
-    if (lyrics.length === 0) adjustLyricFontSize("🎙 XuanKen Official 🎙");
+    if (lyrics.length === 0) adjustLyricFontSize("BÀI HÁT TẠM CHƯA CÓ LYRIC NHA HIHI");
     renderPlaylist();
     updateMediaSession();
     if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
@@ -644,7 +651,7 @@ function escapeHtml(str) {
 function renderPlaylist() {
     const list = document.getElementById('playlist-content');
     if (!list) return;
-    list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="window.selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fas fa-microphone-alt"></i> XuanKen Official</div></div>${i === index ? '<i class="fas fa-music text-xs text-black"></i>' : ''}</div>`).join('');
+    list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="window.selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fa-regular fa-microphone"></i> XuanKen Official</div></div>${i === index ? '<i class="fa-sharp fa-light fa-face-grin-tongue-squint"></i>' : ''}</div>`).join('');
 }
 
 const initIdx = getInitialShuffleIndex();
