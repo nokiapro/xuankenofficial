@@ -1064,51 +1064,50 @@ async function incrementListenCount(songName) {
     return false;
 }
 
-function updateListenBadge() {
-    const badge = document.getElementById('listen-count-badge');
-    if (badge && listenData) {
-        const total = Object.values(listenData).reduce((a, b) => a + b, 0);
-        if (total >= 1000000) badge.textContent = (total / 1000000).toFixed(1) + 'M';
-        else if (total >= 1000) badge.textContent = (total / 1000).toFixed(1) + 'K';
-        else badge.textContent = total;
-    }
-}
-
 function showListenStats() {
     let modal = document.getElementById('listen-stats-modal');
-    let overlay = document.getElementById('listen-overlay');
+    
     if (!modal) {
+        // Tạo modal với cấu trúc giống playlist
         modal = document.createElement('div');
         modal.id = 'listen-stats-modal';
         modal.className = 'listen-modal';
         modal.innerHTML = `
-            <h3><i class="fal fa-headphones"></i> THỐNG KÊ LƯỢT NGHE</h3>
-            <div class="listen-stats" id="listen-stats-content"><div style="text-align:center;padding:20px">Đang tải...</div></div>
+            <div class="listen-modal-header">
+                <div class="close-listen" id="close-listen-modal">
+                    <i class="fas fa-times"></i>
+                </div>
+                <div class="listen-title"><i class="fal fa-headphones"></i> THỐNG KÊ LƯỢT NGHE <i class="fal fa-headphones"></i></div>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="listen-stats" id="listen-stats-content">
+                <div style="text-align:center;padding:40px">Đang tải dữ liệu...</div>
+            </div>
             <div class="listen-total" id="listen-total-stats"></div>
-            <button id="close-listen-modal" class="close-stats-btn"><i class="fas fa-times"></i> ĐÓNG</button>
         `;
-        document.body.appendChild(modal);
-        overlay = document.createElement('div');
-        overlay.id = 'listen-overlay';
-        overlay.className = 'timer-overlay';
-        document.body.appendChild(overlay);
-        document.getElementById('close-listen-modal').onclick = () => {
-            modal.classList.remove('show');
-            overlay.classList.remove('show');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
-        };
-        overlay.onclick = () => {
-            modal.classList.remove('show');
-            overlay.classList.remove('show');
-            setTimeout(() => { overlay.style.display = 'none'; }, 300);
-        };
+        
+        // Chèn modal vào bên trong player-container (giống playlist)
+        const playerContainer = document.querySelector('.player-container');
+        if (playerContainer) {
+            playerContainer.appendChild(modal);
+        } else {
+            document.body.appendChild(modal);
+        }
+        
+        // Gắn sự kiện đóng
+        const closeBtn = document.getElementById('close-listen-modal');
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                modal.classList.remove('show');
+            };
+        }
     }
+    
+    // Cập nhật nội dung
     updateListenStatsModal();
-    overlay.style.display = 'block';
-    setTimeout(() => {
-        overlay.classList.add('show');
-        modal.classList.add('show');
-    }, 10);
+    
+    // Hiển thị modal
+    modal.classList.add('show');
 }
 
 function updateListenStatsModal() {
