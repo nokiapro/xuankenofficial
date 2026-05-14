@@ -570,7 +570,7 @@ body.dark .album-art {
     white-space: nowrap;
 }
 
-/* ========== TIMER MODAL - TRONG PLAYER ========== */
+/* ========== TIMER MODAL - NẰM TRONG PLAYER ========== */
 
 .timer-overlay {
     position: fixed;
@@ -820,7 +820,7 @@ body.dark .album-art {
     50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); }
 }
 
-/* ========== LƯỢT NGHE - BỎ SỐ THỨ TỰ ========== */
+/* ========== LƯỢT NGHE ========== */
 
 .listen-badge {
     position: absolute;
@@ -919,7 +919,6 @@ body.dark .listen-badge {
     overflow-y: auto;
 }
 
-/* Bỏ số thứ tự - chỉ còn tên bài và số lượt */
 .listen-stat-item {
     display: flex;
     align-items: center;
@@ -938,7 +937,6 @@ body.dark .listen-badge {
     transform: translateX(4px);
 }
 
-/* Tên bài hát - chiếm toàn bộ không gian còn lại */
 .listen-stat-name {
     flex: 1;
     color: var(--text-primary);
@@ -950,7 +948,6 @@ body.dark .listen-badge {
     padding-right: 12px;
 }
 
-/* Số lượt nghe */
 .listen-stat-count {
     font-weight: bold;
     color: var(--accent-color);
