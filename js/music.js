@@ -294,6 +294,15 @@ function changeSong(i) {
     loadSong(i).then(() => audio.play().catch(() => { }));
 }
 
+// Hàm ghi nhận lượt nghe khi chuyển bài (next, prev, shuffle)
+function recordListenOnSongChange(songName, action) {
+    if (songName) {
+        incrementListenCount(songName, false);
+        console.log(`📊 Chuyển bài (${action}) - ghi nhận lượt nghe: ${songName}`);
+    }
+}
+
+// Ghi đè selectSongFromList
 function selectSongFromList(i) {
     const songName = songs[i].name;
     if (songName) {
@@ -304,6 +313,7 @@ function selectSongFromList(i) {
     changeSong(i);
 }
 
+// Ghi đè handleNextAction
 function handleNextAction() {
     let next;
     if (isShuffle) {
@@ -311,9 +321,12 @@ function handleNextAction() {
     } else {
         next = (index + 1) % songs.length;
     }
+    const nextSongName = songs[next].name;
+    recordListenOnSongChange(nextSongName, 'next');
     changeSong(next);
 }
 
+// Ghi đè prevSong
 function prevSong() {
     let prev;
     if (isShuffle) {
@@ -321,6 +334,8 @@ function prevSong() {
     } else {
         prev = (index - 1 + songs.length) % songs.length;
     }
+    const prevSongName = songs[prev].name;
+    recordListenOnSongChange(prevSongName, 'prev');
     changeSong(prev);
 }
 
@@ -713,7 +728,7 @@ async function incrementListenCount(songName, isFromLoop = false) {
     } finally { 
         isUpdatingListen = false;
         if (!isFromLoop) {
-            setTimeout(() => { if (hasRecordedCurrentSong) hasRecordedCurrentSong = false; }, 2000);
+            setTimeout(() => { if (hasRecordedCurrentSong) hasRecordedCurrentSong = false; }, 1000);
         }
     }
     return false;
@@ -750,21 +765,29 @@ function updateListenStatsModal() {
     const container = document.getElementById('listen-stats-content');
     const totalContainer = document.getElementById('listen-total-stats');
     if (!container) return;
+    
     if (listenData && Object.keys(listenData).length > 0) {
-        const sorted = Object.entries(listenData).sort((a, b) => b[1] - a[1]);
-        const total = sorted.reduce((sum, [_, count]) => sum + count, 0);
-        // ĐÃ BỎ SỐ THỨ TỰ
-        const statsHtml = sorted.map(([name, count]) => `
-            <div class="listen-stat-item">
-                <span class="listen-stat-name">${escapeHtmlStat(name)}</span>
-                <span class="listen-stat-count">${formatNumberStat(count)}</span>
-            </div>
-        `).join('');
+        // Hiển thị theo đúng thứ tự trong mảng songs (thứ tự sheet)
+        const statsHtml = songs.map(song => {
+            const count = listenData[song.name] || 0;
+            return `
+                <div class="listen-stat-item">
+                    <span class="listen-stat-name">${escapeHtmlStat(song.name)}</span>
+                    <span class="listen-stat-count">${formatNumberStat(count)}</span>
+                </div>
+            `;
+        }).join('');
+        
+        const total = Object.values(listenData).reduce((sum, count) => sum + count, 0);
         container.innerHTML = statsHtml;
-        if (totalContainer) totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
+        if (totalContainer) {
+            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
+        }
     } else {
-        container.innerHTML = '<div style="text-align:center;padding:40px">Chưa có dữ liệu lượt nghe<br><span style="font-size:12px">Hãy nghe một bài hát để bắt đầu!</span></div>';
-        if (totalContainer) totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>0</span>`;
+        container.innerHTML = '<div style="text-align:center;padding:40px">Đang tải dữ liệu...</div>';
+        if (totalContainer) {
+            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>0</span>`;
+        }
     }
 }
 
@@ -784,7 +807,7 @@ function escapeHtmlStat(str) {
     });
 }
 
-// Sự kiện play dự phòng
+// Lắng nghe sự kiện play (dự phòng)
 audio.addEventListener('play', () => {
     const currentSong = songs[index];
     if (currentSong && currentSong.name && !hasRecordedCurrentSong && !isRepeatOne) {
@@ -799,8 +822,9 @@ audio.addEventListener('play', () => {
 const listenCountBtn = document.getElementById('listen-count-btn');
 if (listenCountBtn) listenCountBtn.onclick = (e) => { e.stopPropagation(); showListenStats(); };
 
+// Cập nhật lượt nghe mỗi 1 giây (thay vì 30 giây)
 fetchListenData();
-setInterval(fetchListenData, 30000);
+setInterval(fetchListenData, 1000);
 
 window.adjustLyricFontSize = adjustLyricFontSize;
 window.selectSongFromList = selectSongFromList;
