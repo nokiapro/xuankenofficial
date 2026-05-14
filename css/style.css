@@ -115,7 +115,7 @@ body.dark .player-container {
     align-items: center;
     text-align: center;
     gap: 20px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none;
     position: relative;
     transition: border-color 0.3s ease;
 }
@@ -820,28 +820,11 @@ body.dark .album-art {
     50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); }
 }
 
-/* ========== LƯỢT NGHE ========== */
+/* ========== LƯỢT NGHE - BADGE ĐÃ BỊ XÓA ========== */
 
+/* Badge đã bị xóa - không hiển thị */
 .listen-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff4444;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-body.dark .listen-badge {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    display: none;
 }
 
 .listen-modal {
