@@ -572,6 +572,7 @@ body.dark .album-art {
 
 /* ========== TIMER MODAL - NẰM TRONG PLAYER ========== */
 
+/* Overlay nền tối phía sau */
 .timer-overlay {
     position: fixed;
     top: 0;
@@ -591,6 +592,7 @@ body.dark .album-art {
     backdrop-filter: blur(5px);
 }
 
+/* Timer modal - NẰM TRONG player-container (position absolute) */
 .timer-modal {
     position: absolute;
     top: 0;
@@ -609,6 +611,7 @@ body.dark .album-art {
     border-radius: 32px;
     padding: 0;
     opacity: 1;
+    box-shadow: none;
 }
 
 .timer-modal.show {
@@ -820,9 +823,9 @@ body.dark .album-art {
     50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); }
 }
 
-/* ========== LƯỢT NGHE - BADGE ĐÃ BỊ XÓA ========== */
+/* ========== LƯỢT NGHE ========== */
 
-/* Badge đã bị xóa - không hiển thị */
+/* Badge đã bị xóa */
 .listen-badge {
     display: none;
 }
