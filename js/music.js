@@ -279,21 +279,21 @@ const songs = [
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/LONGUOIUOTAO-LYRIC.lrc",
         lrc2: ""
     },
-	{
+    {
         name: "Cầu Vồng Tình Yêu",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CAUVONGTINHYEU-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/cuei0bsf4ytosz2ylxc4w/CAUVONGTINHYEU-XUANKEN.mp3?rlkey=0kd5k7wmyqxqdm9ke0gamgafu&st=wvyrs5jj&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CAUVONGTINHYEU-LYRIC.lrc",
         lrc2: ""
     },
-	{
+    {
         name: "Mỉm Cười Trông Em Thật Đẹp",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/MIMCUOITRONGEMTHATDEP-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/9o84fhb69n8hf8lvdl4o7/MIMCUOITRONGEMTHATDEP-XUANKEN.mp3?rlkey=z8y7eo5n3gdfkagq0biwptu3x&st=nms6ahbn&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/MIMCUOITRONGEMTHATDEP-LYRIC.lrc",
         lrc2: ""
     },
-	{
+    {
         name: "Chúc Em Hạnh Phúc",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUCEMHANHPHUC-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/0h0msp09nb4p3y7emkok6/CHUCEMHANHPHUC-XUANKEN.mp3?rlkey=ajwjfdvotwpnk1c5gos4mbrdm&st=mkqi288c&dl=0",
@@ -985,4 +985,206 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
     }
 });
 
+// ========== HỆ THỐNG ĐẾM LƯỢT NGHE ==========
+
+// ĐÃ CẬP NHẬT URL APPS SCRIPT CỦA BẠN
+const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbxGoLJOeikvklz3EM137ELiK6a86jioK9o5DFBEXHZvmulQpxKJcTiKe8KL0wPizoeV0Q/exec';
+
+// Link CSV từ Sheet đã xuất bản
+const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9vI_OY_nJ0sHiSVUy31z9U-4zClIdkgBZCAiquu8wePVrosqwV-GnSOKTtYJP_pgHt_mtC8Kcm/pub?output=csv';
+
+let listenData = {};
+let hasRecordedCurrentSong = false;
+let isUpdatingListen = false;
+
+async function fetchListenData() {
+    if (isUpdatingListen) return listenData;
+    try {
+        const response = await fetch(`${GOOGLE_SHEET_API}?action=get&t=${Date.now()}`);
+        if (response.ok) {
+            listenData = await response.json();
+            updateListenBadge();
+            updateListenStatsModal();
+            return listenData;
+        }
+    } catch (error) {
+        console.log('API error, trying CSV fallback...');
+    }
+    try {
+        const csvResponse = await fetch(GOOGLE_SHEET_CSV + '&t=' + Date.now());
+        if (csvResponse.ok) {
+            const csvText = await csvResponse.text();
+            const rows = csvText.split('\n');
+            listenData = {};
+            for (let i = 1; i < rows.length; i++) {
+                const cols = rows[i].split(',');
+                if (cols.length >= 2 && cols[0]) {
+                    let name = cols[0].replace(/^"|"$/g, '');
+                    let count = parseInt(cols[1]) || 0;
+                    listenData[name] = count;
+                }
+            }
+            updateListenBadge();
+            updateListenStatsModal();
+        }
+    } catch (error) {
+        console.error('Lỗi lấy dữ liệu:', error);
+        const saved = localStorage.getItem('xuanken_listens');
+        if (saved) {
+            listenData = JSON.parse(saved);
+            updateListenBadge();
+        }
+    }
+    return listenData;
+}
+
+async function incrementListenCount(songName) {
+    if (!songName || hasRecordedCurrentSong || isUpdatingListen) return false;
+    hasRecordedCurrentSong = true;
+    isUpdatingListen = true;
+    try {
+        const response = await fetch(`${GOOGLE_SHEET_API}?action=increment&song=${encodeURIComponent(songName)}`);
+        const result = await response.json();
+        if (result.success) {
+            listenData[songName] = result.count;
+            updateListenBadge();
+            updateListenStatsModal();
+            localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
+            console.log(`📊 Đã ghi nhận lượt nghe: ${songName} - ${result.count}`);
+        }
+    } catch (error) {
+        console.error('Lỗi tăng lượt nghe:', error);
+        if (!listenData[songName]) listenData[songName] = 0;
+        listenData[songName]++;
+        localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
+        updateListenBadge();
+    } finally {
+        isUpdatingListen = false;
+    }
+    return false;
+}
+
+function updateListenBadge() {
+    const badge = document.getElementById('listen-count-badge');
+    if (badge && listenData) {
+        const total = Object.values(listenData).reduce((a, b) => a + b, 0);
+        if (total >= 1000000) badge.textContent = (total / 1000000).toFixed(1) + 'M';
+        else if (total >= 1000) badge.textContent = (total / 1000).toFixed(1) + 'K';
+        else badge.textContent = total;
+    }
+}
+
+function showListenStats() {
+    let modal = document.getElementById('listen-stats-modal');
+    let overlay = document.getElementById('listen-overlay');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'listen-stats-modal';
+        modal.className = 'listen-modal';
+        modal.innerHTML = `
+            <h3><i class="fal fa-headphones"></i> THỐNG KÊ LƯỢT NGHE</h3>
+            <div class="listen-stats" id="listen-stats-content"><div style="text-align:center;padding:20px">Đang tải...</div></div>
+            <div class="listen-total" id="listen-total-stats"></div>
+            <button id="close-listen-modal" class="close-stats-btn"><i class="fas fa-times"></i> ĐÓNG</button>
+        `;
+        document.body.appendChild(modal);
+        overlay = document.createElement('div');
+        overlay.id = 'listen-overlay';
+        overlay.className = 'timer-overlay';
+        document.body.appendChild(overlay);
+        document.getElementById('close-listen-modal').onclick = () => {
+            modal.classList.remove('show');
+            overlay.classList.remove('show');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        };
+        overlay.onclick = () => {
+            modal.classList.remove('show');
+            overlay.classList.remove('show');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        };
+    }
+    updateListenStatsModal();
+    overlay.style.display = 'block';
+    setTimeout(() => {
+        overlay.classList.add('show');
+        modal.classList.add('show');
+    }, 10);
+}
+
+function updateListenStatsModal() {
+    const container = document.getElementById('listen-stats-content');
+    const totalContainer = document.getElementById('listen-total-stats');
+    if (!container) return;
+    if (listenData && Object.keys(listenData).length > 0) {
+        const sorted = Object.entries(listenData).sort((a, b) => b[1] - a[1]);
+        const total = sorted.reduce((sum, [_, count]) => sum + count, 0);
+        const statsHtml = sorted.slice(0, 15).map(([name, count], idx) => `
+            <div class="listen-stat-item">
+                <span class="listen-stat-rank">#${idx + 1}</span>
+                <span class="listen-stat-name">${escapeHtmlStat(name)}</span>
+                <span class="listen-stat-count">${formatNumberStat(count)}</span>
+            </div>
+        `).join('');
+        container.innerHTML = statsHtml;
+        if (totalContainer) {
+            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span style="font-size:1.2rem">${formatNumberStat(total)}</span>`;
+        }
+    } else {
+        container.innerHTML = '<div style="text-align:center;padding:20px">Chưa có dữ liệu lượt nghe</div>';
+    }
+}
+
+function formatNumberStat(num) {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toString();
+}
+
+function escapeHtmlStat(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+function recordListen() {
+    const currentSong = songs[index];
+    if (currentSong && currentSong.name && !hasRecordedCurrentSong && isPlaying) {
+        incrementListenCount(currentSong.name);
+    }
+}
+
+function resetListenFlag() {
+    hasRecordedCurrentSong = false;
+}
+
+const originalChangeSongForListen = changeSong;
+changeSong = function(i) {
+    resetListenFlag();
+    originalChangeSongForListen(i);
+};
+
+audio.addEventListener('play', () => {
+    setTimeout(() => {
+        if (!audio.paused && audio.currentTime > 3) {
+            recordListen();
+        }
+    }, 4000);
+});
+
+const listenCountBtn = document.getElementById('listen-count-btn');
+if (listenCountBtn) {
+    listenCountBtn.onclick = (e) => {
+        e.stopPropagation();
+        showListenStats();
+    };
+}
+
+fetchListenData();
+setInterval(fetchListenData, 30000);
+
 window.adjustLyricFontSize = adjustLyricFontSize;
+window.selectSongFromList = selectSongFromList;
