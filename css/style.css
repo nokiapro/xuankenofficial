@@ -794,7 +794,7 @@ body.dark .timer-modal {
     display: none !important;
 }
 
-/* ========== LƯỢT NGHE - MODAL RỘNG HƠN VÀ SCROLL ========== */
+/* ========== LƯỢT NGHE ========== */
 
 .listen-badge {
     position: absolute;
@@ -818,242 +818,6 @@ body.dark .listen-badge {
     box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* Modal chính - rộng hơn */
-.listen-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.96);
-    background: var(--modal-bg);
-    backdrop-filter: blur(24px);
-    padding: 20px;
-    border-radius: 32px;
-    z-index: 500;
-    display: none;
-    width: 90%;
-    max-width: 450px;
-    transition: all 0.25s ease;
-    opacity: 0;
-    text-align: center;
-    border: 1px solid var(--border-color);
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.listen-modal.show {
-    display: block;
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-}
-
-.listen-modal h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--accent-color);
-    color: var(--text-primary);
-    position: sticky;
-    top: 0;
-    background: var(--modal-bg);
-    z-index: 10;
-}
-
-/* Phần danh sách bài hát - có scrollbar riêng */
-.listen-stats {
-    text-align: left;
-    max-height: 55vh;
-    overflow-y: auto;
-    padding-right: 5px;
-}
-
-/* Tùy chỉnh scrollbar cho phần thống kê - giống playlist */
-.listen-stats::-webkit-scrollbar {
-    width: 4px;
-}
-
-.listen-stats::-webkit-scrollbar-track {
-    background-color: var(--progress-bg);
-    border-radius: 10px;
-}
-
-.listen-stats::-webkit-scrollbar-thumb {
-    background: var(--accent-color);
-    border-radius: 10px;
-    opacity: 0.5;
-}
-
-/* Mỗi dòng bài hát */
-.listen-stat-item {
-    display: flex;
-    align-items: center;
-    
-/* ========== LƯỢT NGHE - GIỐNG HỆT PLAYLIST (NẰM TRONG PLAYER) ========== */
-
-.listen-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff4444;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-body.dark .listen-badge {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-}
-
-/* Modal chính - GIỐNG Y HỆT PLAYLIST */
-.listen-modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--playlist-bg);
-    z-index: 150;
-    overflow-y: auto;
-    overflow-x: hidden;
-    transform: translateY(-100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    scroll-behavior: smooth;
-    border-radius: 32px;
-}
-
-.listen-modal.show {
-    transform: translateY(0);
-}
-
-/* Header của modal - GIỐNG PLAYLIST HEADER */
-.listen-modal-header {
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    background: var(--playlist-header-bg);
-    backdrop-filter: blur(10px);
-    z-index: 160;
-}
-
-.listen-modal-header .close-listen {
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: var(--text-primary);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    background: var(--progress-bg);
-}
-
-.listen-modal-header .close-listen:hover {
-    background: var(--btn-hover);
-    transform: rotate(90deg);
-}
-
-.listen-modal-header .close-listen:active {
-    transform: rotate(90deg) scale(0.9);
-}
-
-.listen-modal-header .listen-title {
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 0.9rem;
-    background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
-/* Phần danh sách bài hát */
-.listen-stats {
-    flex: 1;
-    padding-bottom: 20px;
-    overflow-y: auto;
-}
-
-/* Mỗi dòng bài hát - GIỐNG SONG-ITEM */
-.listen-stat-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 20px;
-    cursor: default;
-    border-bottom: 1px solid var(--border-color);
-    transition: all 0.2s ease;
-    margin: 4px 12px;
-    border-radius: 16px;
-    background: transparent;
-}
-
-.listen-stat-item:hover {
-    background: var(--song-item-hover);
-    transform: translateX(4px);
-}
-
-/* Số thứ tự */
-.listen-stat-rank {
-    width: 45px;
-    font-weight: bold;
-    color: var(--accent-color);
-    font-size: 0.9rem;
-}
-
-/* Tên bài hát */
-.listen-stat-name {
-    flex: 1;
-    color: var(--text-primary);
-    font-weight: 600;
-    text-align: left;
-    word-break: break-word;
-    line-height: 1.4;
-    font-size: 0.85rem;
-
-/* ========== LƯỢT NGHE - GIỐNG HỆT PLAYLIST (NẰM TRONG PLAYER, CÓ ANIMATION) ========== */
-
-.listen-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff4444;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    font-family: "Roboto Condensed", sans-serif;
-}
-
-body.dark .listen-badge {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-}
-
-/* Modal chính - GIỐNG Y HỆT PLAYLIST */
 .listen-modal {
     position: absolute;
     top: 0;
@@ -1076,7 +840,6 @@ body.dark .listen-badge {
     transform: translateY(0);
 }
 
-/* Header của modal - GIỐNG PLAYLIST HEADER */
 .listen-modal-header {
     padding: 18px 20px;
     display: flex;
@@ -1124,15 +887,12 @@ body.dark .listen-badge {
     color: transparent;
 }
 
-/* Phần danh sách bài hát - có scrollbar */
 .listen-stats {
     flex: 1;
     padding-bottom: 20px;
     overflow-y: auto;
-    max-height: calc(100% - 120px);
 }
 
-/* Mỗi dòng bài hát - GIỐNG SONG-ITEM */
 .listen-stat-item {
     display: flex;
     align-items: center;
@@ -1151,7 +911,6 @@ body.dark .listen-badge {
     transform: translateX(4px);
 }
 
-/* Số thứ tự */
 .listen-stat-rank {
     width: 45px;
     font-weight: bold;
@@ -1159,7 +918,6 @@ body.dark .listen-badge {
     font-size: 0.9rem;
 }
 
-/* Tên bài hát */
 .listen-stat-name {
     flex: 1;
     color: var(--text-primary);
@@ -1170,7 +928,6 @@ body.dark .listen-badge {
     font-size: 0.85rem;
 }
 
-/* Số lượt nghe */
 .listen-stat-count {
     font-weight: bold;
     color: var(--accent-color);
@@ -1179,156 +936,6 @@ body.dark .listen-badge {
     text-align: right;
 }
 
-/* Tổng lượt nghe */
-.listen-total {
-.listen-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff4444;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-body.dark .listen-badge {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-}
-
-/* Modal chính - GIỐNG Y HỆT PLAYLIST */
-.listen-modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--playlist-bg);
-    z-index: 200;
-    overflow-y: auto;
-    overflow-x: hidden;
-    transform: translateY(-100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    scroll-behavior: smooth;
-    border-radius: 32px;
-}
-
-.listen-modal.show {
-    transform: translateY(0);
-}
-
-/* Header của modal */
-.listen-modal-header {
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    background: var(--playlist-header-bg);
-    backdrop-filter: blur(10px);
-    z-index: 160;
-}
-
-.listen-modal-header .close-listen {
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: var(--text-primary);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    background: var(--progress-bg);
-}
-
-.listen-modal-header .close-listen:hover {
-    background: var(--btn-hover);
-    transform: rotate(90deg);
-}
-
-.listen-modal-header .close-listen:active {
-    transform: rotate(90deg) scale(0.9);
-}
-
-.listen-modal-header .listen-title {
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 0.9rem;
-    background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
-/* Phần danh sách bài hát */
-.listen-stats {
-    flex: 1;
-    padding-bottom: 20px;
-    overflow-y: auto;
-}
-
-/* Mỗi dòng bài hát */
-.listen-stat-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 20px;
-    cursor: default;
-    border-bottom: 1px solid var(--border-color);
-    transition: all 0.2s ease;
-    margin: 4px 12px;
-    border-radius: 16px;
-    background: transparent;
-}
-
-.listen-stat-item:hover {
-    background: var(--song-item-hover);
-    transform: translateX(4px);
-}
-
-/* Số thứ tự */
-.listen-stat-rank {
-    width: 45px;
-    font-weight: bold;
-    color: var(--accent-color);
-    font-size: 0.9rem;
-}
-
-/* Tên bài hát */
-.listen-stat-name {
-    flex: 1;
-    color: var(--text-primary);
-    font-weight: 600;
-    text-align: left;
-    word-break: break-word;
-    line-height: 1.4;
-    font-size: 0.85rem;
-}
-
-/* Số lượt nghe */
-.listen-stat-count {
-    font-weight: bold;
-    color: var(--accent-color);
-    font-size: 0.9rem;
-    min-width: 55px;
-    text-align: right;
-}
-
-/* Tổng lượt nghe */
 .listen-total {
     margin: 16px 20px 20px 20px;
     padding: 14px 18px;
@@ -1351,7 +958,6 @@ body.dark .listen-badge {
     color: var(--accent-color);
 }
 
-/* Scrollbar cho danh sách - GIỐNG PLAYLIST */
 .listen-stats::-webkit-scrollbar {
     width: 4px;
 }
@@ -1363,12 +969,6 @@ body.dark .listen-badge {
 .listen-stats::-webkit-scrollbar-thumb {
     background-image: linear-gradient(-45deg, #f1b586, #9f81ca, #c20175, #b33cea, #17adca, #dd4809, #ad9199);
     border-radius: 50px;
-}
-
-/* Đảm bảo player-container có position relative */
-.player-container {
-    position: relative;
-    overflow: hidden;
 }
 
 #listen-count-btn {
