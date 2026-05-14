@@ -1065,10 +1065,11 @@ async function incrementListenCount(songName) {
 }
 
 function showListenStats() {
+function showListenStats() {
     let modal = document.getElementById('listen-stats-modal');
     
+    // Nếu modal chưa tồn tại, tạo mới
     if (!modal) {
-        // Tạo modal với cấu trúc giống playlist
         modal = document.createElement('div');
         modal.id = 'listen-stats-modal';
         modal.className = 'listen-modal';
@@ -1086,7 +1087,7 @@ function showListenStats() {
             <div class="listen-total" id="listen-total-stats"></div>
         `;
         
-        // Chèn modal vào bên trong player-container (giống playlist)
+        // CHÈN VÀO BÊN TRONG player-container (quan trọng!)
         const playerContainer = document.querySelector('.player-container');
         if (playerContainer) {
             playerContainer.appendChild(modal);
@@ -1094,7 +1095,7 @@ function showListenStats() {
             document.body.appendChild(modal);
         }
         
-        // Gắn sự kiện đóng
+        // Gắn sự kiện đóng modal
         const closeBtn = document.getElementById('close-listen-modal');
         if (closeBtn) {
             closeBtn.onclick = () => {
@@ -1103,13 +1104,14 @@ function showListenStats() {
         }
     }
     
-    // Cập nhật nội dung
+    // Cập nhật nội dung trước khi hiển thị
     updateListenStatsModal();
     
-    // Hiển thị modal
+    // HIỂN THỊ MODAL - thêm class show để kích hoạt animation
     modal.classList.add('show');
 }
 
+function updateListenStatsModal() {
 function updateListenStatsModal() {
     const container = document.getElementById('listen-stats-content');
     const totalContainer = document.getElementById('listen-total-stats');
@@ -1120,14 +1122,20 @@ function updateListenStatsModal() {
         const sorted = Object.entries(listenData).sort((a, b) => b[1] - a[1]);
         const total = sorted.reduce((sum, [_, count]) => sum + count, 0);
         
-        // HIỂN THỊ TẤT CẢ BÀI HÁT (không giới hạn 15)
-        const statsHtml = sorted.map(([name, count], idx) => `
-            <div class="listen-stat-item">
-                <span class="listen-stat-rank">#${idx + 1}</span>
-                <span class="listen-stat-name">${escapeHtmlStat(name)}</span>
-                <span class="listen-stat-count">${formatNumberStat(count)}</span>
-            </div>
-        `).join('');
+        // Hiển thị TẤT CẢ bài hát
+        const statsHtml = sorted.map(([name, count], idx) => {
+            // Xử lý tên bài hát bị lỗi font chữ (Vụ Quy -> Vu Quy)
+            let cleanName = name.replace(/Vụ Quy/g, 'Vu Quy')
+                               .replace(/Thắt Tình/g, 'Thất Tình')
+                               .replace(/Nổi Nhớ/g, 'Nỗi Nhớ');
+            return `
+                <div class="listen-stat-item">
+                    <span class="listen-stat-rank">${idx + 1}</span>
+                    <span class="listen-stat-name">${escapeHtmlStat(cleanName)}</span>
+                    <span class="listen-stat-count">${formatNumberStat(count)}</span>
+                </div>
+            `;
+        }).join('');
         
         container.innerHTML = statsHtml;
         
@@ -1135,7 +1143,7 @@ function updateListenStatsModal() {
             totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
         }
     } else {
-        container.innerHTML = '<div style="text-align:center;padding:30px">Chưa có dữ liệu lượt nghe<br><span style="font-size:12px">Hãy nghe một bài hát để bắt đầu!</span></div>';
+        container.innerHTML = '<div style="text-align:center;padding:40px">Chưa có dữ liệu lượt nghe<br><span style="font-size:12px">Hãy nghe một bài hát để bắt đầu!</span></div>';
         if (totalContainer) {
             totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>0</span>`;
         }
