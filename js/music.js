@@ -987,135 +987,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 
 // ========== HỆ THỐNG ĐẾM LƯỢT NGHE ==========
 
-// ĐÃ CẬP NHẬT URL APPS SCRIPT CỦA BẠN
 const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbxGoLJOeikvklz3EM137ELiK6a86jioK9o5DFBEXHZvmulQpxKJcTiKe8KL0wPizoeV0Q/exec';
-
-// Link CSV từ Sheet đã xuất bản
-const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9vI_OY_nJ0sHiSVUy31z9U-4zClIdkgBZCAiquu8wePVrosqwV-GnSOKTtYJP_pgHt_mtC8Kcm/pub?output=csv';
-
-let listenData = {};
-let hasRecordedCurrentSong = false;
-let isUpdatingListen = false;
-
-async function fetchListenData() {
-    if (isUpdatingListen) return listenData;
-    try {
-        const response = await fetch(`${GOOGLE_SHEET_API}?action=get&t=${Date.now()}`);
-        if (response.ok) {
-            listenData = await response.json();
-            updateListenBadge();
-            updateListenStatsModal();
-            return listenData;
-        }
-    } catch (error) {
-        console.log('API error, trying CSV fallback...');
-    }
-    try {
-        const csvResponse = await fetch(GOOGLE_SHEET_CSV + '&t=' + Date.now());
-        if (csvResponse.ok) {
-            const csvText = await csvResponse.text();
-            const rows = csvText.split('\n');
-            listenData = {};
-            for (let i = 1; i < rows.length; i++) {
-                const cols = rows[i].split(',');
-                if (cols.length >= 2 && cols[0]) {
-                    let name = cols[0].replace(/^"|"$/g, '');
-                    let count = parseInt(cols[1]) || 0;
-                    listenData[name] = count;
-                }
-            }
-            updateListenBadge();
-            updateListenStatsModal();
-        }
-    } catch (error) {
-        console.error('Lỗi lấy dữ liệu:', error);
-        const saved = localStorage.getItem('xuanken_listens');
-        if (saved) {
-            listenData = JSON.parse(saved);
-            updateListenBadge();
-        }
-    }
-    return listenData;
-}
-
-async function incrementListenCount(songName) {
-    if (!songName || hasRecordedCurrentSong || isUpdatingListen) return false;
-    hasRecordedCurrentSong = true;
-    isUpdatingListen = true;
-    try {
-        const response = await fetch(`${GOOGLE_SHEET_API}?action=increment&song=${encodeURIComponent(songName)}`);
-        const result = await response.json();
-        if (result.success) {
-            listenData[songName] = result.count;
-            updateListenBadge();
-            updateListenStatsModal();
-            localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
-            console.log(`📊 Đã ghi nhận lượt nghe: ${songName} - ${result.count}`);
-        }
-    } catch (error) {
-        console.error('Lỗi tăng lượt nghe:', error);
-        if (!listenData[songName]) listenData[songName] = 0;
-        listenData[songName]++;
-        localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
-        updateListenBadge();
-    } finally {
-        isUpdatingListen = false;
-    }
-    return false;
-}
-
-function showListenStats() {
-function showListenStats() {
-    let modal = document.getElementById('listen-stats-modal');
-    
-    // Nếu modal chưa tồn tại, tạo mới
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'listen-stats-modal';
-        modal.className = 'listen-modal';
-        modal.innerHTML = `
-            <div class="listen-modal-header">
-                <div class="close-listen" id="close-listen-modal">
-                    <i class="fas fa-times"></i>
-                </div>
-                <div class="listen-title"><i class="fal fa-headphones"></i> THỐNG KÊ LƯỢT NGHE <i class="fal fa-headphones"></i></div>
-                <div style="width: 40px;"></div>
-            </div>
-            <div class="listen-stats" id="listen-stats-content">
-                <div style="text-align:center;padding:40px">Đang tải dữ liệu...</div>
-            </div>
-            <div class="listen-total" id="listen-total-stats"></div>
-        `;
-        
-        // CHÈN VÀO BÊN TRONG player-container (quan trọng!)
-        const playerContainer = document.querySelector('.player-container');
-        if (playerContainer) {
-            playerContainer.appendChild(modal);
-        } else {
-            document.body.appendChild(modal);
-        }
-        
-        // Gắn sự kiện đóng modal
-        const closeBtn = document.getElementById('close-listen-modal');
-        if (closeBtn) {
-            closeBtn.onclick = () => {
-                modal.classList.remove('show');
-            };
-        }
-    }
-    
-    // Cập nhật nội dung trước khi hiển thị
-    updateListenStatsModal();
-    
-    // HIỂN THỊ MODAL - thêm class show để kích hoạt animation
-    modal.classList.add('show');
-}
-// ========== HỆ THỐNG ĐẾM LƯỢT NGHE ==========
-
-// ĐÃ CẬP NHẬT URL APPS SCRIPT CỦA BẠN
-const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbxGoLJOeikvklz3EM137ELiK6a86jioK9o5DFBEXHZvmulQpxKJcTiKe8KL0wPizoeV0Q/exec';
-
-// Link CSV từ Sheet đã xuất bản
 const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9vI_OY_nJ0sHiSVUy31z9U-4zClIdkgBZCAiquu8wePVrosqwV-GnSOKTtYJP_pgHt_mtC8Kcm/pub?output=csv';
 
 let listenData = {};
@@ -1199,11 +1071,9 @@ function updateListenBadge() {
     }
 }
 
-// Hàm hiển thị modal thống kê
 function showListenStats() {
     let modal = document.getElementById('listen-stats-modal');
     
-    // Nếu modal chưa tồn tại, tạo mới
     if (!modal) {
         modal = document.createElement('div');
         modal.id = 'listen-stats-modal';
@@ -1222,7 +1092,6 @@ function showListenStats() {
             <div class="listen-total" id="listen-total-stats"></div>
         `;
         
-        // CHÈN VÀO BÊN TRONG player-container (quan trọng!)
         const playerContainer = document.querySelector('.player-container');
         if (playerContainer) {
             playerContainer.appendChild(modal);
@@ -1230,7 +1099,6 @@ function showListenStats() {
             document.body.appendChild(modal);
         }
         
-        // Gắn sự kiện đóng modal
         const closeBtn = document.getElementById('close-listen-modal');
         if (closeBtn) {
             closeBtn.onclick = () => {
@@ -1239,27 +1107,20 @@ function showListenStats() {
         }
     }
     
-    // Cập nhật nội dung trước khi hiển thị
     updateListenStatsModal();
-    
-    // HIỂN THỊ MODAL - thêm class show để kích hoạt animation
     modal.classList.add('show');
 }
 
-// Hàm cập nhật nội dung modal thống kê
 function updateListenStatsModal() {
     const container = document.getElementById('listen-stats-content');
     const totalContainer = document.getElementById('listen-total-stats');
     if (!container) return;
     
     if (listenData && Object.keys(listenData).length > 0) {
-        // Sắp xếp theo lượt nghe giảm dần
         const sorted = Object.entries(listenData).sort((a, b) => b[1] - a[1]);
         const total = sorted.reduce((sum, [_, count]) => sum + count, 0);
         
-        // Hiển thị TẤT CẢ bài hát
         const statsHtml = sorted.map(([name, count], idx) => {
-            // Xử lý tên bài hát bị lỗi font chữ
             let cleanName = name.replace(/Vụ Quy/g, 'Vu Quy')
                                .replace(/Thắt Tình/g, 'Thất Tình')
                                .replace(/Nổi Nhớ/g, 'Nỗi Nhớ');
@@ -1312,14 +1173,12 @@ function resetListenFlag() {
     hasRecordedCurrentSong = false;
 }
 
-// Lưu lại hàm changeSong gốc để gắn reset
 const originalChangeSongForListen = changeSong;
 changeSong = function(i) {
     resetListenFlag();
     originalChangeSongForListen(i);
 };
 
-// Lắng nghe sự kiện play
 audio.addEventListener('play', () => {
     setTimeout(() => {
         if (!audio.paused && audio.currentTime > 3) {
@@ -1328,7 +1187,6 @@ audio.addEventListener('play', () => {
     }, 4000);
 });
 
-// Gắn sự kiện cho nút tai nghe
 const listenCountBtn = document.getElementById('listen-count-btn');
 if (listenCountBtn) {
     listenCountBtn.onclick = (e) => {
@@ -1337,10 +1195,7 @@ if (listenCountBtn) {
     };
 }
 
-// Tải dữ liệu khi khởi động
 fetchListenData();
-
-// Cập nhật định kỳ mỗi 30 giây
 setInterval(fetchListenData, 30000);
 
 window.adjustLyricFontSize = adjustLyricFontSize;
