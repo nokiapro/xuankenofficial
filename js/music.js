@@ -313,6 +313,27 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/p524zta5w1bgjtvib9m7p/SAULOITAMBIET-XUANKEN.mp3?rlkey=tvmpqbysyztan8p8fc6qh5g7p&st=vo0z8tk1&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/SAULOITAMBIET-LYRIC.lrc",
         lrc2: "https://dl.dropboxusercontent.com/scl/fi/ur3cyl6i7u4c52o1fqyil/SAULOITAMBIET-LYRIC.lrc?rlkey=ws6mpq9vfqtquec85nrnpdfnz&st=5hc55xk2&dl=0"
+    },
+    {
+        name: "Món Quà Vô Giá",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/MONQUAVOGIA-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/fuijf7q8htphn9q4x142t/MONQUAVOGIA-XUANKEN.mp3?rlkey=q6wrw8w2naxqf332lz4u25pee&st=nla1ou45&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/MONQUAVOGIA-LYRIC.lrc",
+        lrc2: ""
+    },
+    {
+        name: "Bay Giữa Ngân Hà",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/BAYGIUANGANHA-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/d40siu3rpo5k50r85jdwj/BAYGIUANGANHA-XUANKEN.mp3?rlkey=xqnqr2vc0yvbltpbyre5z2zfa&st=wvuxajfp&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BAYGIUANGANHA-LYRIC.lrc",
+        lrc2: ""
+    },
+    {
+        name: "Từng Là Thanh Xuân Của Nhau",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TUNGLATHANHXUANCUANHAU-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/5q563c9qerc5434o50dwg/TUNGLATHANHXUANCUANHAU-XUANKEN.mp3?rlkey=22c5bqupw97ymipvioe8z3yp0&st=s6wg975g&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TUNGLATHANHXUANCUANHAU-LYRIC.lrc",
+        lrc2: ""
     }
 ];
 
@@ -721,7 +742,6 @@ if (progressArea) {
     };
 }
 
-// ==================== TIMER CODE ĐÃ SỬA ====================
 let sleepTimerId = null;
 let countdownInterval = null;
 let remainSeconds = 0;
@@ -795,7 +815,6 @@ function startCountdown(seconds) {
                 clearTimeout(sleepTimerId);
                 sleepTimerId = null;
             }
-            // TẮT NHẠC
             if (audio && !audio.paused) {
                 audio.pause();
             }
@@ -815,11 +834,10 @@ window.setTimer = function(minutes) {
         return;
     }
 
-    cancelTimer(); // Xóa timer cũ trước khi đặt mới
+    cancelTimer();
 
     const seconds = minutes * 60;
 
-    // Đặt timeout tắt nhạc sau seconds giây
     sleepTimerId = setTimeout(() => {
         if (audio && !audio.paused) {
             audio.pause();
@@ -834,7 +852,6 @@ window.setTimer = function(minutes) {
         remainSeconds = 0;
     }, seconds * 1000);
 
-    // Chạy đếm ngược hiển thị
     startCountdown(seconds);
     toggleTimerModal();
     showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT`);
@@ -892,7 +909,6 @@ if (timerModal) {
         e.stopPropagation();
     });
 }
-// ==================== END TIMER CODE ====================
 
 const observer = new ResizeObserver(() => autoScaleSongTitle());
 if (songTitleEl) observer.observe(songTitleEl.parentElement);
