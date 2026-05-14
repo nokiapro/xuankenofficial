@@ -27,7 +27,6 @@
                 </div>
                 <div class="btn-icon" id="listen-count-btn" title="Lượt nghe">
                     <i class="fal fa-headphones"></i>
-                    <span id="listen-count-badge" class="listen-badge">0</span>
                 </div>
             </div>
 
@@ -92,40 +91,41 @@
             </div>
             <div id="playlist-content"></div>
         </div>
-    </div>
 
-    <div id="timer-overlay" class="timer-overlay"></div>
-    <div id="timer-modal" class="timer-modal">
-        <div class="timer-modal-header">
-            <div class="close-timer" id="close-timer-modal">
-                <i class="fas fa-times"></i>
+        <!-- TIMER MODAL - NẰM TRONG player-container -->
+        <div id="timer-overlay" class="timer-overlay"></div>
+        <div id="timer-modal" class="timer-modal">
+            <div class="timer-modal-header">
+                <div class="close-timer" id="close-timer-modal">
+                    <i class="fas fa-times"></i>
+                </div>
+                <div class="timer-title"><i class="fal fa-stopwatch"></i> HẸN GIỜ TẮT NHẠC <i class="fal fa-stopwatch"></i></div>
+                <div style="width: 40px;"></div>
             </div>
-            <div class="timer-title"><i class="fal fa-stopwatch"></i> HẸN GIỜ TẮT NHẠC <i class="fal fa-stopwatch"></i></div>
-            <div style="width: 40px;"></div>
-        </div>
-        <div class="timer-modal-content">
-            <div class="timer-status-box">
-                <i class="fal fa-alarm-clock"></i>
-                <div class="timer-status-text" id="timer-status">CHƯA ĐẶT HẸN GIỜ</div>
+            <div class="timer-modal-content">
+                <div class="timer-status-box">
+                    <i class="fal fa-alarm-clock"></i>
+                    <div class="timer-status-text" id="timer-status">CHƯA ĐẶT HẸN GIỜ</div>
+                </div>
+                
+                <div class="timer-preset-group">
+                    <button class="timer-preset" data-minutes="15">15</button>
+                    <button class="timer-preset" data-minutes="30">30</button>
+                    <button class="timer-preset" data-minutes="60">60</button>
+                    <button class="timer-preset" data-minutes="90">90</button>
+                    <button class="timer-preset" data-minutes="120">120</button>
+                </div>
+                
+                <input type="number" id="timer-minutes" class="timer-input" placeholder="NHẬP SỐ PHÚT...">
+                
+                <button id="start-timer-btn" class="timer-start-btn">
+                    <i class="fas fa-play"></i> BẮT ĐẦU
+                </button>
+                
+                <button id="cancel-timer-btn" class="timer-cancel-btn">
+                    <i class="fas fa-trash-alt"></i> HỦY HẸN GIỜ
+                </button>
             </div>
-            
-            <div class="timer-preset-group">
-                <button class="timer-preset" data-minutes="15">15</button>
-                <button class="timer-preset" data-minutes="30">30</button>
-                <button class="timer-preset" data-minutes="60">60</button>
-                <button class="timer-preset" data-minutes="90">90</button>
-                <button class="timer-preset" data-minutes="120">120</button>
-            </div>
-            
-            <input type="number" id="timer-minutes" class="timer-input" placeholder="NHẬP SỐ PHÚT...">
-            
-            <button id="start-timer-btn" class="timer-start-btn">
-                <i class="fas fa-play"></i> BẮT ĐẦU
-            </button>
-            
-            <button id="cancel-timer-btn" class="timer-cancel-btn">
-                <i class="fas fa-trash-alt"></i> HỦY HẸN GIỜ
-            </button>
         </div>
     </div>
 
