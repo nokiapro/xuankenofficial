@@ -1115,22 +1115,31 @@ function updateListenStatsModal() {
     const container = document.getElementById('listen-stats-content');
     const totalContainer = document.getElementById('listen-total-stats');
     if (!container) return;
+    
     if (listenData && Object.keys(listenData).length > 0) {
+        // Sắp xếp theo lượt nghe giảm dần
         const sorted = Object.entries(listenData).sort((a, b) => b[1] - a[1]);
         const total = sorted.reduce((sum, [_, count]) => sum + count, 0);
-        const statsHtml = sorted.slice(0, 15).map(([name, count], idx) => `
+        
+        // HIỂN THỊ TẤT CẢ BÀI HÁT (không giới hạn 15)
+        const statsHtml = sorted.map(([name, count], idx) => `
             <div class="listen-stat-item">
                 <span class="listen-stat-rank">#${idx + 1}</span>
                 <span class="listen-stat-name">${escapeHtmlStat(name)}</span>
                 <span class="listen-stat-count">${formatNumberStat(count)}</span>
             </div>
         `).join('');
+        
         container.innerHTML = statsHtml;
+        
         if (totalContainer) {
-            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span style="font-size:1.2rem">${formatNumberStat(total)}</span>`;
+            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
         }
     } else {
-        container.innerHTML = '<div style="text-align:center;padding:20px">Chưa có dữ liệu lượt nghe</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px">Chưa có dữ liệu lượt nghe<br><span style="font-size:12px">Hãy nghe một bài hát để bắt đầu!</span></div>';
+        if (totalContainer) {
+            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>0</span>`;
+        }
     }
 }
 
