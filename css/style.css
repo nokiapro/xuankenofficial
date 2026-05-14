@@ -134,6 +134,8 @@ body.dark .player-container {
     top: 15px;
     left: 15px;
     z-index: 110;
+    display: flex;
+    gap: 8px;
 }
 
 .btn-icon {
@@ -790,4 +792,129 @@ body.dark .timer-modal {
 .timer-preset::before,
 .timer-preset::after {
     display: none !important;
+}
+
+/* ========== LƯỢT NGHE ========== */
+
+.listen-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4444;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+body.dark .listen-badge {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.listen-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.96);
+    background: var(--modal-bg);
+    backdrop-filter: blur(24px);
+    padding: 20px;
+    border-radius: 32px;
+    z-index: 500;
+    display: none;
+    width: 85%;
+    max-width: 350px;
+    transition: all 0.25s ease;
+    opacity: 0;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.listen-modal.show {
+    display: block;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.listen-modal h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.listen-stats {
+    text-align: left;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.listen-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85rem;
+}
+
+.listen-stat-rank {
+    width: 35px;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.listen-stat-name {
+    flex: 1;
+    color: var(--text-primary);
+    font-weight: 500;
+    text-align: left;
+    word-break: break-word;
+}
+
+.listen-stat-count {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.listen-total {
+    margin-top: 15px;
+    padding: 12px;
+    background: var(--progress-bg);
+    border-radius: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-primary);
+}
+
+.close-stats-btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background: var(--progress-bg);
+    border: none;
+    border-radius: 30px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.close-stats-btn:hover {
+    background: var(--btn-hover);
+    color: var(--text-primary);
+}
+
+#listen-count-btn {
+    position: relative;
 }
