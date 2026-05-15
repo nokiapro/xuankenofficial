@@ -450,20 +450,16 @@ function scrollToActiveTop() {
     const scrollContainer = document.getElementById('playlist-content');
     if (!scrollContainer) return;
     
-    // Lấy chiều cao chính xác của header
     const header = document.querySelector('.playlist-header');
     const headerHeight = header ? header.offsetHeight : 65;
     
-    // Tính vị trí của bài hát so với đỉnh container
+    // Khoảng cách mong muốn từ header đến bài hát (20px)
+    const desiredSpacing = 20;
+    
+    // Tính vị trí cuộn
     const itemOffsetTop = activeItem.offsetTop;
+    const targetScroll = itemOffsetTop - headerHeight - desiredSpacing;
     
-    // Khoảng cách muốn cách header (0 = sát dưới header)
-    const spacing = 8;
-    
-    // Vị trí cần cuộn đến
-    const targetScroll = itemOffsetTop - headerHeight - spacing;
-    
-    // Cuộn đến vị trí (không âm)
     scrollContainer.scrollTo({
         top: Math.max(0, targetScroll),
         behavior: 'smooth'
@@ -1078,20 +1074,16 @@ function scrollToCurrentListenSong() {
     const scrollContainer = modal.querySelector('.listen-stats');
     if (!scrollContainer) return;
     
-    // Lấy chiều cao chính xác của header
     const header = modal.querySelector('.listen-modal-header');
     const headerHeight = header ? header.offsetHeight : 65;
     
-    // Tính vị trí của bài hát so với đỉnh container
+    // Khoảng cách mong muốn từ header đến bài hát (20px)
+    const desiredSpacing = 20;
+    
+    // Tính vị trí cuộn
     const itemOffsetTop = activeItem.offsetTop;
+    const targetScroll = itemOffsetTop - headerHeight - desiredSpacing;
     
-    // Khoảng cách muốn cách header (0 = sát dưới header)
-    const spacing = 0;
-    
-    // Vị trí cần cuộn đến
-    const targetScroll = itemOffsetTop - headerHeight - spacing;
-    
-    // Cuộn đến vị trí (không âm)
     scrollContainer.scrollTo({
         top: Math.max(0, targetScroll),
         behavior: 'smooth'
