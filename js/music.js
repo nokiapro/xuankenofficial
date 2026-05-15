@@ -1023,36 +1023,23 @@ function updateListenBadge() {
     // Badge đã bị xóa trong CSS, function này để tránh lỗi
 }
 
-// Hàm cuộn đến bài hát đang phát trong modal lượt nghe
+// ========== HÀM CHO LƯỢT NGHE (COPY Y HỆT PLAYLIST) ==========
+
+// Cuộn đến bài đang phát - GIỐNG Y HỆT scrollToActiveTop CỦA PLAYLIST
 function scrollToCurrentListenSong() {
     const modal = document.getElementById('listen-stats-modal');
-    const currentSongName = songs[index]?.name;
+    if (!modal) return;
     
-    if (!modal || !currentSongName) return;
-    
-    const statItems = modal.querySelectorAll('.listen-stat-item');
-    let targetItem = null;
-    
-    for (let i = 0; i < statItems.length; i++) {
-        const nameSpan = statItems[i].querySelector('.listen-stat-name');
-        if (nameSpan && nameSpan.innerText === currentSongName) {
-            targetItem = statItems[i];
-            break;
-        }
-    }
-    
-    if (targetItem) {
-        statItems.forEach(item => item.classList.remove('current-playing'));
-        targetItem.classList.add('current-playing');
-        
-        // Sử dụng scrollIntoView với offset để không bị che header
-        targetItem.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+    const activeItem = modal.querySelector('.listen-stat-item.current-playing');
+    if (activeItem) {
+        const headerHeight = modal.querySelector('.listen-modal-header').offsetHeight;
+        const targetScroll = activeItem.offsetTop - headerHeight;
+        // Cuộn trực tiếp trên modal (giống playlist)
+        modal.scrollTop = Math.max(0, targetScroll);
     }
 }
 
+// Hiển thị modal lượt nghe - GIỐNG Y HỆT CÁCH MỞ PLAYLIST
 function showListenStats() {
     let modal = document.getElementById('listen-stats-modal');
     if (!modal) {
@@ -1069,9 +1056,63 @@ function showListenStats() {
     updateListenStatsModal();
     modal.classList.add('show');
     
+    // TỰ ĐỘNG CUỘN ĐẾN BÀI ĐANG PHÁT (GIỐNG PLAYLIST)
     setTimeout(() => {
         scrollToCurrentListenSong();
-    }, 200);
+    }, 150);
+}
+
+// Cập nhật nội dung modal (giữ nguyên highlight)
+function updateListenStatsModal() {
+    const container = document.getElementById('listen-stats-content');
+    const totalContainer = document.getElementById('listen-total-stats');
+    if (!container) return;
+    
+    if (listenData && Object.keys(listenData).length > 0) {
+        const currentSongName = songs[index]?.name;
+        const statsHtml = songs.map(song => {
+            const count = listenData[song.name] || 0;
+            const isCurrent = (song.name === currentSongName);
+            return `
+                <div class="listen-stat-item ${isCurrent ? 'current-playing' : ''}">
+                    <span class="listen-stat-name">${escapeHtmlStat(song.name)}</span>
+                    <span class="listen-stat-count">${formatNumberStat(count)}</span>
+                </div>
+            `;
+        }).join('');
+        
+        const total = Object.values(listenData).reduce((sum, count) => sum + count, 0);
+        container.innerHTML = statsHtml;
+        if (totalContainer) {
+            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
+        }
+    } else {
+        container.innerHTML = '<div style="text-align:center;padding:40px">Đang tải dữ liệu...</div>';
+        if (totalContainer) {
+            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>0</span>`;
+        }
+    }
+}
+
+// Cập nhật highlight khi chuyển bài (GIỐNG PLAYLIST)
+function updateCurrentSongHighlight() {
+    const modal = document.getElementById('listen-stats-modal');
+    if (!modal || !modal.classList.contains('show')) return;
+    
+    const currentSongName = songs[index]?.name;
+    const statItems = modal.querySelectorAll('.listen-stat-item');
+    
+    statItems.forEach(item => {
+        const nameSpan = item.querySelector('.listen-stat-name');
+        if (nameSpan && nameSpan.innerText === currentSongName) {
+            item.classList.add('current-playing');
+        } else {
+            item.classList.remove('current-playing');
+        }
+    });
+    
+    // Cuộn đến bài mới khi chuyển bài (GIỐNG PLAYLIST)
+    scrollToCurrentListenSong();
 }
 
 function updateListenStatsModal() {
