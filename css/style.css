@@ -572,7 +572,6 @@ body.dark .album-art {
 
 /* ========== TIMER MODAL - NẰM TRONG PLAYER ========== */
 
-/* Overlay nền tối phía sau */
 .timer-overlay {
     position: fixed;
     top: 0;
@@ -592,7 +591,6 @@ body.dark .album-art {
     backdrop-filter: blur(5px);
 }
 
-/* Timer modal - NẰM TRONG player-container (position absolute) */
 .timer-modal {
     position: absolute;
     top: 0;
@@ -611,7 +609,6 @@ body.dark .album-art {
     border-radius: 32px;
     padding: 0;
     opacity: 1;
-    box-shadow: none;
 }
 
 .timer-modal.show {
@@ -825,7 +822,6 @@ body.dark .album-art {
 
 /* ========== LƯỢT NGHE ========== */
 
-/* Badge đã bị xóa */
 .listen-badge {
     display: none;
 }
@@ -923,6 +919,23 @@ body.dark .album-art {
     transform: translateX(4px);
 }
 
+/* Bài hát đang phát trong modal lượt nghe */
+.listen-stat-item.current-playing {
+    background: linear-gradient(135deg, var(--btn-hover), transparent);
+    border-left: 3px solid var(--accent-color);
+    transform: translateX(4px);
+}
+
+.listen-stat-item.current-playing .listen-stat-name {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.listen-stat-item.current-playing .listen-stat-count {
+    color: var(--accent-color);
+    transform: scale(1.05);
+}
+
 .listen-stat-name {
     flex: 1;
     color: var(--text-primary);
@@ -932,6 +945,7 @@ body.dark .album-art {
     line-height: 1.4;
     font-size: 0.85rem;
     padding-right: 12px;
+    transition: all 0.2s ease;
 }
 
 .listen-stat-count {
@@ -940,6 +954,7 @@ body.dark .album-art {
     font-size: 0.9rem;
     min-width: 55px;
     text-align: right;
+    transition: all 0.2s ease;
 }
 
 .listen-total {
