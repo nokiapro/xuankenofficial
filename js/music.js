@@ -453,8 +453,7 @@ function scrollToActiveTop() {
     const header = document.querySelector('.playlist-header');
     const headerHeight = header ? header.offsetHeight : 65;
     
-    // Khoảng cách từ header đến bài hát (12px - giống padding)
-    const spacingFromHeader = 12;
+    const spacingFromHeader = 4;
     
     const itemOffsetTop = activeItem.offsetTop;
     const targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
@@ -465,7 +464,6 @@ function scrollToActiveTop() {
     });
 }
 
-// Hàm cuộn mượt tùy chỉnh tốc độ
 function smoothScrollTo(element, targetY, duration) {
     const startY = element.scrollTop;
     const distance = targetY - startY;
@@ -619,11 +617,10 @@ function changeSong(i) {
     loadSong(i).then(() => audio.play().catch(() => { }));
 }
 
-// Hàm ghi nhận lượt nghe khi chuyển bài
 function recordListenOnSongChange(songName, action) {
     if (songName) {
         incrementListenCount(songName, false);
-        console.log(`📊 Chuyển bài (${action}) - ghi nhận lượt nghe: ${songName}`);
+        console.log(`CHUYỂN BÀI (${action}) - GHI NHẬN LƯỢT NGHE: ${songName}`);
     }
 }
 
@@ -631,7 +628,7 @@ function selectSongFromList(i) {
     const songName = songs[i].name;
     if (songName) {
         incrementListenCount(songName, false);
-        showToast(`🎧 Đã ghi nhận lượt nghe: ${songName}`);
+        showToast(`ĐÃ GHI NHẬN LƯỢT NGHE: ${songName}`);
     }
     if (playlistOverlay) playlistOverlay.classList.remove('active');
     changeSong(i);
@@ -708,7 +705,7 @@ audio.onended = () => {
         const currentSong = songs[index];
         if (currentSong && currentSong.name) {
             incrementListenCount(currentSong.name, true);
-            console.log(`🔄 Lặp lại - ghi nhận thêm lượt nghe: ${currentSong.name}`);
+            console.log(`LẶP LẠI - GHI NHẬN THÊM LƯỢT NGHE: ${currentSong.name}`);
         }
         audio.currentTime = 0;
         setTimeout(() => { audio.play().catch(e => { audio.load(); setTimeout(() => audio.play(), 50); }); }, 10);
@@ -801,8 +798,6 @@ if (progressArea) {
     };
 }
 
-// ========== HẸN GIỜ TẮT NHẠC ==========
-
 let sleepTimerId = null;
 let countdownInterval = null;
 let remainSeconds = 0;
@@ -835,7 +830,7 @@ function cancelTimer() {
     if (sleepTimerId) { clearTimeout(sleepTimerId); sleepTimerId = null; }
     if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
     remainSeconds = 0;
-    if (timerStatus) timerStatus.innerHTML = 'CHƯA ĐẶT HẸN GIỜ';
+    if (timerStatus) timerStatus.innerHTML = 'BẠN CHƯA ĐẶT HẸN GIỜ';
     if (openTimerBtn) openTimerBtn.classList.remove('active');
 }
 
@@ -846,7 +841,7 @@ function updateTimerDisplay() {
         if (timerStatus) timerStatus.innerHTML = `TẮT SAU: <strong>${mins}</strong> PHÚT <strong>${secs}</strong> GIÂY`;
         if (openTimerBtn) openTimerBtn.classList.add('active');
     } else {
-        if (timerStatus) timerStatus.innerHTML = 'CHƯA ĐẶT HẸN GIỜ';
+        if (timerStatus) timerStatus.innerHTML = 'BẠN CHƯA ĐẶT HẸN GIỜ';
         if (openTimerBtn) openTimerBtn.classList.remove('active');
     }
 }
@@ -979,8 +974,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
     }
 });
 
-// ========== HỆ THỐNG ĐẾM LƯỢT NGHE ==========
-
 const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbxGoLJOeikvklz3EM137ELiK6a86jioK9o5DFBEXHZvmulQpxKJcTiKe8KL0wPizoeV0Q/exec';
 const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9vI_OY_nJ0sHiSVUy31z9U-4zClIdkgBZCAiquu8wePVrosqwV-GnSOKTtYJP_pgHt_mtC8Kcm/pub?output=csv';
 
@@ -1017,7 +1010,7 @@ async function fetchListenData() {
             updateListenStatsModal();
         }
     } catch (error) {
-        console.error('Lỗi lấy dữ liệu:', error);
+        console.error('LỖI LẤY DỮ LIỆU:', error);
         const saved = localStorage.getItem('xuanken_listens');
         if (saved) { listenData = JSON.parse(saved); updateListenBadge(); }
     }
@@ -1039,10 +1032,10 @@ async function incrementListenCount(songName, isFromLoop = false) {
             updateListenBadge();
             updateListenStatsModal();
             localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
-            console.log(`📊 Đã ghi nhận lượt nghe: ${songName} - ${result.count} ${isFromLoop ? '(lặp lại)' : ''}`);
+            console.log(`ĐÃ GHI NHẬN LƯỢT NGHE: ${songName} - ${result.count} ${isFromLoop ? '(LẶP LẠI)' : ''}`);
         }
     } catch (error) {
-        console.error('Lỗi tăng lượt nghe:', error);
+        console.error('LỖI TĂNG LƯỢT NGHE:', error);
         if (!listenData[songName]) listenData[songName] = 0;
         listenData[songName]++;
         localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
@@ -1057,12 +1050,8 @@ async function incrementListenCount(songName, isFromLoop = false) {
 }
 
 function updateListenBadge() {
-    // Badge đã bị xóa trong CSS, function này để tránh lỗi
 }
 
-// ========== HÀM CHO LƯỢT NGHE (COPY Y HỆT PLAYLIST) ==========
-
-// Cuộn đến bài đang phát - GIỐNG Y HỆT scrollToActiveTop CỦA PLAYLIST
 function scrollToCurrentListenSong() {
     const modal = document.getElementById('listen-stats-modal');
     if (!modal) return;
@@ -1076,8 +1065,7 @@ function scrollToCurrentListenSong() {
     const header = modal.querySelector('.listen-modal-header');
     const headerHeight = header ? header.offsetHeight : 65;
     
-    // Khoảng cách từ header đến bài hát (12px - giống padding)
-    const spacingFromHeader = 12;
+    const spacingFromHeader = 4;
     
     const itemOffsetTop = activeItem.offsetTop;
     const targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
@@ -1088,14 +1076,13 @@ function scrollToCurrentListenSong() {
     });
 }
 
-// Hiển thị modal lượt nghe - GIỐNG Y HỆT CÁCH MỞ PLAYLIST
 function showListenStats() {
     let modal = document.getElementById('listen-stats-modal');
     if (!modal) {
         modal = document.createElement('div');
         modal.id = 'listen-stats-modal';
         modal.className = 'listen-modal';
-        modal.innerHTML = `<div class="listen-modal-header"><div class="close-listen" id="close-listen-modal"><i class="fas fa-times"></i></div><div class="listen-title"><i class="fal fa-headphones"></i> THỐNG KÊ LƯỢT NGHE <i class="fal fa-headphones"></i></div><div style="width:40px"></div></div><div class="listen-stats" id="listen-stats-content"><div style="text-align:center;padding:40px">Đang tải dữ liệu...</div></div><div class="listen-total" id="listen-total-stats"></div>`;
+        modal.innerHTML = `<div class="listen-modal-header"><div class="close-listen" id="close-listen-modal"><i class="fas fa-times"></i></div><div class="listen-title"><i class="fal fa-headphones"></i> THỐNG KÊ LƯỢT NGHE <i class="fal fa-headphones"></i></div><div style="width:40px"></div></div><div class="listen-stats" id="listen-stats-content"><div style="text-align:center;padding:40px">ĐANG TẢI DỮ LIỆU NHA...</div></div><div class="listen-total" id="listen-total-stats"></div>`;
         const playerContainer = document.querySelector('.player-container');
         if (playerContainer) playerContainer.appendChild(modal);
         else document.body.appendChild(modal);
@@ -1110,7 +1097,6 @@ function showListenStats() {
     }, 250);
 }
 
-// Cập nhật nội dung modal (giữ nguyên highlight)
 function updateListenStatsModal() {
     const container = document.getElementById('listen-stats-content');
     const totalContainer = document.getElementById('listen-total-stats');
@@ -1132,17 +1118,16 @@ function updateListenStatsModal() {
         const total = Object.values(listenData).reduce((sum, count) => sum + count, 0);
         container.innerHTML = statsHtml;
         if (totalContainer) {
-            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
+            totalContainer.innerHTML = `<span>TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
         }
     } else {
-        container.innerHTML = '<div style="text-align:center;padding:40px">Đang tải dữ liệu...</div>';
+        container.innerHTML = '<div style="text-align:center;padding:40px">ĐANG TẢI DỮ LIỆU NHA...</div>';
         if (totalContainer) {
-            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>0</span>`;
+            totalContainer.innerHTML = `<span>TỔNG LƯỢT NGHE:</span><span>0</span>`;
         }
     }
 }
 
-// Cập nhật highlight khi chuyển bài (GIỐNG PLAYLIST)
 function updateCurrentSongHighlight() {
     const modal = document.getElementById('listen-stats-modal');
     if (!modal || !modal.classList.contains('show')) return;
@@ -1185,12 +1170,12 @@ function updateListenStatsModal() {
         const total = Object.values(listenData).reduce((sum, count) => sum + count, 0);
         container.innerHTML = statsHtml;
         if (totalContainer) {
-            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
+            totalContainer.innerHTML = `<span>TỔNG LƯỢT NGHE:</span><span>${formatNumberStat(total)}</span>`;
         }
     } else {
-        container.innerHTML = '<div style="text-align:center;padding:40px">Đang tải dữ liệu...</div>';
+        container.innerHTML = '<div style="text-align:center;padding:40px">ĐANG TẢI DỮ LIỆU NHA...</div>';
         if (totalContainer) {
-            totalContainer.innerHTML = `<span>🎧 TỔNG LƯỢT NGHE:</span><span>0</span>`;
+            totalContainer.innerHTML = `<span>TỔNG LƯỢT NGHE:</span><span>0</span>`;
         }
     }
 }
@@ -1211,14 +1196,12 @@ function escapeHtmlStat(str) {
     });
 }
 
-// Cập nhật highlight khi chuyển bài
 function updateCurrentSongHighlight() {
     const modal = document.getElementById('listen-stats-modal');
     if (!modal || !modal.classList.contains('show')) return;
     scrollToCurrentListenSong();
 }
 
-// Ghi đè changeSong để cập nhật highlight
 const originalChangeSongForHighlight = changeSong;
 changeSong = function(i) {
     originalChangeSongForHighlight(i);
@@ -1228,7 +1211,6 @@ changeSong = function(i) {
     }, 100);
 };
 
-// Sự kiện play dự phòng
 audio.addEventListener('play', () => {
     const currentSong = songs[index];
     if (currentSong && currentSong.name && !hasRecordedCurrentSong && !isRepeatOne) {
