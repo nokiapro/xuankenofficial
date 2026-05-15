@@ -30,6 +30,7 @@ const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9
 
 let listenData = {};
 let isUpdatingListen = false;
+let hasRecordedCurrentSong = false;
 
 function showToastMsg(msg, isListen = false) {
     const toastEl = document.getElementById('toast-msg');
@@ -184,7 +185,6 @@ function scrollToCurrentListenSong() {
     const spacingFromHeader = 4;
     
     const itemOffsetTop = currentPlayingItem.offsetTop;
-    const itemHeight = currentPlayingItem.offsetHeight;
     const containerHeight = scrollContainer.clientHeight;
     const scrollHeight = scrollContainer.scrollHeight;
     
@@ -197,7 +197,6 @@ function scrollToCurrentListenSong() {
         targetScroll = scrollHeight - containerHeight;
     } else {
         targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
-        
         const maxScroll = scrollHeight - containerHeight;
         if (targetScroll > maxScroll) {
             targetScroll = maxScroll;
@@ -477,6 +476,9 @@ async function loadSong(i) {
     renderPlaylist();
     updateMediaSession();
     if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
+    
+    hasRecordedCurrentSong = false;
+    
     isChanging = false;
 }
 
@@ -533,6 +535,8 @@ audio.onerror = () => {
     } else showToast("LỖI: KHÔNG THỂ PHÁT BÀI HÁT!");
 };
 
+let listenRecordedTime = null;
+
 audio.ontimeupdate = () => {
     const cur = audio.currentTime;
     const dur = audio.duration;
@@ -550,6 +554,16 @@ audio.ontimeupdate = () => {
             adjustLyricFontSize(active.text);
         }
     }
+    
+    if (cur >= 1 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
+        const currentSong = songs[index];
+        if (currentSong && currentSong.name) {
+            hasRecordedCurrentSong = true;
+            recordListenWithSource(currentSong.name, 'normal');
+            console.log(`ĐÃ GHI NHẬN LƯỢT NGHE SAU 1 GIÂY: ${currentSong.name}`);
+        }
+    }
+    
     if (isRepeatOne && dur && (dur - cur) <= 0.1 && !isLoopingHandled && dur > 0) {
         isLoopingHandled = true;
         audio.currentTime = 0;
@@ -563,6 +577,7 @@ audio.onended = () => {
         isLoopingHandled = true;
         const currentSong = songs[index];
         if (currentSong && currentSong.name) {
+            hasRecordedCurrentSong = false;
             recordListenWithSource(currentSong.name, 'loop');
         }
         audio.currentTime = 0;
