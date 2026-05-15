@@ -820,12 +820,13 @@ body.dark .album-art {
     50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); }
 }
 
-/* ========== LƯỢT NGHE - ĐÃ SỬA LỖI BỊ CHE HEADER ========== */
+/* ========== LƯỢT NGHE - GIỐNG HỆT PLAYLIST ========== */
 
 .listen-badge {
     display: none;
 }
 
+/* MODAL CHÍNH - CUỘN TRỰC TIẾP TRÊN MODAL (GIỐNG PLAYLIST) */
 .listen-modal {
     position: absolute;
     top: 0;
@@ -848,7 +849,7 @@ body.dark .album-art {
     transform: translateY(0);
 }
 
-/* HEADER - STICKY NHƯNG CÓ BACKGROUND ĐẬM */
+/* HEADER - STICKY GIỐNG PLAYLIST */
 .listen-modal-header {
     padding: 18px 20px;
     display: flex;
@@ -860,7 +861,6 @@ body.dark .album-art {
     background: var(--playlist-header-bg);
     backdrop-filter: blur(10px);
     z-index: 160;
-    flex-shrink: 0;
 }
 
 .listen-modal-header .close-listen {
@@ -897,26 +897,24 @@ body.dark .album-art {
     color: transparent;
 }
 
-/* PHẦN DANH SÁCH - CÓ THỂ CUỘN */
+/* PHẦN DANH SÁCH - KHÔNG CUỘN RIÊNG (CUỘN TRÊN MODAL CHÍNH) */
 .listen-stats {
     flex: 1;
-    padding: 0 12px 20px 12px;
-    overflow-y: auto;
+    padding: 8px 12px 20px 12px;
 }
 
-/* MỖI DÒNG BÀI HÁT - THÊM scroll-margin-top để tránh bị che khi cuộn đến */
+/* MỖI DÒNG BÀI HÁT - GIỐNG SONG-ITEM */
 .listen-stat-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 14px 20px;
     cursor: default;
     border-bottom: 1px solid var(--border-color);
     transition: all 0.2s ease;
-    margin: 4px 0;
+    margin: 4px 12px;
     border-radius: 16px;
     background: transparent;
-    scroll-margin-top: 70px;
 }
 
 .listen-stat-item:hover {
@@ -924,21 +922,15 @@ body.dark .album-art {
     transform: translateX(4px);
 }
 
-/* Bài hát đang phát */
+/* BÀI ĐANG PHÁT - GIỐNG ACTIVE TRONG PLAYLIST */
 .listen-stat-item.current-playing {
     background: linear-gradient(135deg, var(--btn-hover), transparent);
     border-left: 3px solid var(--accent-color);
-    transform: translateX(4px);
 }
 
 .listen-stat-item.current-playing .listen-stat-name {
     color: var(--accent-color);
     font-weight: 700;
-}
-
-.listen-stat-item.current-playing .listen-stat-count {
-    color: var(--accent-color);
-    transform: scale(1.05);
 }
 
 /* TÊN BÀI HÁT */
@@ -964,7 +956,7 @@ body.dark .album-art {
     transition: all 0.2s ease;
 }
 
-/* TỔNG LƯỢT NGHE - CỐ ĐỊNH CUỐI TRANG */
+/* TỔNG LƯỢT NGHE */
 .listen-total {
     margin: 16px 20px 20px 20px;
     padding: 14px 18px;
@@ -976,7 +968,6 @@ body.dark .album-art {
     color: var(--text-primary);
     font-size: 0.9rem;
     border: 1px solid var(--border-color);
-    flex-shrink: 0;
 }
 
 .listen-total span:first-child {
@@ -988,16 +979,16 @@ body.dark .album-art {
     color: var(--accent-color);
 }
 
-/* SCROLLBAR */
-.listen-stats::-webkit-scrollbar {
+/* SCROLLBAR - GIỐNG PLAYLIST */
+.listen-modal::-webkit-scrollbar {
     width: 4px;
 }
 
-.listen-stats::-webkit-scrollbar-track {
+.listen-modal::-webkit-scrollbar-track {
     background-color: var(--progress-bg);
 }
 
-.listen-stats::-webkit-scrollbar-thumb {
+.listen-modal::-webkit-scrollbar-thumb {
     background-image: linear-gradient(-45deg, #f1b586, #9f81ca, #c20175, #b33cea, #17adca, #dd4809, #ad9199);
     border-radius: 50px;
 }
