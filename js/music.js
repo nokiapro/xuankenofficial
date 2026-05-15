@@ -453,12 +453,11 @@ function scrollToActiveTop() {
     const header = document.querySelector('.playlist-header');
     const headerHeight = header ? header.offsetHeight : 65;
     
-    // Khoảng cách mong muốn từ header đến bài hát (20px)
-    const desiredSpacing = 20;
+    // Khoảng cách từ header đến bài hát (12px - giống padding)
+    const spacingFromHeader = 12;
     
-    // Tính vị trí cuộn
     const itemOffsetTop = activeItem.offsetTop;
-    const targetScroll = itemOffsetTop - headerHeight - desiredSpacing;
+    const targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
     
     scrollContainer.scrollTo({
         top: Math.max(0, targetScroll),
@@ -1077,12 +1076,11 @@ function scrollToCurrentListenSong() {
     const header = modal.querySelector('.listen-modal-header');
     const headerHeight = header ? header.offsetHeight : 65;
     
-    // Khoảng cách mong muốn từ header đến bài hát (20px)
-    const desiredSpacing = 20;
+    // Khoảng cách từ header đến bài hát (12px - giống padding)
+    const spacingFromHeader = 12;
     
-    // Tính vị trí cuộn
     const itemOffsetTop = activeItem.offsetTop;
-    const targetScroll = itemOffsetTop - headerHeight - desiredSpacing;
+    const targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
     
     scrollContainer.scrollTo({
         top: Math.max(0, targetScroll),
