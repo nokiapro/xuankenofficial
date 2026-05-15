@@ -820,7 +820,7 @@ body.dark .album-art {
     50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); }
 }
 
-/* ========== LƯỢT NGHE ========== */
+/* ========== LƯỢT NGHE - ĐÃ SỬA LỖI BỊ CHE HEADER ========== */
 
 .listen-badge {
     display: none;
@@ -848,17 +848,17 @@ body.dark .album-art {
     transform: translateY(0);
 }
 
+/* HEADER - KHÔNG STICKY, LUÔN Ở TRÊN CÙNG */
 .listen-modal-header {
     padding: 18px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
     background: var(--playlist-header-bg);
     backdrop-filter: blur(10px);
     z-index: 160;
+    flex-shrink: 0;
 }
 
 .listen-modal-header .close-listen {
@@ -895,21 +895,23 @@ body.dark .album-art {
     color: transparent;
 }
 
+/* PHẦN DANH SÁCH - CÓ THỂ CUỘN */
 .listen-stats {
     flex: 1;
-    padding-bottom: 20px;
+    padding: 8px 12px 20px 12px;
     overflow-y: auto;
 }
 
+/* MỖI DÒNG BÀI HÁT */
 .listen-stat-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 20px;
+    padding: 12px 16px;
     cursor: default;
     border-bottom: 1px solid var(--border-color);
     transition: all 0.2s ease;
-    margin: 4px 12px;
+    margin: 4px 0;
     border-radius: 16px;
     background: transparent;
 }
@@ -919,7 +921,7 @@ body.dark .album-art {
     transform: translateX(4px);
 }
 
-/* Bài hát đang phát trong modal lượt nghe */
+/* Bài hát đang phát */
 .listen-stat-item.current-playing {
     background: linear-gradient(135deg, var(--btn-hover), transparent);
     border-left: 3px solid var(--accent-color);
@@ -936,6 +938,7 @@ body.dark .album-art {
     transform: scale(1.05);
 }
 
+/* TÊN BÀI HÁT */
 .listen-stat-name {
     flex: 1;
     color: var(--text-primary);
@@ -948,6 +951,7 @@ body.dark .album-art {
     transition: all 0.2s ease;
 }
 
+/* SỐ LƯỢT NGHE */
 .listen-stat-count {
     font-weight: bold;
     color: var(--accent-color);
@@ -957,6 +961,7 @@ body.dark .album-art {
     transition: all 0.2s ease;
 }
 
+/* TỔNG LƯỢT NGHE - CỐ ĐỊNH CUỐI TRANG */
 .listen-total {
     margin: 16px 20px 20px 20px;
     padding: 14px 18px;
@@ -968,6 +973,7 @@ body.dark .album-art {
     color: var(--text-primary);
     font-size: 0.9rem;
     border: 1px solid var(--border-color);
+    flex-shrink: 0;
 }
 
 .listen-total span:first-child {
@@ -979,6 +985,7 @@ body.dark .album-art {
     color: var(--accent-color);
 }
 
+/* SCROLLBAR */
 .listen-stats::-webkit-scrollbar {
     width: 4px;
 }
