@@ -334,6 +334,13 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/5q563c9qerc5434o50dwg/TUNGLATHANHXUANCUANHAU-XUANKEN.mp3?rlkey=22c5bqupw97ymipvioe8z3yp0&st=s6wg975g&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TUNGLATHANHXUANCUANHAU-LYRIC.lrc",
         lrc2: ""
+    },
+    {
+        name: "Chúng Ta Đã Từng",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHUNGTADATUNG-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/pbh030k959oq9jibxu44h/CHUNGTADATUNG-XUANKEN.mp3?rlkey=05ntd1u16dfg36a1lctlb4b3e&st=u211mia2&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADATUNG-LYRIC.lrc",
+        lrc2: "https://dl.dropboxusercontent.com/scl/fi/rblqzx0aue2cpdyqx4p6r/CHUNGTADATUNG-LYRIC.lrc?rlkey=rv6hsjb8xs471pdi8kjvbkpcv&st=ggs9o8i9&dl=0"
     }
 ];
 
