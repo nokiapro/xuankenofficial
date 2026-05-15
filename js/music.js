@@ -458,7 +458,7 @@ function scrollToActiveTop() {
     const itemOffsetTop = activeItem.offsetTop;
     
     // Khoảng cách muốn cách header (0 = sát dưới header)
-    const spacing = 0;
+    const spacing = 8;
     
     // Vị trí cần cuộn đến
     const targetScroll = itemOffsetTop - headerHeight - spacing;
