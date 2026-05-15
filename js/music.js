@@ -181,9 +181,22 @@ function scrollToCurrentListenSong() {
     
     const header = modal.querySelector('.listen-modal-header');
     const headerHeight = header ? header.offsetHeight : 65;
-    const spacingFromHeader = 8;
+    const spacingFromHeader = 4;
+    
+    const footer = modal.querySelector('.listen-total');
+    const footerHeight = footer ? footer.offsetHeight : 0;
+    
     const itemOffsetTop = currentPlayingItem.offsetTop;
-    const targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
+    const itemHeight = currentPlayingItem.offsetHeight;
+    const containerHeight = scrollContainer.clientHeight;
+    const scrollHeight = scrollContainer.scrollHeight;
+    
+    let targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
+    
+    const distanceToBottom = scrollHeight - (itemOffsetTop + itemHeight) - footerHeight;
+    if (distanceToBottom < 4) {
+        targetScroll = scrollHeight - containerHeight - (4 - distanceToBottom);
+    }
     
     scrollContainer.scrollTo({
         top: Math.max(0, targetScroll),
