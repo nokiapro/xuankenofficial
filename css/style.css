@@ -848,13 +848,15 @@ body.dark .album-art {
     transform: translateY(0);
 }
 
-/* HEADER - KHÔNG STICKY, LUÔN Ở TRÊN CÙNG */
+/* HEADER - STICKY NHƯNG CÓ BACKGROUND ĐẬM */
 .listen-modal-header {
     padding: 18px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
     background: var(--playlist-header-bg);
     backdrop-filter: blur(10px);
     z-index: 160;
@@ -898,11 +900,11 @@ body.dark .album-art {
 /* PHẦN DANH SÁCH - CÓ THỂ CUỘN */
 .listen-stats {
     flex: 1;
-    padding: 8px 12px 20px 12px;
+    padding: 0 12px 20px 12px;
     overflow-y: auto;
 }
 
-/* MỖI DÒNG BÀI HÁT */
+/* MỖI DÒNG BÀI HÁT - THÊM scroll-margin-top để tránh bị che khi cuộn đến */
 .listen-stat-item {
     display: flex;
     align-items: center;
@@ -914,6 +916,7 @@ body.dark .album-art {
     margin: 4px 0;
     border-radius: 16px;
     background: transparent;
+    scroll-margin-top: 70px;
 }
 
 .listen-stat-item:hover {
