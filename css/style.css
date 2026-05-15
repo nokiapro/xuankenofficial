@@ -490,7 +490,8 @@ body.dark .album-art {
 #playlist-content {
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 20px;
+    padding: 12px 0 20px 0; /* padding trên 12px, dưới 20px */
+    scroll-padding-top: 20px; /* Khi scroll tự động, cách header 20px */
 }
 
 /* SCROLLBAR CHO PLAYLIST */
@@ -514,9 +515,13 @@ body.dark .album-art {
     cursor: pointer;
     border-bottom: 1px solid var(--border-color);
     transition: all 0.2s ease;
-    margin: 4px 12px;
+    margin: 0 12px 4px 12px; /* bỏ margin-top, chỉ margin-bottom */
     border-radius: 16px;
     background: transparent;
+}
+
+.song-item:first-child {
+    margin-top: 0;
 }
 
 .song-item:hover {
@@ -908,7 +913,8 @@ body.dark .album-art {
 .listen-stats {
     flex: 1;
     overflow-y: auto;
-    padding: 8px 12px 0px 12px;
+    padding: 12px 12px 20px 12px; /* padding trên 12px, dưới 20px */
+    scroll-padding-top: 20px; /* Khi scroll tự động, cách header 20px */
 }
 
 /* FOOTER TỔNG LƯỢT NGHE - RỘNG TOÀN BỘ, BÁM CUỐI */
@@ -954,9 +960,13 @@ body.dark .album-art {
     cursor: default;
     border-bottom: 1px solid var(--border-color);
     transition: all 0.2s ease;
-    margin: 4px 12px;
+    margin: 0 0 4px 0; /* bỏ margin ngang, chỉ margin-bottom */
     border-radius: 16px;
     background: transparent;
+}
+
+.listen-stat-item:last-child {
+    margin-bottom: 16px;
 }
 
 .listen-stat-item:hover {
