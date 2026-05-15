@@ -448,23 +448,45 @@ function scrollToActiveTop() {
     if (activeItem) {
         const scrollContainer = document.getElementById('playlist-content');
         if (scrollContainer) {
-            // Lấy chiều cao thực tế của header
             const header = document.querySelector('.playlist-header');
             const headerHeight = header ? header.offsetHeight : 65;
             
-            // Tính vị trí cuộn chính xác
             const itemRect = activeItem.getBoundingClientRect();
             const containerRect = scrollContainer.getBoundingClientRect();
             const currentScroll = scrollContainer.scrollTop;
             const relativeTop = itemRect.top - containerRect.top;
-            const targetScroll = currentScroll + relativeTop - headerHeight;
+            const targetScroll = Math.max(0, currentScroll + relativeTop - headerHeight);
+            const distance = Math.abs(targetScroll - currentScroll);
             
-            scrollContainer.scrollTo({
-                top: Math.max(0, targetScroll),
-                behavior: 'smooth'
-            });
+            // Tính thời gian cuộn dựa trên khoảng cách (tối đa 800ms, tối thiểu 300ms)
+            const duration = Math.min(800, Math.max(300, distance * 1.5));
+            smoothScrollTo(scrollContainer, targetScroll, duration);
         }
     }
+}
+
+// Hàm cuộn mượt tùy chỉnh tốc độ
+function smoothScrollTo(element, targetY, duration) {
+    const startY = element.scrollTop;
+    const distance = targetY - startY;
+    const startTime = performance.now();
+    
+    function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+    }
+    
+    function animation(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const easeProgress = easeOutCubic(progress);
+        element.scrollTop = startY + distance * easeProgress;
+        
+        if (progress < 1) {
+            requestAnimationFrame(animation);
+        }
+    }
+    
+    requestAnimationFrame(animation);
 }
 
 async function requestWakeLock() {
@@ -1049,21 +1071,19 @@ function scrollToCurrentListenSong() {
     if (activeItem) {
         const scrollContainer = modal.querySelector('.listen-stats');
         if (scrollContainer) {
-            // Lấy chiều cao thực tế của header
             const header = modal.querySelector('.listen-modal-header');
             const headerHeight = header ? header.offsetHeight : 65;
             
-            // Tính vị trí cuộn chính xác
             const itemRect = activeItem.getBoundingClientRect();
             const containerRect = scrollContainer.getBoundingClientRect();
             const currentScroll = scrollContainer.scrollTop;
             const relativeTop = itemRect.top - containerRect.top;
-            const targetScroll = currentScroll + relativeTop - headerHeight;
+            const targetScroll = Math.max(0, currentScroll + relativeTop - headerHeight);
+            const distance = Math.abs(targetScroll - currentScroll);
             
-            scrollContainer.scrollTo({
-                top: Math.max(0, targetScroll),
-                behavior: 'smooth'
-            });
+            // Tính thời gian cuộn dựa trên khoảng cách (tối đa 800ms, tối thiểu 300ms)
+            const duration = Math.min(800, Math.max(300, distance * 1.5));
+            smoothScrollTo(scrollContainer, targetScroll, duration);
         }
     }
 }
@@ -1085,7 +1105,6 @@ function showListenStats() {
     updateListenStatsModal();
     modal.classList.add('show');
     
-    // Delay đủ lâu để modal render xong
     setTimeout(() => {
         scrollToCurrentListenSong();
     }, 250);
@@ -1140,10 +1159,9 @@ function updateCurrentSongHighlight() {
         }
     });
     
-    // Cuộn đến bài mới khi chuyển bài
     setTimeout(() => {
         scrollToCurrentListenSong();
-    }, 100);
+    }, 150);
 }
 
 function updateListenStatsModal() {
