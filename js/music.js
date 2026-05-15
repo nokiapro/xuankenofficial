@@ -29,9 +29,7 @@ const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbxGoLJOeikvklz
 const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9vI_OY_nJ0sHiSVUy31z9U-4zClIdkgBZCAiquu8wePVrosqwV-GnSOKTtYJP_pgHt_mtC8Kcm/pub?output=csv';
 
 let listenData = {};
-let hasRecordedCurrentSong = false;
 let isUpdatingListen = false;
-let listenTimeout = null;
 
 function showToastMsg(msg, isListen = false) {
     const toastEl = document.getElementById('toast-msg');
@@ -86,8 +84,6 @@ async function incrementListenCount(songName, source = 'normal') {
     if (!songName) return false;
     if (isUpdatingListen) return false;
     
-    if (listenTimeout) clearTimeout(listenTimeout);
-    
     isUpdatingListen = true;
     try {
         const response = await fetch(`${GOOGLE_SHEET_API}?action=increment&song=${encodeURIComponent(songName)}&t=${Date.now()}`);
@@ -137,7 +133,7 @@ function updateListenStatsModal() {
             const count = listenData[song.name] || 0;
             const isCurrent = (song.name === currentSongName);
             return `
-                <div class="listen-stat-item ${isCurrent ? 'current-playing' : ''}">
+                <div class="listen-stat-item ${isCurrent ? 'current-playing' : ''}" data-song-name="${escapeHtmlStat(song.name)}">
                     <span class="listen-stat-name">${escapeHtmlStat(song.name)}</span>
                     <span class="listen-stat-count">${formatNumberStat(count)}</span>
                 </div>
@@ -173,6 +169,28 @@ function escapeHtmlStat(str) {
     });
 }
 
+function scrollToCurrentListenSong() {
+    const modal = document.getElementById('listen-stats-modal');
+    if (!modal || !modal.classList.contains('show')) return;
+    
+    const currentPlayingItem = modal.querySelector('.listen-stat-item.current-playing');
+    if (!currentPlayingItem) return;
+    
+    const scrollContainer = modal.querySelector('.listen-stats');
+    if (!scrollContainer) return;
+    
+    const header = modal.querySelector('.listen-modal-header');
+    const headerHeight = header ? header.offsetHeight : 65;
+    const spacingFromHeader = 8;
+    const itemOffsetTop = currentPlayingItem.offsetTop;
+    const targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
+    
+    scrollContainer.scrollTo({
+        top: Math.max(0, targetScroll),
+        behavior: 'smooth'
+    });
+}
+
 function showListenStats() {
     let modal = document.getElementById('listen-stats-modal');
     if (!modal) {
@@ -188,6 +206,35 @@ function showListenStats() {
     }
     updateListenStatsModal();
     modal.classList.add('show');
+    
+    setTimeout(() => {
+        scrollToCurrentListenSong();
+    }, 300);
+}
+
+function updateCurrentSongHighlightAndScroll() {
+    const modal = document.getElementById('listen-stats-modal');
+    if (!modal) return;
+    
+    const currentSongName = songs[index]?.name;
+    const statItems = modal.querySelectorAll('.listen-stat-item');
+    
+    let foundCurrent = false;
+    statItems.forEach(item => {
+        const nameSpan = item.querySelector('.listen-stat-name');
+        if (nameSpan && nameSpan.innerText === currentSongName) {
+            item.classList.add('current-playing');
+            foundCurrent = true;
+        } else {
+            item.classList.remove('current-playing');
+        }
+    });
+    
+    if (modal.classList.contains('show') && foundCurrent) {
+        setTimeout(() => {
+            scrollToCurrentListenSong();
+        }, 100);
+    }
 }
 
 function createShuffledArray() {
@@ -766,7 +813,39 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 });
 
 const listenCountBtn = document.getElementById('listen-count-btn');
-if (listenCountBtn) listenCountBtn.onclick = (e) => { e.stopPropagation(); showListenStats(); };
+if (listenCountBtn) {
+    listenCountBtn.onclick = (e) => { 
+        e.stopPropagation(); 
+        showListenStats(); 
+    };
+}
+
+const originalChangeSong = changeSong;
+changeSong = function(i, source = 'normal') {
+    originalChangeSong(i, source);
+    setTimeout(() => {
+        updateCurrentSongHighlightAndScroll();
+        updateListenStatsModal();
+    }, 100);
+};
+
+const observerForModal = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const modal = document.getElementById('listen-stats-modal');
+            if (modal && modal.classList.contains('show')) {
+                setTimeout(() => {
+                    scrollToCurrentListenSong();
+                }, 200);
+            }
+        }
+    });
+});
+
+const modalElement = document.getElementById('listen-stats-modal');
+if (modalElement) {
+    observerForModal.observe(modalElement, { attributes: true });
+}
 
 setInterval(fetchListenData, 30000);
 
