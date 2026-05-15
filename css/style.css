@@ -420,6 +420,8 @@ body.dark .album-art {
     transform: scale(0.92);
 }
 
+/* ========== PLAYLIST - CỐ ĐỊNH HEADER, CUỘN NỘI DUNG ========== */
+
 .playlist {
     position: absolute;
     top: 0;
@@ -428,13 +430,10 @@ body.dark .album-art {
     height: 100%;
     background: var(--playlist-bg);
     z-index: 150;
-    overflow-y: auto;
-    overflow-x: hidden;
     transform: translateY(-100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    scroll-behavior: smooth;
     border-radius: 32px;
 }
 
@@ -448,11 +447,9 @@ body.dark .album-art {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
     background: var(--playlist-header-bg);
     backdrop-filter: blur(10px);
-    z-index: 160;
+    flex-shrink: 0;
 }
 
 .close-playlist {
@@ -489,9 +486,25 @@ body.dark .album-art {
     color: transparent;
 }
 
+/* NỘI DUNG PLAYLIST - CÓ THỂ CUỘN */
 #playlist-content {
     flex: 1;
+    overflow-y: auto;
     padding-bottom: 20px;
+}
+
+/* SCROLLBAR CHO PLAYLIST */
+#playlist-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+#playlist-content::-webkit-scrollbar-track {
+    background-color: var(--progress-bg);
+}
+
+#playlist-content::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(-45deg, #f1b586, #9f81ca, #c20175, #b33cea, #17adca, #dd4809, #ad9199);
+    border-radius: 50px;
 }
 
 .song-item {
@@ -570,7 +583,7 @@ body.dark .album-art {
     white-space: nowrap;
 }
 
-/* ========== TIMER MODAL - NẰM TRONG PLAYER ========== */
+/* ========== TIMER MODAL ========== */
 
 .timer-overlay {
     position: fixed;
@@ -834,13 +847,10 @@ body.dark .album-art {
     height: 100%;
     background: var(--playlist-bg);
     z-index: 200;
-    overflow-y: auto;
-    overflow-x: hidden;
     transform: translateY(-100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    scroll-behavior: smooth;
     border-radius: 32px;
 }
 
@@ -848,18 +858,15 @@ body.dark .album-art {
     transform: translateY(0);
 }
 
-/* HEADER */
+/* HEADER - CỐ ĐỊNH ĐẦU */
 .listen-modal-header {
     padding: 18px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
     background: var(--playlist-header-bg);
     backdrop-filter: blur(10px);
-    z-index: 160;
     flex-shrink: 0;
 }
 
@@ -897,10 +904,45 @@ body.dark .album-art {
     color: transparent;
 }
 
-/* DANH SÁCH BÀI HÁT */
+/* PHẦN DANH SÁCH - CÓ THỂ CUỘN */
 .listen-stats {
     flex: 1;
+    overflow-y: auto;
     padding: 8px 12px 0px 12px;
+}
+
+/* FOOTER TỔNG LƯỢT NGHE - RỘNG TOÀN BỘ, BÁM CUỐI */
+.listen-total {
+    margin: 0;
+    padding: 14px 20px;
+    background: var(--playlist-header-bg);
+    backdrop-filter: blur(10px);
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.listen-total span:first-child {
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.listen-total span:first-child i {
+    font-size: 1rem;
+    color: var(--accent-color);
+}
+
+.listen-total span:last-child {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    font-weight: 800;
 }
 
 /* MỖI DÒNG BÀI HÁT */
@@ -932,7 +974,6 @@ body.dark .album-art {
     font-weight: 700;
 }
 
-/* TÊN BÀI HÁT */
 .listen-stat-name {
     flex: 1;
     color: var(--text-primary);
@@ -945,7 +986,6 @@ body.dark .album-art {
     transition: all 0.2s ease;
 }
 
-/* SỐ LƯỢT NGHE */
 .listen-stat-count {
     font-weight: bold;
     color: var(--accent-color);
@@ -955,79 +995,20 @@ body.dark .album-art {
     transition: all 0.2s ease;
 }
 
-/* FOOTER TỔNG LƯỢT NGHE - CÁCH BIỆT RÕ RÀNG */
-.listen-total {
-    margin: 16px 20px 20px 20px;
-    padding: 14px 18px;
-    background: var(--progress-bg);
-    border-radius: 20px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    border: 1px solid var(--border-color);
-    position: sticky;
-    bottom: 0;
-    background: var(--playlist-header-bg);
-    backdrop-filter: blur(10px);
-    z-index: 10;
-    flex-shrink: 0;
-    border-top: 1px solid var(--border-color);
-    margin-top: 8px;
-}
-
-.listen-total span:first-child {
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.listen-total span:first-child i {
-    font-size: 1rem;
-    color: var(--accent-color);
-}
-
-.listen-total span:last-child {
-    font-size: 1.2rem;
-    color: var(--accent-color);
-    font-weight: 800;
-}
-
-/* SCROLLBAR */
-.listen-modal::-webkit-scrollbar {
+/* SCROLLBAR CHO PHẦN DANH SÁCH */
+.listen-stats::-webkit-scrollbar {
     width: 4px;
 }
 
-.listen-modal::-webkit-scrollbar-track {
+.listen-stats::-webkit-scrollbar-track {
     background-color: var(--progress-bg);
 }
 
-.listen-modal::-webkit-scrollbar-thumb {
+.listen-stats::-webkit-scrollbar-thumb {
     background-image: linear-gradient(-45deg, #f1b586, #9f81ca, #c20175, #b33cea, #17adca, #dd4809, #ad9199);
     border-radius: 50px;
 }
 
 #listen-count-btn {
     position: relative;
-}
-
-.playlist::-webkit-scrollbar,
-.timer-modal::-webkit-scrollbar,
-.listen-modal::-webkit-scrollbar {
-    width: 4px;
-}
-
-.playlist::-webkit-scrollbar-track,
-.timer-modal::-webkit-scrollbar-track,
-.listen-modal::-webkit-scrollbar-track {
-    background-color: var(--progress-bg);
-}
-
-.playlist::-webkit-scrollbar-thumb,
-.timer-modal::-webkit-scrollbar-thumb,
-.listen-modal::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(-45deg, #f1b586, #9f81ca, #c20175, #b33cea, #17adca, #dd4809, #ad9199);
-    border-radius: 50px;
 }
