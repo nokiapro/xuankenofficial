@@ -826,7 +826,7 @@ body.dark .album-art {
     display: none;
 }
 
-/* MODAL CHÍNH - CUỘN TRỰC TIẾP TRÊN MODAL (GIỐNG PLAYLIST) */
+/* MODAL CHÍNH - FLEX COLUMN ĐỂ FOOTER LUÔN Ở CUỐI */
 .listen-modal {
     position: absolute;
     top: 0;
@@ -849,7 +849,7 @@ body.dark .album-art {
     transform: translateY(0);
 }
 
-/* HEADER - STICKY GIỐNG PLAYLIST */
+/* HEADER - STICKY */
 .listen-modal-header {
     padding: 18px 20px;
     display: flex;
@@ -861,6 +861,7 @@ body.dark .album-art {
     background: var(--playlist-header-bg);
     backdrop-filter: blur(10px);
     z-index: 160;
+    flex-shrink: 0;
 }
 
 .listen-modal-header .close-listen {
@@ -897,13 +898,13 @@ body.dark .album-art {
     color: transparent;
 }
 
-/* PHẦN DANH SÁCH - KHÔNG CUỘN RIÊNG (CUỘN TRÊN MODAL CHÍNH) */
+/* PHẦN DANH SÁCH - FLEX GROW ĐỂ ĐẨY FOOTER XUỐNG CUỐI */
 .listen-stats {
     flex: 1;
-    padding: 8px 12px 20px 12px;
+    padding: 8px 12px 0px 12px;
 }
 
-/* MỖI DÒNG BÀI HÁT - GIỐNG SONG-ITEM */
+/* MỖI DÒNG BÀI HÁT */
 .listen-stat-item {
     display: flex;
     align-items: center;
@@ -922,7 +923,7 @@ body.dark .album-art {
     transform: translateX(4px);
 }
 
-/* BÀI ĐANG PHÁT - GIỐNG ACTIVE TRONG PLAYLIST */
+/* BÀI ĐANG PHÁT */
 .listen-stat-item.current-playing {
     background: linear-gradient(135deg, var(--btn-hover), transparent);
     border-left: 3px solid var(--accent-color);
@@ -956,7 +957,7 @@ body.dark .album-art {
     transition: all 0.2s ease;
 }
 
-/* TỔNG LƯỢT NGHE */
+/* TỔNG LƯỢT NGHE - BÁM Ở CUỐI (STICKY BOTTOM) */
 .listen-total {
     margin: 16px 20px 20px 20px;
     padding: 14px 18px;
@@ -968,6 +969,12 @@ body.dark .album-art {
     color: var(--text-primary);
     font-size: 0.9rem;
     border: 1px solid var(--border-color);
+    position: sticky;
+    bottom: 0;
+    background: var(--playlist-header-bg);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    flex-shrink: 0;
 }
 
 .listen-total span:first-child {
@@ -979,7 +986,7 @@ body.dark .album-art {
     color: var(--accent-color);
 }
 
-/* SCROLLBAR - GIỐNG PLAYLIST */
+/* SCROLLBAR */
 .listen-modal::-webkit-scrollbar {
     width: 4px;
 }
