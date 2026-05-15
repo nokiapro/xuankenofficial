@@ -445,24 +445,29 @@ function getRandomPastel() {
 
 function scrollToActiveTop() {
     const activeItem = document.querySelector('.song-item.active');
-    if (activeItem) {
-        const scrollContainer = document.getElementById('playlist-content');
-        if (scrollContainer) {
-            const header = document.querySelector('.playlist-header');
-            const headerHeight = header ? header.offsetHeight : 65;
-            
-            const itemRect = activeItem.getBoundingClientRect();
-            const containerRect = scrollContainer.getBoundingClientRect();
-            const currentScroll = scrollContainer.scrollTop;
-            const relativeTop = itemRect.top - containerRect.top;
-            const targetScroll = Math.max(0, currentScroll + relativeTop - headerHeight);
-            const distance = Math.abs(targetScroll - currentScroll);
-            
-            // Tính thời gian cuộn dựa trên khoảng cách (tối đa 800ms, tối thiểu 300ms)
-            const duration = Math.min(800, Math.max(300, distance * 1.5));
-            smoothScrollTo(scrollContainer, targetScroll, duration);
-        }
-    }
+    if (!activeItem) return;
+    
+    const scrollContainer = document.getElementById('playlist-content');
+    if (!scrollContainer) return;
+    
+    // Lấy chiều cao chính xác của header
+    const header = document.querySelector('.playlist-header');
+    const headerHeight = header ? header.offsetHeight : 65;
+    
+    // Tính vị trí của bài hát so với đỉnh container
+    const itemOffsetTop = activeItem.offsetTop;
+    
+    // Khoảng cách muốn cách header (0 = sát dưới header)
+    const spacing = 0;
+    
+    // Vị trí cần cuộn đến
+    const targetScroll = itemOffsetTop - headerHeight - spacing;
+    
+    // Cuộn đến vị trí (không âm)
+    scrollContainer.scrollTo({
+        top: Math.max(0, targetScroll),
+        behavior: 'smooth'
+    });
 }
 
 // Hàm cuộn mượt tùy chỉnh tốc độ
@@ -1068,24 +1073,29 @@ function scrollToCurrentListenSong() {
     if (!modal) return;
     
     const activeItem = modal.querySelector('.listen-stat-item.current-playing');
-    if (activeItem) {
-        const scrollContainer = modal.querySelector('.listen-stats');
-        if (scrollContainer) {
-            const header = modal.querySelector('.listen-modal-header');
-            const headerHeight = header ? header.offsetHeight : 65;
-            
-            const itemRect = activeItem.getBoundingClientRect();
-            const containerRect = scrollContainer.getBoundingClientRect();
-            const currentScroll = scrollContainer.scrollTop;
-            const relativeTop = itemRect.top - containerRect.top;
-            const targetScroll = Math.max(0, currentScroll + relativeTop - headerHeight);
-            const distance = Math.abs(targetScroll - currentScroll);
-            
-            // Tính thời gian cuộn dựa trên khoảng cách (tối đa 800ms, tối thiểu 300ms)
-            const duration = Math.min(800, Math.max(300, distance * 1.5));
-            smoothScrollTo(scrollContainer, targetScroll, duration);
-        }
-    }
+    if (!activeItem) return;
+    
+    const scrollContainer = modal.querySelector('.listen-stats');
+    if (!scrollContainer) return;
+    
+    // Lấy chiều cao chính xác của header
+    const header = modal.querySelector('.listen-modal-header');
+    const headerHeight = header ? header.offsetHeight : 65;
+    
+    // Tính vị trí của bài hát so với đỉnh container
+    const itemOffsetTop = activeItem.offsetTop;
+    
+    // Khoảng cách muốn cách header (0 = sát dưới header)
+    const spacing = 0;
+    
+    // Vị trí cần cuộn đến
+    const targetScroll = itemOffsetTop - headerHeight - spacing;
+    
+    // Cuộn đến vị trí (không âm)
+    scrollContainer.scrollTo({
+        top: Math.max(0, targetScroll),
+        behavior: 'smooth'
+    });
 }
 
 // Hiển thị modal lượt nghe - GIỐNG Y HỆT CÁCH MỞ PLAYLIST
