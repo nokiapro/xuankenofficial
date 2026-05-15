@@ -420,8 +420,6 @@ body.dark .album-art {
     transform: scale(0.92);
 }
 
-/* ========== PLAYLIST - CỐ ĐỊNH HEADER, CUỘN NỘI DUNG ========== */
-
 .playlist {
     position: absolute;
     top: 0;
@@ -486,14 +484,12 @@ body.dark .album-art {
     color: transparent;
 }
 
-/* NỘI DUNG PLAYLIST - CÓ THỂ CUỘN */
 #playlist-content {
     flex: 1;
     overflow-y: auto;
-    padding: 12px 0 16px 0; /* trên 12px, dưới 16px (giống trong ảnh) */
+    padding: 4px 0 4px 0;
 }
 
-/* SCROLLBAR CHO PLAYLIST */
 #playlist-content::-webkit-scrollbar {
     width: 4px;
 }
@@ -590,8 +586,6 @@ body.dark .album-art {
     letter-spacing: 0.3px;
     white-space: nowrap;
 }
-
-/* ========== TIMER MODAL ========== */
 
 .timer-overlay {
     position: fixed;
@@ -841,8 +835,6 @@ body.dark .album-art {
     50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); }
 }
 
-/* ========== LƯỢT NGHE - GIỐNG HỆT PLAYLIST ========== */
-
 .listen-badge {
     display: none;
 }
@@ -866,7 +858,6 @@ body.dark .album-art {
     transform: translateY(0);
 }
 
-/* HEADER - CỐ ĐỊNH ĐẦU */
 .listen-modal-header {
     padding: 18px 20px;
     display: flex;
@@ -912,14 +903,12 @@ body.dark .album-art {
     color: transparent;
 }
 
-/* PHẦN DANH SÁCH - CÓ THỂ CUỘN */
 .listen-stats {
     flex: 1;
     overflow-y: auto;
-    padding: 12px 12px 16px 12px; /* trên 12px, dưới 16px (giống trong ảnh) */
+    padding: 4px 12px 4px 12px;
 }
 
-/* FOOTER TỔNG LƯỢT NGHE - RỘNG TOÀN BỘ, BÁM CUỐI */
 .listen-total {
     margin: 0;
     padding: 14px 20px;
@@ -953,7 +942,6 @@ body.dark .album-art {
     font-weight: 800;
 }
 
-/* MỖI DÒNG BÀI HÁT */
 .listen-stat-item {
     display: flex;
     align-items: center;
@@ -968,7 +956,7 @@ body.dark .album-art {
 }
 
 .listen-stat-item:last-child {
-    margin-bottom: 12px;
+    margin-bottom: 0;
 }
 
 .listen-stat-item:hover {
@@ -1007,7 +995,6 @@ body.dark .album-art {
     transition: all 0.2s ease;
 }
 
-/* SCROLLBAR CHO PHẦN DANH SÁCH */
 .listen-stats::-webkit-scrollbar {
     width: 4px;
 }
