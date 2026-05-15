@@ -341,6 +341,13 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/pbh030k959oq9jibxu44h/CHUNGTADATUNG-XUANKEN.mp3?rlkey=05ntd1u16dfg36a1lctlb4b3e&st=u211mia2&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHUNGTADATUNG-LYRIC.lrc",
         lrc2: "https://dl.dropboxusercontent.com/scl/fi/rblqzx0aue2cpdyqx4p6r/CHUNGTADATUNG-LYRIC.lrc?rlkey=rv6hsjb8xs471pdi8kjvbkpcv&st=ggs9o8i9&dl=0"
+    },
+    {
+        name: "Nếu Biết Trước (Remake)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NEUBIETTRUOCREMAKE-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/jk1do59a9y710t9iby1uf/NEUBIETTRUOCREMAKE-XUANKEN.mp3?rlkey=vtcvevpxz0ku0yrk9cv2l6hwl&st=2ucy8oof&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NEUBIETTRUOCREMAKE-LYRIC.lrc",
+        lrc2: ""
     }
 ];
 
