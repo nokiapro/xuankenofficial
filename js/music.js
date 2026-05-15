@@ -446,9 +446,17 @@ function getRandomPastel() {
 function scrollToActiveTop() {
     const activeItem = document.querySelector('.song-item.active');
     if (activeItem) {
-        const headerHeight = playlistHeader.offsetHeight;
-        const targetScroll = activeItem.offsetTop - headerHeight;
-        playlistOverlay.scrollTop = targetScroll;
+        // Tìm container có thể cuộn là #playlist-content
+        const scrollContainer = document.getElementById('playlist-content');
+        if (scrollContainer) {
+            const headerHeight = 70; // Chiều cao header
+            const itemOffsetTop = activeItem.offsetTop;
+            const scrollPosition = itemOffsetTop - headerHeight;
+            scrollContainer.scrollTo({
+                top: Math.max(0, scrollPosition),
+                behavior: 'smooth'
+            });
+        }
     }
 }
 
@@ -1032,10 +1040,17 @@ function scrollToCurrentListenSong() {
     
     const activeItem = modal.querySelector('.listen-stat-item.current-playing');
     if (activeItem) {
-        const headerHeight = modal.querySelector('.listen-modal-header').offsetHeight;
-        const targetScroll = activeItem.offsetTop - headerHeight;
-        // Cuộn trực tiếp trên modal (giống playlist)
-        modal.scrollTop = Math.max(0, targetScroll);
+        // Tìm container có thể cuộn là .listen-stats
+        const scrollContainer = modal.querySelector('.listen-stats');
+        if (scrollContainer) {
+            const headerHeight = 70; // Chiều cao header
+            const itemOffsetTop = activeItem.offsetTop;
+            const scrollPosition = itemOffsetTop - headerHeight;
+            scrollContainer.scrollTo({
+                top: Math.max(0, scrollPosition),
+                behavior: 'smooth'
+            });
+        }
     }
 }
 
@@ -1056,10 +1071,10 @@ function showListenStats() {
     updateListenStatsModal();
     modal.classList.add('show');
     
-    // TỰ ĐỘNG CUỘN ĐẾN BÀI ĐANG PHÁT (GIỐNG PLAYLIST)
+    // Cuộn đến bài đang phát sau khi modal hiển thị
     setTimeout(() => {
         scrollToCurrentListenSong();
-    }, 150);
+    }, 200);
 }
 
 // Cập nhật nội dung modal (giữ nguyên highlight)
