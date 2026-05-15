@@ -1045,15 +1045,11 @@ function scrollToCurrentListenSong() {
         statItems.forEach(item => item.classList.remove('current-playing'));
         targetItem.classList.add('current-playing');
         
-        const container = modal.querySelector('.listen-stats');
-        if (container) {
-            const headerHeight = 70;
-            const targetOffset = targetItem.offsetTop - headerHeight;
-            container.scrollTo({
-                top: targetOffset,
-                behavior: 'smooth'
-            });
-        }
+        // Sử dụng scrollIntoView với offset để không bị che header
+        targetItem.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
     }
 }
 
