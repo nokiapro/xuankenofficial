@@ -355,5 +355,12 @@ const songs = [
         audio2: "https://dl.dropboxusercontent.com/scl/fi/ms2ebmosb41xcjkbjmg2j/NGAYNAYNAMAY-XUANKEN.mp3?rlkey=ehv6hgm9wgqjuqjti54piua6l&st=1kfaqh3c&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYNAYNAMAY-LYRIC.lrc",
         lrc2: ""
+    },
+    {
+        name: "Ngày Em Quay Gót",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGAYEMQUAYGOT-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/kayhesf7xvbvbqx2iw1wo/NGAYEMQUAYGOT-XUANKEN.mp3?rlkey=zirwtjow4nx5ddz9xt5bkw6l6&st=mh8hxs2i&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYEMQUAYGOT-LYRIC.lrc",
+        lrc2: ""
     }
 ];
