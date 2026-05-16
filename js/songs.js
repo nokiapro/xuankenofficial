@@ -142,7 +142,7 @@ const songs = [
     {
         name: "Phố Cũ Còn Em (Version Nam)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3",
-        audio2: "https://dl.dropboxusercontent.com/scl/fi/8dn5wczn5kywxwaael7hq/PHOCUCONEM-XUANKEN.mp3?rlkey=rtzxbgzwldj1xtb0qs8j5jq80&st=ek29uf7s&dl=0",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/hdhgb71qdnb8umpikx2zc/PHOCUCONEM-XUANKEN.mp3?rlkey=4antz9cak1qomr5a388ufpnwg&st=1p432yqb&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc",
         lrc2: ""
     },
@@ -347,6 +347,13 @@ const songs = [
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NEUBIETTRUOCREMAKE-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/jk1do59a9y710t9iby1uf/NEUBIETTRUOCREMAKE-XUANKEN.mp3?rlkey=vtcvevpxz0ku0yrk9cv2l6hwl&st=2ucy8oof&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NEUBIETTRUOCREMAKE-LYRIC.lrc",
+        lrc2: ""
+    },
+    {
+        name: "Ngày Này Năm Ấy",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGAYNAYNAMAY-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/ms2ebmosb41xcjkbjmg2j/NGAYNAYNAMAY-XUANKEN.mp3?rlkey=ehv6hgm9wgqjuqjti54piua6l&st=1kfaqh3c&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYNAYNAMAY-LYRIC.lrc",
         lrc2: ""
     }
 ];
