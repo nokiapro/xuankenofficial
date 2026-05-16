@@ -50,18 +50,11 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
+    padding: 16px;
     color: var(--text-primary);
     user-select: none;
     overflow: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Thêm vào để căn giữa trên mobile */
-@media (max-width: 768px) {
-    body {
-        padding: 16px;
-    }
 }
 
 .player-container {
@@ -79,18 +72,6 @@ body {
     position: relative;
     z-index: 10;
     transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-/* Thêm vào để căn giữa trên mobile */
-@media (max-width: 768px) {
-    .player-container {
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
-        border-radius: 24px;
-        height: auto;
-        max-height: 90vh;
-    }
 }
 
 body.dark .player-container {
@@ -1066,137 +1047,4 @@ body.dark .album-art {
 
 #listen-count-btn {
     position: relative;
-}
-
-@media (max-width: 768px) {
-    /* Căn giữa body */
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 12px;
-        margin: 0;
-    }
-    
-    /* Player container - không tràn màn hình */
-    .player-container {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-        border-radius: 28px;
-        height: auto;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-    
-    /* Cuộn nhẹ nếu nội dung dài */
-    .player-container::-webkit-scrollbar {
-        display: none;
-    }
-    
-    /* Header co lại */
-    .header-section {
-        padding: 16px 16px 10px 16px;
-        gap: 10px;
-    }
-    
-    /* Album nhỏ lại */
-    .album-art {
-        width: 110px;
-        height: 110px;
-    }
-    
-    /* Title nhỏ lại */
-    .song-title {
-        font-size: 1rem;
-    }
-    
-    .artist-name {
-        font-size: 0.75rem;
-    }
-    
-    /* Controls co lại */
-    .controls-bar {
-        padding: 12px 16px 18px 16px;
-    }
-    
-    /* Nút bấm nhỏ lại */
-    .btn-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 1rem;
-    }
-    
-    .play-btn {
-        width: 50px;
-        height: 50px;
-    }
-    
-    /* Thanh progress */
-    .progress-thumb {
-        width: 22px;
-        height: 22px;
-    }
-    
-    /* Lyric container */
-    .lyric-container {
-        min-height: 42px;
-        padding: 0 12px;
-    }
-    
-    .current-lyric {
-        font-size: 0.7rem;
-    }
-}
-
-/* Điều chỉnh cho màn hình rất nhỏ (iPhone SE) */
-@media (max-width: 380px) {
-    .player-container {
-        max-width: 95%;
-        border-radius: 24px;
-    }
-    
-    .album-art {
-        width: 95px;
-        height: 95px;
-    }
-    
-    .song-title {
-        font-size: 0.85rem;
-    }
-    
-    .btn-icon {
-        width: 34px;
-        height: 34px;
-    }
-    
-    .play-btn {
-        width: 46px;
-        height: 46px;
-    }
-}
-
-/* Điều chỉnh cho màn hình lớn hơn (iPhone 15 Pro Max) */
-@media (min-width: 420px) and (max-width: 768px) {
-    .player-container {
-        max-width: 380px;
-    }
-    
-    .album-art {
-        width: 130px;
-        height: 130px;
-    }
-    
-    .song-title {
-        font-size: 1.1rem;
-    }
-}
-
-/* Desktop - giữ nguyên style cũ */
-@media (min-width: 769px) {
-    .player-container {
-        max-width: 450px;
-        margin: auto;
-        border-radius: 32px;
-    }
 }
