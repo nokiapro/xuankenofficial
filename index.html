@@ -6,36 +6,48 @@
     <link href="https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/icon.png" rel="shortcut icon" type="image/x-icon" />
     <title>XuanKen Music Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v7.2.0/css/pro.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <div id="toast-msg"></div>
 
+    <!-- MÀN HÌNH CHẠM ĐỂ BẮT ĐẦU MỚI -->
     <div id="interaction-hint">
-        <div class="mb-4 border-4 border-gray-200 border-t-black rounded-full w-12 h-12 animate-spin-custom"></div>
-        <p class="font-bold text-2xl text-center px-4 tracking-tighter">XUANKEN MUSIC OFFICIAL</p>
-        <p class="text-gray-500 text-sm mt-2"><i class="fa-light fa-face-grin-stars"></i> Chạm để bắt đầu nghe nhạc <i class="fa-light fa-face-grin-stars"></i></p>
+        <div class="hint-logo">
+            <img src="https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/logoofficial.png" alt="Logo Xuanken Music">
+        </div>
+        <div class="hint-title">XUANKEN MUSIC</div>
+        <div class="hint-subtitle">OFFICIAL</div>
+        <div class="hint-button">
+            <div class="hint-button-icon">
+                <i class="fas fa-play"></i>
+            </div>
+            <div class="hint-button-text">Chạm để bắt đầu</div>
+        </div>
+        <div class="hint-decoration">
+            <i class="fas fa-headphones"></i> NGHE NHẠC MIỄN PHÍ <i class="fas fa-heart"></i>
+        </div>
     </div>
 
-    <div class="player-container">
+    <div class="player-container" id="player-container" style="display: none;">
         <div class="header-section">
             <div class="top-left-action">
                 <div class="btn-icon" id="open-timer-btn" title="Hẹn giờ tắt">
-                    <i class="fal fa-stopwatch"></i>
+                    <i class="fa-regular fa-stopwatch"></i>
                 </div>
                 <div class="btn-icon" id="listen-count-btn" title="Lượt nghe">
-                    <i class="fal fa-headphones"></i>
+                    <i class="fa-regular fa-headphones"></i>
                 </div>
             </div>
 
             <div class="top-right-action">
                 <div class="btn-icon" id="theme-toggle" title="Chế độ sáng/tối">
-                    <i class="fal fa-sun"></i>
+                    <i class="fa-regular fa-sun"></i>
                 </div>
                 <div class="btn-icon" id="list-btn" title="Danh sách bài hát">
-                    <i class="fal fa-list-music"></i>
+                    <i class="fa-regular fa-list-music"></i>
                 </div>
             </div>
             
@@ -46,7 +58,7 @@
                 <span class="song-title" id="current-title">Sẵn sàng</span>
                 <span class="artist-name" id="current-artist">XuanKen Official</span>
                 <div class="lyric-container" id="lyric-container">
-                    <div class="current-lyric" id="lyric-text"><i class="fa-light fa-face-grin-hearts"></i> Chọn bài hát để phát <i class="fa-light fa-face-grin-hearts"></i></div>
+                    <div class="current-lyric" id="lyric-text"><i class="fa-regular fa-face-grin-hearts"></i> Chọn bài hát để phát <i class="fa-regular fa-face-grin-hearts"></i></div>
                 </div>
             </div>
         </div>
@@ -87,7 +99,7 @@
                 <div class="close-playlist" id="close-playlist-btn">
                     <i class="fas fa-times"></i>
                 </div>
-                <div class="playlist-title"><i class="fal fa-music"></i> DANH SÁCH BÀI HÁT <i class="fal fa-music"></i></div>
+                <div class="playlist-title"><i class="fa-regular fa-music"></i> DANH SÁCH BÀI HÁT <i class="fa-regular fa-music"></i></div>
                 <div style="width: 40px;"></div> 
             </div>
             <div id="playlist-content"></div>
@@ -99,12 +111,12 @@
                 <div class="close-timer" id="close-timer-modal">
                     <i class="fas fa-times"></i>
                 </div>
-                <div class="timer-title"><i class="fal fa-stopwatch"></i> HẸN GIỜ TẮT NHẠC <i class="fal fa-stopwatch"></i></div>
+                <div class="timer-title"><i class="fa-regular fa-stopwatch"></i> HẸN GIỜ TẮT NHẠC <i class="fa-regular fa-stopwatch"></i></div>
                 <div style="width: 40px;"></div>
             </div>
             <div class="timer-modal-content">
                 <div class="timer-status-box">
-                    <i class="fal fa-alarm-clock"></i>
+                    <i class="fa-regular fa-alarm-clock"></i>
                     <div class="timer-status-text" id="timer-status">CHƯA ĐẶT HẸN GIỜ</div>
                 </div>
                 
