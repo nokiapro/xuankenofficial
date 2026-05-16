@@ -30,7 +30,7 @@ const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9
 let listenData = {};
 let isUpdatingListen = false;
 let hasRecordedCurrentSong = false;
-let listenCheckInterval = null;
+let currentSource = 'normal';
 
 function showToastMsg(msg, isListen = false) {
     const toastEl = document.getElementById('toast-msg');
@@ -484,7 +484,14 @@ async function loadSong(i) {
 }
 
 function changeSong(i, source = 'normal') {
-    loadSong(i).then(() => audio.play().catch(() => { }));
+    currentSource = source;
+    loadSong(i).then(() => {
+        audio.play().catch(() => { });
+        setTimeout(() => {
+            updateCurrentSongHighlightAndScroll();
+            updateListenStatsModal();
+        }, 100);
+    });
 }
 
 function selectSongFromList(i) {
@@ -592,7 +599,7 @@ if (progressThumb) {
     };
 }
 
-let listenRecordedTime = null;
+let listenCheckInterval = null;
 
 audio.ontimeupdate = () => {
     const cur = audio.currentTime;
@@ -611,12 +618,12 @@ audio.ontimeupdate = () => {
         }
     }
     
-    if (cur >= 3 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
+    if (cur >= 5 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
         const currentSong = songs[index];
         if (currentSong && currentSong.name) {
             hasRecordedCurrentSong = true;
-            recordListenWithSource(currentSong.name, 'normal');
-            console.log(`ĐÃ GHI NHẬN LƯỢT NGHE SAU 3 GIÂY: ${currentSong.name}`);
+            recordListenWithSource(currentSong.name, currentSource);
+            console.log(`ĐÃ GHI NHẬN LƯỢT NGHE SAU 5 GIÂY: ${currentSong.name} (${currentSource})`);
         }
     }
     
@@ -636,6 +643,7 @@ audio.onended = () => {
         const currentSong = songs[index];
         if (currentSong && currentSong.name) {
             hasRecordedCurrentSong = false;
+            currentSource = 'loop';
         }
         audio.currentTime = 0;
         setTimeout(() => { audio.play().catch(e => { audio.load(); setTimeout(() => audio.play(), 50); }); }, 10);
@@ -903,33 +911,6 @@ if (listenCountBtn) {
         e.stopPropagation(); 
         showListenStats(); 
     };
-}
-
-const originalChangeSong = changeSong;
-changeSong = function(i, source = 'normal') {
-    originalChangeSong(i, source);
-    setTimeout(() => {
-        updateCurrentSongHighlightAndScroll();
-        updateListenStatsModal();
-    }, 100);
-};
-
-const observerForModal = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-            const modal = document.getElementById('listen-stats-modal');
-            if (modal && modal.classList.contains('show')) {
-                setTimeout(() => {
-                    scrollToCurrentListenSong();
-                }, 200);
-            }
-        }
-    });
-});
-
-const modalElement = document.getElementById('listen-stats-modal');
-if (modalElement) {
-    observerForModal.observe(modalElement, { attributes: true });
 }
 
 setInterval(fetchListenData, 30000);
