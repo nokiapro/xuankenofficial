@@ -364,35 +364,72 @@ body.dark .album-art {
     border-radius: 10px;
     margin-bottom: 10px;
     transition: background 0.3s ease;
-    overflow: hidden;
 }
 
 .progress-filled {
     height: 100%;
-    background: var(--accent-color);
+    background: linear-gradient(90deg, #F5E9FD,#F4E0DF,#F6BCBA,#E3AADD,#C3C7F4,#F5E9FD);
     width: 0%;
     border-radius: 10px;
-    transition: width 0.1s linear, background-color 0.3s ease;
+    transition: width 0.1s linear;
+    background-size: 200% 100%;
+    animation: pastelMove 3s linear infinite;
     position: relative;
+    box-shadow: 0 0 12px rgba(243, 184, 186, 0.6);
+}
+
+@keyframes pastelMove {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
 }
 
 .progress-filled::after {
     content: '';
     position: absolute;
+    top: 0;
+    left: 0;
     right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    background: var(--accent-color);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.2s;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent
+    );
+    animation: shimmer 1.5s infinite;
 }
 
-.progress-bar-container:hover .progress-filled::after {
-    opacity: 1;
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-thumb {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url('https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/SanrioCinnamorollIceCreamPixel.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.1s ease;
+    pointer-events: auto;
+    border-radius: 50%;
+}
+
+.progress-thumb:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+}
+
+.progress-thumb:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.progress-filled::after {
+    display: none;
 }
 
 .time-info {
