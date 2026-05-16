@@ -1,43 +1,110 @@
 /* ========================================
-   RESPONSIVE.CSS - TỐI ƯU CHO MỌI ĐIỆN THOẠI
-   Hỗ trợ iPhone 15, Xiaomi Redmi K70 và các thiết bị khác
+   RESPONSIVE.CSS - CĂN GIỮA PLAYER TRÊN MỌI ĐIỆN THOẠI
    ======================================== */
 
-/* Reset cơ bản cho mobile */
-@media (max-width: 768px) {
-    body {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
+/* Reset toàn bộ để căn giữa hoàn hảo */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Căn giữa body trên mọi thiết bị */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Player container - căn giữa hoàn hảo */
+.player-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    max-height: 95vh;
+    margin: auto;
+    position: relative;
+    border-radius: 32px;
+    overflow: hidden;
+}
+
+/* ========================================
+   IPHONE 15 (393 x 852)
+   ======================================== */
+@media screen and (width: 393px) and (height: 852px) {
+    .player-container {
+        width: 92%;
+        max-width: 360px;
+        height: auto;
+        max-height: 85vh;
+        transform: translateY(0);
+        margin: auto;
     }
     
-    .player-container {
-        height: 100%;
-        width: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        margin: 0;
-        justify-content: space-between;
+    .header-section {
+        padding: 16px 16px 10px 16px;
+        gap: 10px;
+    }
+    
+    .album-art {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .song-title {
+        font-size: 1rem;
+    }
+    
+    .artist-name {
+        font-size: 0.75rem;
+    }
+    
+    .controls-bar {
+        padding: 12px 16px 18px 16px;
+    }
+    
+    .main-actions {
+        gap: 8px;
+    }
+    
+    .btn-icon {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .play-btn {
+        width: 52px;
+        height: 52px;
     }
 }
 
 /* ========================================
-   IPHONE 15 (393 x 852) 
+   XIAOMI REDMI K70 (320 x 1440)
    ======================================== */
-@media screen and (device-width: 393px) and (device-height: 852px) {
+@media screen and (width: 320px) and (height: 1440px) {
     .player-container {
-        max-width: 100%;
+        width: 90%;
+        max-width: 300px;
+        height: auto;
+        max-height: 80vh;
+        margin: auto;
     }
     
     .header-section {
-        padding: 10px 16px 6px 16px;
+        padding: 14px 14px 8px 14px;
         gap: 8px;
     }
     
@@ -48,18 +115,15 @@
     
     .song-title {
         font-size: 0.9rem;
-        margin-bottom: 3px;
     }
     
     .artist-name {
         font-size: 0.7rem;
-        margin-bottom: 6px;
     }
     
     .lyric-container {
-        min-height: 36px;
+        min-height: 38px;
         padding: 0 8px;
-        margin-top: 3px;
     }
     
     .current-lyric {
@@ -67,24 +131,11 @@
     }
     
     .controls-bar {
-        padding: 10px 16px 14px 16px;
+        padding: 10px 14px 14px 14px;
     }
     
     .progress-wrapper {
         margin-bottom: 12px;
-    }
-    
-    .progress-bar-container {
-        height: 5px;
-        margin-bottom: 6px;
-    }
-    
-    .time-info {
-        font-size: 0.65rem;
-    }
-    
-    .main-actions {
-        gap: 6px;
     }
     
     .btn-icon {
@@ -105,207 +156,59 @@
 }
 
 /* ========================================
-   IPHONE 15 PRO (393 x 852) - Tương tự
+   IPHONE 15 PRO MAX (430 x 932)
    ======================================== */
-@media screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) {
-    /* Giống iPhone 15 */
-}
-
-/* ========================================
-   IPHONE 15 PLUS (430 x 932)
-   ======================================== */
-@media screen and (device-width: 430px) and (device-height: 932px) {
-    .header-section {
-        padding: 14px 16px 10px 16px;
-        gap: 10px;
+@media screen and (width: 430px) and (height: 932px) {
+    .player-container {
+        width: 90%;
+        max-width: 380px;
+        margin: auto;
     }
     
     .album-art {
-        width: 120px;
-        height: 120px;
+        width: 130px;
+        height: 130px;
     }
     
     .song-title {
-        font-size: 1rem;
-    }
-    
-    .controls-bar {
-        padding: 14px 16px 18px 16px;
-    }
-    
-    .btn-icon {
-        width: 38px;
-        height: 38px;
-    }
-    
-    .play-btn {
-        width: 50px;
-        height: 50px;
+        font-size: 1.1rem;
     }
 }
 
 /* ========================================
-   XIAOMI REDMI K70 (320 x 1440) 
+   IPHONE 12/13/14 (390 x 844)
    ======================================== */
-@media screen and (device-width: 320px) and (device-height: 1440px) {
-    .header-section {
-        padding: 12px 16px 8px 16px;
-        gap: 10px;
+@media screen and (width: 390px) and (height: 844px) {
+    .player-container {
+        width: 92%;
+        max-width: 360px;
+        margin: auto;
     }
     
     .album-art {
-        width: 110px;
-        height: 110px;
-    }
-    
-    .song-title {
-        font-size: 0.95rem;
-        margin-bottom: 4px;
-    }
-    
-    .artist-name {
-        font-size: 0.75rem;
-        margin-bottom: 8px;
-    }
-    
-    .lyric-container {
-        min-height: 38px;
-        padding: 0 10px;
-    }
-    
-    .current-lyric {
-        font-size: 0.7rem;
-    }
-    
-    .controls-bar {
-        padding: 12px 16px 16px 16px;
-    }
-    
-    .progress-wrapper {
-        margin-bottom: 14px;
-    }
-    
-    .btn-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 0.95rem;
-    }
-    
-    .play-btn {
-        width: 48px;
-        height: 48px;
-    }
-    
-    .progress-thumb {
-        width: 22px;
-        height: 22px;
+        width: 115px;
+        height: 115px;
     }
 }
 
 /* ========================================
-   XIAOMI REDMI K70 PRO (320 x 1440)
+   IPHONE SE (375 x 667) - Nhỏ nhất
    ======================================== */
-@media screen and (min-device-width: 320px) and (max-device-width: 360px) and (min-device-height: 1400px) {
+@media screen and (width: 375px) and (height: 667px) {
+    .player-container {
+        width: 94%;
+        max-width: 350px;
+        margin: auto;
+    }
+    
     .header-section {
-        padding: 12px 16px 8px 16px;
-        gap: 10px;
-    }
-    
-    .album-art {
-        width: 110px;
-        height: 110px;
-    }
-    
-    .btn-icon {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .play-btn {
-        width: 48px;
-        height: 48px;
-    }
-}
-
-/* ========================================
-   SAMSUNG GALAXY S23 (360 x 780)
-   ======================================== */
-@media screen and (device-width: 360px) and (device-height: 780px) {
-    .header-section {
-        padding: 12px 16px 8px 16px;
-        gap: 10px;
-    }
-    
-    .album-art {
-        width: 110px;
-        height: 110px;
-    }
-    
-    .controls-bar {
-        padding: 12px 16px 16px 16px;
-    }
-    
-    .btn-icon {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .play-btn {
-        width: 48px;
-        height: 48px;
-    }
-}
-
-/* ========================================
-   SAMSUNG GALAXY S23 ULTRA (412 x 915)
-   ======================================== */
-@media screen and (device-width: 412px) and (device-height: 915px) {
-    .header-section {
-        padding: 14px 16px 10px 16px;
-        gap: 12px;
-    }
-    
-    .album-art {
-        width: 125px;
-        height: 125px;
-    }
-    
-    .song-title {
-        font-size: 1.05rem;
-    }
-    
-    .controls-bar {
-        padding: 14px 16px 18px 16px;
-    }
-}
-
-/* ========================================
-   GOOGLE PIXEL (412 x 915)
-   ======================================== */
-@media screen and (device-width: 412px) and (device-height: 915px) {
-    .header-section {
-        padding: 14px 16px 10px 16px;
-        gap: 12px;
-    }
-    
-    .album-art {
-        width: 125px;
-        height: 125px;
-    }
-}
-
-/* ========================================
-   IPHONE SE (375 x 667)
-   ======================================== */
-@media screen and (device-width: 375px) and (device-height: 667px) {
-    .header-section {
-        padding: 10px 16px 6px 16px;
+        padding: 12px 12px 6px 12px;
         gap: 8px;
     }
     
     .album-art {
-        width: 95px;
-        height: 95px;
+        width: 90px;
+        height: 90px;
     }
     
     .song-title {
@@ -322,6 +225,10 @@
     
     .current-lyric {
         font-size: 0.6rem;
+    }
+    
+    .controls-bar {
+        padding: 8px 12px 12px 12px;
     }
     
     .btn-icon {
@@ -342,17 +249,18 @@
 }
 
 /* ========================================
-   IPHONE 12/13/14 (390 x 844)
+   SAMSUNG GALAXY S23 (360 x 780)
    ======================================== */
-@media screen and (device-width: 390px) and (device-height: 844px) {
-    .header-section {
-        padding: 12px 16px 8px 16px;
-        gap: 10px;
+@media screen and (width: 360px) and (height: 780px) {
+    .player-container {
+        width: 92%;
+        max-width: 340px;
+        margin: auto;
     }
     
     .album-art {
-        width: 110px;
-        height: 110px;
+        width: 105px;
+        height: 105px;
     }
     
     .btn-icon {
@@ -367,117 +275,77 @@
 }
 
 /* ========================================
-   IPHONE 12/13/14 PRO MAX (428 x 926)
+   XIAOMI 12/13 (394 x 852)
    ======================================== */
-@media screen and (device-width: 428px) and (device-height: 926px) {
-    .header-section {
-        padding: 16px 20px 12px 20px;
-        gap: 14px;
+@media screen and (width: 394px) and (height: 852px) {
+    .player-container {
+        width: 90%;
+        max-width: 360px;
+        margin: auto;
     }
     
     .album-art {
-        width: 140px;
-        height: 140px;
-    }
-    
-    .song-title {
-        font-size: 1.1rem;
-    }
-    
-    .artist-name {
-        font-size: 0.85rem;
-    }
-    
-    .controls-bar {
-        padding: 16px 20px 20px 20px;
-    }
-    
-    .btn-icon {
-        width: 42px;
-        height: 42px;
-    }
-    
-    .play-btn {
-        width: 54px;
-        height: 54px;
+        width: 115px;
+        height: 115px;
     }
 }
 
 /* ========================================
-   MÀN HÌNH NHỎ (< 320px)
+   OPPO / REALME (360 x 800)
    ======================================== */
-@media screen and (max-width: 320px) {
-    .header-section {
-        padding: 8px 12px 4px 12px;
-        gap: 6px;
+@media screen and (width: 360px) and (height: 800px) {
+    .player-container {
+        width: 92%;
+        max-width: 340px;
+        margin: auto;
     }
     
     .album-art {
-        width: 85px;
-        height: 85px;
-    }
-    
-    .song-title {
-        font-size: 0.8rem;
-    }
-    
-    .artist-name {
-        font-size: 0.6rem;
-    }
-    
-    .lyric-container {
-        min-height: 32px;
-    }
-    
-    .current-lyric {
-        font-size: 0.55rem;
-    }
-    
-    .controls-bar {
-        padding: 8px 12px 12px 12px;
-    }
-    
-    .btn-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 0.8rem;
-    }
-    
-    .play-btn {
-        width: 42px;
-        height: 42px;
-    }
-    
-    .progress-thumb {
-        width: 16px;
-        height: 16px;
+        width: 105px;
+        height: 105px;
     }
 }
 
 /* ========================================
-   MÀN HÌNH LỚN (Tablet nhỏ)
+   MÀN HÌNH TRUNG BÌNH (376 - 400) 
    ======================================== */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
+@media screen and (min-width: 376px) and (max-width: 400px) {
     .player-container {
-        max-width: 500px;
-        margin: 20px auto;
-        border-radius: 32px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        width: 90%;
+        max-width: 360px;
+        margin: auto;
+    }
+    
+    .album-art {
+        width: 110px;
+        height: 110px;
     }
 }
 
 /* ========================================
-   HỖ TRỢ MÀN HÌNH GẤP (Foldable)
+   MÀN HÌNH LỚN (401 - 480)
    ======================================== */
-@media screen and (min-width: 500px) and (max-width: 768px) {
+@media screen and (min-width: 401px) and (max-width: 480px) {
     .player-container {
+        width: 88%;
+        max-width: 400px;
+        margin: auto;
+    }
+    
+    .album-art {
+        width: 130px;
+        height: 130px;
+    }
+}
+
+/* ========================================
+   TABLET NHỎ (481 - 768)
+   ======================================== */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .player-container {
+        width: 70%;
         max-width: 450px;
         margin: auto;
-        border-radius: 32px;
-    }
-    
-    .header-section {
-        padding: 20px 20px 15px 20px;
     }
     
     .album-art {
@@ -487,65 +355,105 @@
 }
 
 /* ========================================
-   TỐI ƯU CHO NOTCH (Tai thỏ)
+   DESKTOP (>= 769px)
    ======================================== */
-@supports (padding-top: env(safe-area-inset-top)) {
-    .player-container {
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
+@media screen and (min-width: 769px) {
+    body {
+        position: relative;
+        padding: 20px;
     }
     
-    .top-right-action,
-    .top-left-action {
-        top: max(15px, env(safe-area-inset-top));
+    .player-container {
+        width: 100%;
+        max-width: 450px;
+        margin: auto;
+        border-radius: 32px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
     }
 }
 
 /* ========================================
-   THANH PROGRESS TRÊN MOBILE
+   CĂN CHÍNH GIỮA THEO CHIỀU DỌC
    ======================================== */
 @media (max-width: 768px) {
-    .progress-thumb {
-        width: 22px;
-        height: 22px;
-        box-shadow: 0 0 4px rgba(243, 184, 186, 0.6);
+    .player-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
     }
     
+    /* Điều chỉnh cho từng thiết bị cụ thể */
+    @media screen and (height: 852px) {
+        .player-container {
+            transform: translate(-50%, -50%);
+        }
+    }
+    
+    @media screen and (height: 1440px) {
+        .player-container {
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+/* ========================================
+   HỖ TRỢ SAFE AREA (Tai thỏ, Dynamic Island)
+   ======================================== */
+@supports (padding: max(0px)) {
+    .top-right-action,
+    .top-left-action {
+        top: max(12px, env(safe-area-inset-top));
+    }
+}
+
+/* ========================================
+   THANH PROGRESS - GIỮ NGUYÊN MÀU PASTEL
+   ======================================== */
+@media (max-width: 768px) {
     .progress-filled {
         background: linear-gradient(90deg, 
-            #F5E9FD,
-            #F4E0DF,
-            #F6BCBA,
-            #E3AADD,
-            #C3C7F4,
-            #F5E9FD
+            #F5E9FD, #F4E0DF, #F6BCBA, 
+            #E3AADD, #C3C7F4, #F5E9FD
         );
         background-size: 200% 100%;
         animation: pastelMove 3s linear infinite;
     }
+    
+    .progress-thumb {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Animation cho progress */
+@keyframes pastelMove {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
 }
 
 /* ========================================
-   ẨN THANH CUỘN TRÊN MOBILE
+   ĐẢM BẢO KHÔNG BỊ TRÀN NỘI DUNG
    ======================================== */
 @media (max-width: 768px) {
+    .song-title {
+        white-space: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .song-title::-webkit-scrollbar {
+        display: none;
+    }
+    
     .current-lyric {
         white-space: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
     }
     
     .current-lyric::-webkit-scrollbar {
         display: none;
     }
-}
-
-/* ========================================
-   ANIMATION
-   ======================================== */
-@keyframes pastelMove {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 200% 0%; }
 }
