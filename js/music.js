@@ -30,6 +30,7 @@ const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9
 let listenData = {};
 let isUpdatingListen = false;
 let hasRecordedCurrentSong = false;
+let listenCheckInterval = null;
 
 function showToastMsg(msg, isListen = false) {
     const toastEl = document.getElementById('toast-msg');
@@ -483,8 +484,6 @@ async function loadSong(i) {
 }
 
 function changeSong(i, source = 'normal') {
-    const newSongName = songs[i].name;
-    recordListenWithSource(newSongName, source);
     loadSong(i).then(() => audio.play().catch(() => { }));
 }
 
@@ -593,6 +592,8 @@ if (progressThumb) {
     };
 }
 
+let listenRecordedTime = null;
+
 audio.ontimeupdate = () => {
     const cur = audio.currentTime;
     const dur = audio.duration;
@@ -610,11 +611,12 @@ audio.ontimeupdate = () => {
         }
     }
     
-    if (cur >= 1 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
+    if (cur >= 3 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
         const currentSong = songs[index];
         if (currentSong && currentSong.name) {
             hasRecordedCurrentSong = true;
             recordListenWithSource(currentSong.name, 'normal');
+            console.log(`ĐÃ GHI NHẬN LƯỢT NGHE SAU 3 GIÂY: ${currentSong.name}`);
         }
     }
     
@@ -634,7 +636,6 @@ audio.onended = () => {
         const currentSong = songs[index];
         if (currentSong && currentSong.name) {
             hasRecordedCurrentSong = false;
-            recordListenWithSource(currentSong.name, 'loop');
         }
         audio.currentTime = 0;
         setTimeout(() => { audio.play().catch(e => { audio.load(); setTimeout(() => audio.play(), 50); }); }, 10);
