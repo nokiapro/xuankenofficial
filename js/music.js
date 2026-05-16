@@ -686,7 +686,20 @@ function renderPlaylist() {
 const initIdx = getInitialShuffleIndex();
 index = initIdx;
 
-if (hint) hint.onclick = () => { hint.style.display = 'none'; changeSong(index, 'normal'); };
+// ========== XỬ LÝ MÀN HÌNH CHẠM ==========
+const playerContainer = document.getElementById('player-container');
+if (playerContainer) playerContainer.style.display = 'none';
+
+if (hint) {
+    hint.onclick = () => {
+        hint.classList.add('hide');
+        setTimeout(() => {
+            hint.style.display = 'none';
+            if (playerContainer) playerContainer.style.display = 'flex';
+        }, 600);
+        changeSong(index, 'normal');
+    };
+}
 
 const playPauseBtn = document.getElementById('play-pause-btn');
 if (playPauseBtn) playPauseBtn.onclick = togglePlay;
