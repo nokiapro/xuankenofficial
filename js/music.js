@@ -16,7 +16,6 @@ const playIcon = document.getElementById('play-icon');
 const art = document.getElementById('current-art');
 const lyricDisplay = document.getElementById('lyric-text');
 const lyricContainer = document.getElementById('lyric-container');
-const progressBar = document.getElementById('progress-bar');
 const hint = document.getElementById('interaction-hint');
 const toast = document.getElementById('toast-msg');
 const shuffleBtn = document.getElementById('shuffle-btn');
@@ -30,6 +29,7 @@ const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9
 
 let listenData = {};
 let isUpdatingListen = false;
+let hasRecordedCurrentSong = false;
 
 function showToastMsg(msg, isListen = false) {
     const toastEl = document.getElementById('toast-msg');
@@ -134,7 +134,7 @@ function updateListenStatsModal() {
             const isCurrent = (song.name === currentSongName);
             return `
                 <div class="listen-stat-item ${isCurrent ? 'current-playing' : ''}" data-song-name="${escapeHtmlStat(song.name)}">
-                    <span class="listen-stat-name">${escapeHtmlStat(song.name)}</span>
+                    <span class="listen-stat-name">${escapeHtmlStat(song.name).toUpperCase()}</span>
                     <span class="listen-stat-count">${formatNumberStat(count)}</span>
                 </div>
             `;
@@ -243,7 +243,7 @@ function updateCurrentSongHighlightAndScroll() {
     let foundCurrent = false;
     statItems.forEach(item => {
         const nameSpan = item.querySelector('.listen-stat-name');
-        if (nameSpan && nameSpan.innerText === currentSongName) {
+        if (nameSpan && nameSpan.innerText === currentSongName.toUpperCase()) {
             item.classList.add('current-playing');
             foundCurrent = true;
         } else {
@@ -471,12 +471,14 @@ async function loadSong(i) {
     lyrics = [];
     lastLyric = "";
     adjustLyricFontSize("ĐANG TẢI LỜI BÀI HÁT...");
-    progressBar.style.width = '0%';
     lyrics = await fetchLyricWithFallback(song.lrc1, song.lrc2);
     if (lyrics.length === 0) adjustLyricFontSize("BÀI HÁT TẠM CHƯA CÓ LYRIC NHA HIHI");
     renderPlaylist();
     updateMediaSession();
     if (playlistOverlay.classList.contains('active')) setTimeout(scrollToActiveTop, 100);
+    
+    hasRecordedCurrentSong = false;
+    
     isChanging = false;
 }
 
@@ -533,11 +535,68 @@ audio.onerror = () => {
     } else showToast("LỖI: KHÔNG THỂ PHÁT BÀI HÁT!");
 };
 
+const progressArea = document.getElementById('progress-area');
+const progressFill = document.getElementById('progress-fill');
+const progressThumb = document.getElementById('progress-thumb');
+
+function updateProgressUI() {
+    const dur = audio.duration;
+    const cur = audio.currentTime;
+    if (dur && !isNaN(dur)) {
+        const percent = (cur / dur) * 100;
+        progressFill.style.width = percent + '%';
+        
+        const wrapperWidth = progressArea.clientWidth;
+        const leftPos = (percent / 100) * wrapperWidth;
+        progressThumb.style.left = leftPos + 'px';
+    }
+}
+
+if (progressArea) {
+    progressArea.onclick = (e) => {
+        if (!audio.duration) return;
+        const rect = progressArea.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = percent * audio.duration;
+        updateProgressUI();
+    };
+}
+
+let isDragging = false;
+
+if (progressThumb) {
+    progressThumb.onmousedown = (e) => {
+        e.stopPropagation();
+        isDragging = true;
+        document.body.style.userSelect = 'none';
+        
+        const onMouseMove = (moveEvent) => {
+            if (!isDragging) return;
+            const rect = progressArea.getBoundingClientRect();
+            let newLeft = moveEvent.clientX - rect.left;
+            newLeft = Math.max(0, Math.min(newLeft, rect.width));
+            const percent = newLeft / rect.width;
+            audio.currentTime = percent * audio.duration;
+            progressFill.style.width = percent * 100 + '%';
+            progressThumb.style.left = newLeft + 'px';
+        };
+        
+        const onMouseUp = () => {
+            isDragging = false;
+            document.body.style.userSelect = '';
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+        
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    };
+}
+
 audio.ontimeupdate = () => {
     const cur = audio.currentTime;
     const dur = audio.duration;
     if (dur) {
-        progressBar.style.width = (cur / dur * 100) + '%';
         const timeCurrent = document.getElementById('time-current');
         const timeTotal = document.getElementById('time-total');
         if (timeCurrent) timeCurrent.innerText = formatTime(cur);
@@ -550,12 +609,23 @@ audio.ontimeupdate = () => {
             adjustLyricFontSize(active.text);
         }
     }
+    
+    if (cur >= 1 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
+        const currentSong = songs[index];
+        if (currentSong && currentSong.name) {
+            hasRecordedCurrentSong = true;
+            recordListenWithSource(currentSong.name, 'normal');
+        }
+    }
+    
     if (isRepeatOne && dur && (dur - cur) <= 0.1 && !isLoopingHandled && dur > 0) {
         isLoopingHandled = true;
         audio.currentTime = 0;
         audio.play().catch(e => { setTimeout(() => audio.play(), 20); });
     }
     if (cur > 0 && dur && (dur - cur) > 0.2) isLoopingHandled = false;
+    
+    updateProgressUI();
 };
 
 audio.onended = () => {
@@ -563,6 +633,7 @@ audio.onended = () => {
         isLoopingHandled = true;
         const currentSong = songs[index];
         if (currentSong && currentSong.name) {
+            hasRecordedCurrentSong = false;
             recordListenWithSource(currentSong.name, 'loop');
         }
         audio.currentTime = 0;
@@ -647,14 +718,11 @@ if (repeatBtn) {
     };
 }
 
-const progressArea = document.getElementById('progress-area');
-if (progressArea) {
-    progressArea.onclick = (e) => {
-        if (!audio.duration) return;
-        const rect = e.currentTarget.getBoundingClientRect();
-        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-    };
-}
+window.addEventListener('resize', () => {
+    updateProgressUI();
+    autoScaleSongTitle();
+    if (lastLyric) adjustLyricFontSize(lastLyric);
+});
 
 let sleepTimerId = null;
 let countdownInterval = null;
@@ -777,7 +845,6 @@ if (timerModal) timerModal.addEventListener('click', (e) => e.stopPropagation())
 
 const observer = new ResizeObserver(() => autoScaleSongTitle());
 if (songTitleEl) observer.observe(songTitleEl.parentElement);
-window.addEventListener('resize', () => autoScaleSongTitle());
 document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && !audio.paused) await requestWakeLock(); });
 
 window.onload = () => {
@@ -787,11 +854,7 @@ window.onload = () => {
     autoScaleSongTitle();
     if ('mediaSession' in navigator) updateMediaSession();
     fetchListenData();
-};
-
-window.onresize = () => {
-    if (lastLyric) adjustLyricFontSize(lastLyric);
-    autoScaleSongTitle();
+    updateProgressUI();
 };
 
 const themeToggle = document.getElementById('theme-toggle');
