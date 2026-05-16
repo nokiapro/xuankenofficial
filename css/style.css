@@ -1021,6 +1021,7 @@ body.dark .album-art {
     font-size: 0.85rem;
     padding-right: 12px;
     transition: all 0.2s ease;
+    text-transform: uppercase;
 }
 
 .listen-stat-count {
@@ -1047,4 +1048,218 @@ body.dark .album-art {
 
 #listen-count-btn {
     position: relative;
+}
+
+/* ========================================
+   MÀN HÌNH CHẠM ĐỂ BẮT ĐẦU - THIẾT KẾ MỚI
+   ======================================== */
+#interaction-hint {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(245, 233, 253, 0.98),
+        rgba(244, 224, 223, 0.98),
+        rgba(246, 188, 186, 0.98),
+        rgba(227, 170, 221, 0.98),
+        rgba(195, 199, 244, 0.98)
+    );
+    background-size: 400% 400%;
+    animation: bgGradient 8s ease infinite;
+    backdrop-filter: blur(2px);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    opacity: 1;
+    visibility: visible;
+    font-family: -apple-system, system-ui, sans-serif;
+}
+
+#interaction-hint.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.hint-logo {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 30px;
+    animation: logoFloat 2.5s ease-in-out infinite;
+    position: relative;
+}
+
+.hint-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.hint-logo::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    animation: pulseRing 2s linear infinite;
+}
+
+@keyframes pulseRing {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.2); opacity: 0; }
+}
+
+@keyframes logoFloat {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+
+.hint-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    background: linear-gradient(135deg, #c20175, #b33cea, #17adca, #dd4809);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: titleGradient 3s ease infinite;
+    margin-bottom: 2px;
+    text-align: center;
+    padding: 0 20px;
+}
+
+@keyframes titleGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.hint-subtitle {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 45px;
+    letter-spacing: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.hint-button {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    padding: 16px 36px;
+    border-radius: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hint-button:active {
+    transform: scale(0.96);
+}
+
+.hint-button-icon {
+    width: 28px;
+    height: 28px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 11px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.hint-button-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #1a1a1a;
+}
+
+.hint-decoration {
+    position: absolute;
+    bottom: 35px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.5);
+    letter-spacing: 1.5px;
+    font-weight: 600;
+}
+
+.hint-decoration i.fa-heart {
+    color: #ff4d4d;
+    margin: 0 3px;
+    animation: heartBeat 1.5s ease infinite;
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Dark mode cho hint */
+body.dark #interaction-hint {
+    background: linear-gradient(135deg, 
+        rgba(30, 30, 40, 0.98),
+        rgba(40, 40, 55, 0.98),
+        rgba(50, 50, 65, 0.98)
+    );
+}
+
+body.dark .hint-subtitle {
+    color: #aaa;
+}
+
+body.dark .hint-button {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark .hint-button-text {
+    color: #fff;
+}
+
+body.dark .hint-decoration {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive cho hint */
+@media (max-width: 480px) {
+    .hint-logo { width: 110px; height: 110px; }
+    .hint-title { font-size: 1.7rem; letter-spacing: 3px; }
+    .hint-subtitle { font-size: 0.75rem; letter-spacing: 4px; margin-bottom: 35px; }
+    .hint-button { padding: 12px 24px; }
+    .hint-button-text { font-size: 0.85rem; }
+    .hint-decoration { font-size: 0.7rem; bottom: 25px; }
 }
