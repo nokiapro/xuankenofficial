@@ -1386,11 +1386,11 @@ body.dark .notification-message {
     .song-title,
     #current-title,
     .item-title,
+    .song-item .item-title,
     .song-title span,
-    #current-title span,
-    .item-title span,
-    .song-item .item-title {
+    #current-title span {
         text-decoration: none !important;
         border-bottom: none !important;
+        text-decoration-line: none !important;
     }
 }
