@@ -1310,6 +1310,7 @@ body.dark .hint-decoration {
     min-width: 0;
     text-align: center;
     white-space: nowrap;
+    overflow: hidden;
 }
 
 .notification-title {
@@ -1323,10 +1324,17 @@ body.dark .hint-decoration {
 }
 
 .notification-message {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
     display: inline-block;
     white-space: nowrap;
+    max-width: 100%;
+    overflow: visible;
+}
+
+.notification-message span {
+    display: inline-block;
+    white-space: nowrap;
+    transform-origin: left center;
+    transition: transform 0.1s ease;
 }
 
 body.dark .notification {
@@ -1359,23 +1367,17 @@ body.dark .notification-message {
     
     .notification-title {
         font-size: 0.75rem;
-    }
-    
-    .notification-message {
-        font-size: 0.7rem;
+        margin-right: 4px;
     }
 }
 
 @media (max-width: 360px) {
     .notification {
         padding: 8px 14px;
+        border-radius: 0 0 16px 16px;
     }
     
     .notification-title {
         font-size: 0.7rem;
-    }
-    
-    .notification-message {
-        font-size: 0.65rem;
     }
 }
