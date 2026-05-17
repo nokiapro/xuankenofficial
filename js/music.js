@@ -32,19 +32,48 @@ let isUpdatingListen = false;
 let hasRecordedCurrentSong = false;
 let currentSource = 'normal';
 
-function showToastMsg(msg, isListen = false) {
-    const toastEl = document.getElementById('toast-msg');
-    if (!toastEl) return;
-    toastEl.innerText = msg;
-    toastEl.style.opacity = "1";
-    if (isListen) {
-        toastEl.style.backgroundColor = "rgba(0,0,0,0.85)";
-        toastEl.style.color = "#4ade80";
-    } else {
-        toastEl.style.backgroundColor = "";
-        toastEl.style.color = "";
+let notificationTimeout = null;
+
+function showNotification(title, message, color = "#4ade80", icon = "fa-headphones") {
+    const noti = document.getElementById('custom-notification');
+    if (!noti) return;
+    
+    if (notificationTimeout) clearTimeout(notificationTimeout);
+    
+    noti.style.borderLeftColor = color;
+    noti.style.borderRightColor = color;
+    const iconElem = noti.querySelector('.notification-icon i');
+    if (iconElem) {
+        iconElem.className = `fal ${icon}`;
+        iconElem.style.color = color;
     }
-    setTimeout(() => { toastEl.style.opacity = "0"; }, 3000);
+    noti.querySelector('.notification-title').innerHTML = title;
+    noti.querySelector('.notification-message').innerHTML = message;
+    
+    noti.classList.remove('show');
+    void noti.offsetHeight;
+    noti.classList.add('show');
+    
+    notificationTimeout = setTimeout(() => {
+        noti.classList.remove('show');
+    }, 5000);
+}
+
+function showToastMsg(msg, isListen = false) {
+    if (isListen) {
+        const match = msg.match(/\+1 LƯỢT NGHE: "(.+)" \((.+)\)/);
+        if (match) {
+            showNotification('+1 LƯỢT NGHE', match[1], '#4ade80', 'fa-headphones');
+        } else {
+            showNotification('THÔNG BÁO', msg, '#4ade80', 'fa-circle-info');
+        }
+    } else {
+        showNotification('THÔNG BÁO', msg, 'var(--accent-color)', 'fa-circle-info');
+    }
+}
+
+function showToast(msg) {
+    showNotification('THÔNG BÁO', msg, 'var(--accent-color)', 'fa-circle-info');
 }
 
 async function fetchListenData() {
@@ -102,7 +131,7 @@ async function incrementListenCount(songName, source = 'normal') {
             else if (source === 'select') sourceText = 'CHỌN BÀI';
             else sourceText = 'NGHE NHẠC';
             
-            showToastMsg(`+1 LƯỢT NGHE: "${songName}" (${sourceText})`, true);
+            showNotification('+1 LƯỢT NGHE', `${songName} (${sourceText})`, '#4ade80', 'fa-headphones');
             console.log(`GHI NHẬN: ${songName} - ${result.count} (${source})`);
         }
     } catch (error) {
@@ -111,7 +140,7 @@ async function incrementListenCount(songName, source = 'normal') {
         listenData[songName]++;
         localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
         updateListenStatsModal();
-        showToastMsg(`LƯU OFFLINE: +1 "${songName}"`, true);
+        showNotification('LƯU OFFLINE', `+1 "${songName}"`, '#ff9800', 'fa-circle-exclamation');
     } finally { 
         isUpdatingListen = false;
     }
@@ -327,10 +356,6 @@ function getPrevShuffleIndex(currentIdx) {
     return prevTrack;
 }
 
-function showToast(msg) {
-    showToastMsg(msg, false);
-}
-
 function getRandomPastel() {
     const h = Math.floor(Math.random() * 360);
     return { bg: `hsl(${h}, 70%, 94%)`, accent: `hsl(${h}, 60%, 40%)` };
@@ -534,11 +559,11 @@ audio.onerror = () => {
     const song = songs[index];
     const currentSrc = audio.src;
     if (currentSrc === song.audio1 && song.audio2 && song.audio2.trim() !== "") {
-        showToast("ĐANG THỬ LINK DỰ PHÒNG...");
+        showNotification('THỬ LINK DỰ PHÒNG', 'ĐANG THỬ LINK DỰ PHÒNG...', '#ff9800', 'fa-circle-notch');
         audio.src = song.audio2;
         audio.load();
         audio.play().catch(e => console.error(e));
-    } else showToast("LỖI: KHÔNG THỂ PHÁT BÀI HÁT!");
+    } else showNotification('LỖI', 'KHÔNG THỂ PHÁT BÀI HÁT!', '#ff4444', 'fa-circle-exclamation');
 };
 
 const progressArea = document.getElementById('progress-area');
@@ -686,7 +711,6 @@ function renderPlaylist() {
 const initIdx = getInitialShuffleIndex();
 index = initIdx;
 
-// ========== XỬ LÝ MÀN HÌNH CHẠM ==========
 const playerContainer = document.getElementById('player-container');
 if (playerContainer) playerContainer.style.display = 'none';
 
@@ -724,9 +748,9 @@ if (shuffleBtn) {
         this.classList.toggle('active', isShuffle);
         if (isShuffle) {
             resetShuffleState(index);
-            showToast("ĐÃ BẬT XÁO TRỘN THÔNG MINH");
+            showNotification('XÁO TRỘN', 'ĐÃ BẬT XÁO TRỘN THÔNG MINH', 'var(--accent-color)', 'fa-random');
         } else {
-            showToast("ĐÃ TẮT XÁO TRỘN, PHÁT TUẦN TỰ");
+            showNotification('TUẦN TỰ', 'ĐÃ TẮT XÁO TRỘN, PHÁT TUẦN TỰ', 'var(--accent-color)', 'fa-list');
         }
     };
 }
@@ -736,7 +760,11 @@ if (repeatBtn) {
         isRepeatOne = !isRepeatOne;
         this.classList.toggle('active', isRepeatOne);
         isLoopingHandled = false;
-        showToast(isRepeatOne ? "BẠN ĐÃ BẬT LẶP LẠI 1 BÀI" : "BẠN ĐÃ TẮT LẶP LẠI");
+        if (isRepeatOne) {
+            showNotification('LẶP LẠI', 'ĐÃ BẬT LẶP LẠI 1 BÀI', 'var(--accent-color)', 'fa-arrow-rotate-left');
+        } else {
+            showNotification('TẮT LẶP', 'ĐÃ TẮT LẶP LẠI', 'var(--accent-color)', 'fa-arrow-rotate-left');
+        }
     };
 }
 
@@ -780,6 +808,7 @@ function cancelTimer() {
     remainSeconds = 0;
     if (timerStatus) timerStatus.innerHTML = 'BẠN CHƯA ĐẶT HẸN GIỜ';
     if (openTimerBtn) openTimerBtn.classList.remove('active');
+    showNotification('HỦY HẸN GIỜ', 'ĐÃ HỦY HẸN GIỜ TẮT NHẠC', '#ff9800', 'fa-trash-alt');
 }
 
 function updateTimerDisplay() {
@@ -804,7 +833,7 @@ function startCountdown(seconds) {
             countdownInterval = null;
             if (sleepTimerId) { clearTimeout(sleepTimerId); sleepTimerId = null; }
             if (audio && !audio.paused) audio.pause();
-            showToast('ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!');
+            showNotification('HẾT GIỜ', 'ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!', '#ff9800', 'fa-bell');
             if (timerStatus) timerStatus.innerHTML = 'ĐÃ TẮT NHẠC';
             if (openTimerBtn) openTimerBtn.classList.remove('active');
         } else {
@@ -815,20 +844,23 @@ function startCountdown(seconds) {
 }
 
 window.setTimer = function(minutes) {
-    if (!minutes || minutes <= 0) { showToast('VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!'); return; }
+    if (!minutes || minutes <= 0) { 
+        showNotification('LỖI', 'VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!', '#ff4444', 'fa-circle-exclamation');
+        return; 
+    }
     cancelTimer();
     const seconds = minutes * 60;
     sleepTimerId = setTimeout(() => {
         if (audio && !audio.paused) audio.pause();
         if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
-        showToast('ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!');
+        showNotification('HẾT GIỜ', 'ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!', '#ff9800', 'fa-bell');
         if (timerStatus) timerStatus.innerHTML = 'ĐÃ TẮT NHẠC';
         if (openTimerBtn) openTimerBtn.classList.remove('active');
         remainSeconds = 0;
     }, seconds * 1000);
     startCountdown(seconds);
     toggleTimerModal();
-    showToast(`ĐÃ HẸN GIỜ TẮT NHẠC SAU ${minutes} PHÚT`);
+    showNotification('HẸN GIỜ', `ĐÃ HẸN GIỜ TẮT SAU ${minutes} PHÚT`, '#4ade80', 'fa-stopwatch');
 };
 
 presetBtns.forEach(btn => {
@@ -846,7 +878,7 @@ presetBtns.forEach(btn => {
         if (minutes > 0) {
             if (timerMinutesInput) timerMinutesInput.value = minutes;
             window.setTimer(minutes);
-        } else { showToast('KHÔNG XÁC ĐỊNH ĐƯỢC SỐ PHÚT'); }
+        } else { showNotification('LỖI', 'KHÔNG XÁC ĐỊNH ĐƯỢC SỐ PHÚT', '#ff4444', 'fa-circle-exclamation'); }
     });
 });
 
@@ -857,11 +889,11 @@ if (startTimerBtn) {
     startTimerBtn.onclick = () => {
         const mins = parseInt(timerMinutesInput?.value);
         if (!isNaN(mins) && mins > 0) window.setTimer(mins);
-        else showToast('VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!');
+        else showNotification('LỖI', 'VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!', '#ff4444', 'fa-circle-exclamation');
     };
 }
 if (cancelTimerBtn) {
-    cancelTimerBtn.onclick = () => { cancelTimer(); showToast('ĐÃ HUỶ HẸN GIỜ TẮT NHẠC'); toggleTimerModal(); };
+    cancelTimerBtn.onclick = () => { cancelTimer(); toggleTimerModal(); };
 }
 if (timerModal) timerModal.addEventListener('click', (e) => e.stopPropagation());
 
@@ -899,12 +931,12 @@ function toggleTheme() {
         document.body.classList.remove('dark');
         localStorage.setItem('xuanken_theme', 'light');
         if (themeIcon) themeIcon.className = 'fal fa-sun';
-        showToast('ĐÃ CHUYỂN SANG GIAO DIỆN SÁNG');
+        showNotification('GIAO DIỆN SÁNG', 'ĐÃ CHUYỂN SANG GIAO DIỆN SÁNG', '#ff9800', 'fa-sun');
     } else {
         document.body.classList.add('dark');
         localStorage.setItem('xuanken_theme', 'dark');
         if (themeIcon) themeIcon.className = 'fal fa-moon';
-        showToast('ĐÃ CHUYỂN SANG GIAO DIỆN TỐI');
+        showNotification('GIAO DIỆN TỐI', 'ĐÃ CHUYỂN SANG GIAO DIỆN TỐI', '#bb86fc', 'fa-moon');
     }
 }
 
