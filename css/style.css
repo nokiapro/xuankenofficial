@@ -1385,12 +1385,12 @@ body.dark .notification-message {
 @media (max-width: 768px) {
     .song-title,
     #current-title,
-    .item-title {
+    .item-title,
+    .song-title span,
+    #current-title span,
+    .item-title span,
+    .song-item .item-title {
         text-decoration: none !important;
-    }
-    
-    .song-item span,
-    .song-title span {
-        text-decoration: none !important;
+        border-bottom: none !important;
     }
 }
