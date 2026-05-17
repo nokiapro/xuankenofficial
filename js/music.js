@@ -24,7 +24,7 @@ const playlistOverlay = document.getElementById('playlist');
 const playlistHeader = document.getElementById('playlist-header');
 const songTitleEl = document.getElementById('current-title');
 
-const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbxGoLJOeikvklz3EM137ELiK6a86jioK9o5DFBEXHZvmulQpxKJcTiKe8KL0wPizoeV0Q/exec';
+const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbweWf3H7-IYrM6Mf2P_N3_SLKpJJ2M0_Jrl_FzJygztabYkHpvZMriQPzSQ7WDgCEVPMw/exec';
 const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9vI_OY_nJ0sHiSVUy31z9U-4zClIdkgBZCAiquu8wePVrosqwV-GnSOKTtYJP_pgHt_mtC8Kcm/pub?output=csv';
 
 let listenData = {};
@@ -34,25 +34,94 @@ let currentSource = 'normal';
 
 let notificationTimeout = null;
 
+function getGradientByTheme() {
+    const isDarkMode = document.body.classList.contains('dark');
+    if (isDarkMode) {
+        return 'linear-gradient(135deg, #ffd89b, #c7e9fb)';
+    } else {
+        return 'linear-gradient(135deg, #ff0040, #8c00ff, #ff0040)';
+    }
+}
+
+function autoScaleNotificationMessage() {
+    const noti = document.getElementById('custom-notification');
+    if (!noti || !noti.classList.contains('show')) return;
+    
+    let targetElement = noti.querySelector('.notification-message span');
+    if (!targetElement) {
+        targetElement = noti.querySelector('.notification-message');
+    }
+    if (!targetElement) return;
+    
+    targetElement.style.transform = 'none';
+    targetElement.style.whiteSpace = 'nowrap';
+    targetElement.style.display = 'inline-block';
+    
+    const container = noti.querySelector('.notification-content');
+    if (!container) return;
+    
+    void container.offsetHeight;
+    void targetElement.offsetHeight;
+    
+    let containerWidth = container.clientWidth;
+    let textWidth = targetElement.scrollWidth;
+    
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
+    let paddingReduce = 15;
+    if (isSmallMobile) {
+        paddingReduce = 25;
+    } else if (isMobile) {
+        paddingReduce = 20;
+    }
+    
+    if (textWidth > containerWidth - paddingReduce) {
+        let scale = (containerWidth - paddingReduce) / textWidth;
+        let minScale = isSmallMobile ? 0.75 : (isMobile ? 0.7 : 0.5);
+        scale = scale * 0.95;
+        const finalScale = Math.max(scale, minScale);
+        targetElement.style.transform = `scale(${finalScale})`;
+        targetElement.style.transformOrigin = 'left center';
+    } else {
+        targetElement.style.transform = 'none';
+    }
+}
+
+function forceScaleNotification() {
+    autoScaleNotificationMessage();
+    setTimeout(() => autoScaleNotificationMessage(), 30);
+    setTimeout(() => autoScaleNotificationMessage(), 80);
+    setTimeout(() => autoScaleNotificationMessage(), 150);
+}
+
 function showNotification(title, message, color = "#4ade80", icon = "fa-headphones") {
     const noti = document.getElementById('custom-notification');
     if (!noti) return;
     
     if (notificationTimeout) clearTimeout(notificationTimeout);
     
-    noti.style.borderLeftColor = color;
-    noti.style.borderRightColor = color;
+    noti.style.borderBottomColor = color;
     const iconElem = noti.querySelector('.notification-icon i');
     if (iconElem) {
         iconElem.className = `fal ${icon}`;
         iconElem.style.color = color;
     }
+    
+    let formattedMessage = message;
+    if (typeof message === 'string' && !message.includes('<span')) {
+        const gradient = getGradientByTheme();
+        formattedMessage = `<span style="font-weight: 700; background: ${gradient}; -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 0.5px; font-size: inherit; display: inline-block; white-space: nowrap;">${message}</span>`;
+    }
+    
     noti.querySelector('.notification-title').innerHTML = title;
-    noti.querySelector('.notification-message').innerHTML = message;
+    noti.querySelector('.notification-message').innerHTML = formattedMessage;
     
     noti.classList.remove('show');
     void noti.offsetHeight;
     noti.classList.add('show');
+    
+    forceScaleNotification();
     
     notificationTimeout = setTimeout(() => {
         noti.classList.remove('show');
@@ -63,7 +132,7 @@ function showToastMsg(msg, isListen = false) {
     if (isListen) {
         const match = msg.match(/\+1 LƯỢT NGHE: "(.+)" \((.+)\)/);
         if (match) {
-            showNotification('+1 LƯỢT NGHE', match[1], '#4ade80', 'fa-headphones');
+            showNotification('+1 LƯỢT NGHE:', match[1], '#4ade80', 'fa-headphones');
         } else {
             showNotification('THÔNG BÁO', msg, '#4ade80', 'fa-circle-info');
         }
@@ -94,10 +163,10 @@ async function fetchListenData() {
             listenData = {};
             for (let i = 1; i < rows.length; i++) {
                 const cols = rows[i].split(',');
-                if (cols.length >= 2 && cols[0]) {
-                    let name = cols[0].replace(/^"|"$/g, '');
-                    let count = parseInt(cols[1]) || 0;
-                    listenData[name] = count;
+                if (cols.length >= 3 && cols[0]) {
+                    let id = cols[0].replace(/^"|"$/g, '');
+                    let count = parseInt(cols[2]) || 0;
+                    listenData[id] = count;
                 }
             }
             updateListenStatsModal();
@@ -110,46 +179,38 @@ async function fetchListenData() {
     return listenData;
 }
 
-async function incrementListenCount(songName, source = 'normal') {
-    if (!songName) return false;
+async function incrementListenCount(songId, songName, source = 'normal') {
+    if (!songId) return false;
     if (isUpdatingListen) return false;
     
     isUpdatingListen = true;
     try {
-        const response = await fetch(`${GOOGLE_SHEET_API}?action=increment&song=${encodeURIComponent(songName)}&t=${Date.now()}`);
+        const response = await fetch(`${GOOGLE_SHEET_API}?action=increment&id=${encodeURIComponent(songId)}&name=${encodeURIComponent(songName)}&t=${Date.now()}`);
         const result = await response.json();
         if (result.success) {
-            listenData[songName] = result.count;
+            listenData[songId] = result.count;
             updateListenStatsModal();
             localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
             
-            let sourceText = '';
-            if (source === 'next') sourceText = 'TIẾP THEO';
-            else if (source === 'prev') sourceText = 'QUAY LẠI';
-            else if (source === 'loop') sourceText = 'LẶP LẠI';
-            else if (source === 'shuffle') sourceText = 'XÁO TRỘN';
-            else if (source === 'select') sourceText = 'CHỌN BÀI';
-            else sourceText = 'NGHE NHẠC';
-            
-            showNotification('+1 LƯỢT NGHE', `${songName} (${sourceText})`, '#4ade80', 'fa-headphones');
-            console.log(`GHI NHẬN: ${songName} - ${result.count} (${source})`);
+            showNotification('+1 LƯỢT NGHE:', songId, '#4ade80', 'fa-headphones');
+            console.log(`GHI NHẬN: ${songName} (${songId}) - ${result.count} (${source})`);
         }
     } catch (error) {
         console.error('LỖI TĂNG LƯỢT NGHE:', error);
-        if (!listenData[songName]) listenData[songName] = 0;
-        listenData[songName]++;
+        if (!listenData[songId]) listenData[songId] = 0;
+        listenData[songId]++;
         localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
         updateListenStatsModal();
-        showNotification('LƯU OFFLINE', `+1 "${songName}"`, '#ff9800', 'fa-circle-exclamation');
+        showNotification('LƯU OFFLINE', songId, '#ff9800', 'fa-circle-exclamation');
     } finally { 
         isUpdatingListen = false;
     }
     return true;
 }
 
-function recordListenWithSource(songName, source) {
-    if (!songName) return;
-    incrementListenCount(songName, source);
+function recordListenWithSource(songId, songName, source) {
+    if (!songId) return;
+    incrementListenCount(songId, songName, source);
 }
 
 function updateListenStatsModal() {
@@ -158,12 +219,12 @@ function updateListenStatsModal() {
     if (!container) return;
     
     if (listenData && Object.keys(listenData).length > 0) {
-        const currentSongName = songs[index]?.name;
+        const currentSongId = songs[index]?.id;
         const statsHtml = songs.map(song => {
-            const count = listenData[song.name] || 0;
-            const isCurrent = (song.name === currentSongName);
+            const count = listenData[song.id] || 0;
+            const isCurrent = (song.id === currentSongId);
             return `
-                <div class="listen-stat-item ${isCurrent ? 'current-playing' : ''}" data-song-name="${escapeHtmlStat(song.name)}">
+                <div class="listen-stat-item ${isCurrent ? 'current-playing' : ''}" data-song-id="${song.id}">
                     <span class="listen-stat-name">${escapeHtmlStat(song.name).toUpperCase()}</span>
                     <span class="listen-stat-count">${formatNumberStat(count)}</span>
                 </div>
@@ -214,7 +275,6 @@ function scrollToCurrentListenSong() {
     const spacingFromHeader = 4;
     
     const itemOffsetTop = currentPlayingItem.offsetTop;
-    const itemHeight = currentPlayingItem.offsetHeight;
     const containerHeight = scrollContainer.clientHeight;
     const scrollHeight = scrollContainer.scrollHeight;
     
@@ -227,19 +287,12 @@ function scrollToCurrentListenSong() {
         targetScroll = scrollHeight - containerHeight;
     } else {
         targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
-        
         const maxScroll = scrollHeight - containerHeight;
-        if (targetScroll > maxScroll) {
-            targetScroll = maxScroll;
-        }
+        if (targetScroll > maxScroll) targetScroll = maxScroll;
     }
     
     targetScroll = Math.max(0, targetScroll);
-    
-    scrollContainer.scrollTo({
-        top: targetScroll,
-        behavior: 'smooth'
-    });
+    scrollContainer.scrollTo({ top: targetScroll, behavior: 'smooth' });
 }
 
 function showListenStats() {
@@ -257,23 +310,20 @@ function showListenStats() {
     }
     updateListenStatsModal();
     modal.classList.add('show');
-    
-    setTimeout(() => {
-        scrollToCurrentListenSong();
-    }, 300);
+    setTimeout(() => scrollToCurrentListenSong(), 300);
 }
 
 function updateCurrentSongHighlightAndScroll() {
     const modal = document.getElementById('listen-stats-modal');
     if (!modal) return;
     
-    const currentSongName = songs[index]?.name;
+    const currentSongId = songs[index]?.id;
     const statItems = modal.querySelectorAll('.listen-stat-item');
     
     let foundCurrent = false;
     statItems.forEach(item => {
-        const nameSpan = item.querySelector('.listen-stat-name');
-        if (nameSpan && nameSpan.innerText === currentSongName.toUpperCase()) {
+        const songId = item.getAttribute('data-song-id');
+        if (songId === currentSongId) {
             item.classList.add('current-playing');
             foundCurrent = true;
         } else {
@@ -282,9 +332,7 @@ function updateCurrentSongHighlightAndScroll() {
     });
     
     if (modal.classList.contains('show') && foundCurrent) {
-        setTimeout(() => {
-            scrollToCurrentListenSong();
-        }, 100);
+        setTimeout(() => scrollToCurrentListenSong(), 100);
     }
 }
 
@@ -308,15 +356,11 @@ function refreshShuffleCycle() {
 }
 
 function getNextShuffleIndex(currentIdx) {
-    if (!remainingQueue.length || remainingQueue.length === 0) {
-        refreshShuffleCycle();
-    }
+    if (!remainingQueue.length || remainingQueue.length === 0) refreshShuffleCycle();
     const nextIndex = remainingQueue.shift();
     shuffleHistory.push(nextIndex);
     if (shuffleHistory.length > 10) shuffleHistory.shift();
-    if (remainingQueue.length === 0) {
-        refreshShuffleCycle();
-    }
+    if (remainingQueue.length === 0) refreshShuffleCycle();
     return nextIndex;
 }
 
@@ -345,14 +389,10 @@ function getInitialShuffleIndex() {
 }
 
 function getPrevShuffleIndex(currentIdx) {
-    if (shuffleHistory.length < 2) {
-        return getNextShuffleIndex(currentIdx);
-    }
+    if (shuffleHistory.length < 2) return getNextShuffleIndex(currentIdx);
     const prevTrack = shuffleHistory[shuffleHistory.length - 2];
     shuffleHistory.pop();
-    if (remainingQueue.length > 0 && !remainingQueue.includes(currentIdx)) {
-        remainingQueue.unshift(currentIdx);
-    }
+    if (remainingQueue.length > 0 && !remainingQueue.includes(currentIdx)) remainingQueue.unshift(currentIdx);
     return prevTrack;
 }
 
@@ -364,20 +404,12 @@ function getRandomPastel() {
 function scrollToActiveTop() {
     const activeItem = document.querySelector('.song-item.active');
     if (!activeItem) return;
-    
     const scrollContainer = document.getElementById('playlist-content');
     if (!scrollContainer) return;
-    
     const header = document.querySelector('.playlist-header');
     const headerHeight = header ? header.offsetHeight : 65;
-    const spacingFromHeader = 4;
-    const itemOffsetTop = activeItem.offsetTop;
-    const targetScroll = itemOffsetTop - headerHeight - spacingFromHeader;
-    
-    scrollContainer.scrollTo({
-        top: Math.max(0, targetScroll),
-        behavior: 'smooth'
-    });
+    const targetScroll = activeItem.offsetTop - headerHeight - 4;
+    scrollContainer.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
 }
 
 async function requestWakeLock() {
@@ -559,11 +591,11 @@ audio.onerror = () => {
     const song = songs[index];
     const currentSrc = audio.src;
     if (currentSrc === song.audio1 && song.audio2 && song.audio2.trim() !== "") {
-        showNotification('THỬ LINK DỰ PHÒNG', 'ĐANG THỬ LINK DỰ PHÒNG...', '#ff9800', 'fa-circle-notch');
+        showNotification('THỬ LINK DỰ PHÒNG:', 'ĐANG THỬ LINK DỰ PHÒNG...', '#ff9800', 'fa-circle-notch');
         audio.src = song.audio2;
         audio.load();
         audio.play().catch(e => console.error(e));
-    } else showNotification('LỖI', 'KHÔNG THỂ PHÁT BÀI HÁT!', '#ff4444', 'fa-circle-exclamation');
+    } else showNotification('LỖI:', 'KHÔNG THỂ PHÁT BÀI HÁT!', '#ff4444', 'fa-circle-exclamation');
 };
 
 const progressArea = document.getElementById('progress-area');
@@ -576,7 +608,6 @@ function updateProgressUI() {
     if (dur && !isNaN(dur)) {
         const percent = (cur / dur) * 100;
         progressFill.style.width = percent + '%';
-        
         const wrapperWidth = progressArea.clientWidth;
         const leftPos = (percent / 100) * wrapperWidth;
         progressThumb.style.left = leftPos + 'px';
@@ -594,13 +625,11 @@ if (progressArea) {
 }
 
 let isDragging = false;
-
 if (progressThumb) {
     progressThumb.onmousedown = (e) => {
         e.stopPropagation();
         isDragging = true;
         document.body.style.userSelect = 'none';
-        
         const onMouseMove = (moveEvent) => {
             if (!isDragging) return;
             const rect = progressArea.getBoundingClientRect();
@@ -611,20 +640,16 @@ if (progressThumb) {
             progressFill.style.width = percent * 100 + '%';
             progressThumb.style.left = newLeft + 'px';
         };
-        
         const onMouseUp = () => {
             isDragging = false;
             document.body.style.userSelect = '';
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
-        
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     };
 }
-
-let listenCheckInterval = null;
 
 audio.ontimeupdate = () => {
     const cur = audio.currentTime;
@@ -645,17 +670,17 @@ audio.ontimeupdate = () => {
     
     if (cur >= 5 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
         const currentSong = songs[index];
-        if (currentSong && currentSong.name) {
+        if (currentSong && currentSong.id) {
             hasRecordedCurrentSong = true;
-            recordListenWithSource(currentSong.name, currentSource);
-            console.log(`ĐÃ GHI NHẬN LƯỢT NGHE SAU 5 GIÂY: ${currentSong.name} (${currentSource})`);
+            incrementListenCount(currentSong.id, currentSong.name, currentSource);
+            console.log(`GHI NHẬN SAU 5 GIÂY: ${currentSong.name} (${currentSong.id}) - Nguồn: ${currentSource}`);
         }
     }
     
     if (isRepeatOne && dur && (dur - cur) <= 0.1 && !isLoopingHandled && dur > 0) {
         isLoopingHandled = true;
         audio.currentTime = 0;
-        audio.play().catch(e => { setTimeout(() => audio.play(), 20); });
+        audio.play().catch(e => setTimeout(() => audio.play(), 20));
     }
     if (cur > 0 && dur && (dur - cur) > 0.2) isLoopingHandled = false;
     
@@ -666,7 +691,7 @@ audio.onended = () => {
     if (isRepeatOne) {
         isLoopingHandled = true;
         const currentSong = songs[index];
-        if (currentSong && currentSong.name) {
+        if (currentSong && currentSong.id) {
             hasRecordedCurrentSong = false;
             currentSource = 'loop';
         }
@@ -748,9 +773,9 @@ if (shuffleBtn) {
         this.classList.toggle('active', isShuffle);
         if (isShuffle) {
             resetShuffleState(index);
-            showNotification('XÁO TRỘN', 'ĐÃ BẬT XÁO TRỘN THÔNG MINH', 'var(--accent-color)', 'fa-random');
+            showNotification('XÁO TRỘN:', 'BẬT XÁO TRỘN THÔNG MINH', 'var(--accent-color)', 'fa-random');
         } else {
-            showNotification('TUẦN TỰ', 'ĐÃ TẮT XÁO TRỘN, PHÁT TUẦN TỰ', 'var(--accent-color)', 'fa-list');
+            showNotification('TUẦN TỰ:', 'TẮT XÁO TRỘN, PHÁT TUẦN TỰ', 'var(--accent-color)', 'fa-list');
         }
     };
 }
@@ -761,9 +786,9 @@ if (repeatBtn) {
         this.classList.toggle('active', isRepeatOne);
         isLoopingHandled = false;
         if (isRepeatOne) {
-            showNotification('LẶP LẠI', 'ĐÃ BẬT LẶP LẠI 1 BÀI', 'var(--accent-color)', 'fa-arrow-rotate-left');
+            showNotification('LẶP LẠI:', 'ĐÃ BẬT LẶP LẠI 1 BÀI', 'var(--accent-color)', 'fa-arrow-rotate-left');
         } else {
-            showNotification('TẮT LẶP', 'ĐÃ TẮT LẶP LẠI', 'var(--accent-color)', 'fa-arrow-rotate-left');
+            showNotification('TẮT LẶP:', 'ĐÃ TẮT LẶP LẠI', 'var(--accent-color)', 'fa-arrow-rotate-left');
         }
     };
 }
@@ -808,7 +833,7 @@ function cancelTimer() {
     remainSeconds = 0;
     if (timerStatus) timerStatus.innerHTML = 'BẠN CHƯA ĐẶT HẸN GIỜ';
     if (openTimerBtn) openTimerBtn.classList.remove('active');
-    showNotification('HỦY HẸN GIỜ', 'ĐÃ HỦY HẸN GIỜ TẮT NHẠC', '#ff9800', 'fa-trash-alt');
+    showNotification('HỦY HẸN GIỜ:', 'ĐÃ HỦY HẸN GIỜ', '#ff9800', 'fa-trash-alt');
 }
 
 function updateTimerDisplay() {
@@ -833,7 +858,7 @@ function startCountdown(seconds) {
             countdownInterval = null;
             if (sleepTimerId) { clearTimeout(sleepTimerId); sleepTimerId = null; }
             if (audio && !audio.paused) audio.pause();
-            showNotification('HẾT GIỜ', 'ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!', '#ff9800', 'fa-bell');
+            showNotification('HẾT GIỜ:', 'ĐÃ TẮT NHẠC!', '#ff9800', 'fa-bell');
             if (timerStatus) timerStatus.innerHTML = 'ĐÃ TẮT NHẠC';
             if (openTimerBtn) openTimerBtn.classList.remove('active');
         } else {
@@ -845,7 +870,7 @@ function startCountdown(seconds) {
 
 window.setTimer = function(minutes) {
     if (!minutes || minutes <= 0) { 
-        showNotification('LỖI', 'VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!', '#ff4444', 'fa-circle-exclamation');
+        showNotification('LỖI:', 'NHẬP SỐ PHÚT HỢP LỆ!', '#ff4444', 'fa-circle-exclamation');
         return; 
     }
     cancelTimer();
@@ -853,14 +878,14 @@ window.setTimer = function(minutes) {
     sleepTimerId = setTimeout(() => {
         if (audio && !audio.paused) audio.pause();
         if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
-        showNotification('HẾT GIỜ', 'ĐÃ TỰ ĐỘNG TẮT NHẠC THEO HẸN GIỜ!', '#ff9800', 'fa-bell');
+        showNotification('HẾT GIỜ:', 'ĐÃ TẮT NHẠC THEO HẸN GIỜ!', '#ff9800', 'fa-bell');
         if (timerStatus) timerStatus.innerHTML = 'ĐÃ TẮT NHẠC';
         if (openTimerBtn) openTimerBtn.classList.remove('active');
         remainSeconds = 0;
     }, seconds * 1000);
     startCountdown(seconds);
     toggleTimerModal();
-    showNotification('HẸN GIỜ', `ĐÃ HẸN GIỜ TẮT SAU ${minutes} PHÚT`, '#4ade80', 'fa-stopwatch');
+    showNotification('HẸN GIỜ:', `TẮT SAU ${minutes} PHÚT`, '#4ade80', 'fa-stopwatch');
 };
 
 presetBtns.forEach(btn => {
@@ -878,7 +903,7 @@ presetBtns.forEach(btn => {
         if (minutes > 0) {
             if (timerMinutesInput) timerMinutesInput.value = minutes;
             window.setTimer(minutes);
-        } else { showNotification('LỖI', 'KHÔNG XÁC ĐỊNH ĐƯỢC SỐ PHÚT', '#ff4444', 'fa-circle-exclamation'); }
+        } else { showNotification('LỖI:', 'KHÔNG XÁC ĐỊNH ĐƯỢC SỐ PHÚT', '#ff4444', 'fa-circle-exclamation'); }
     });
 });
 
@@ -889,7 +914,7 @@ if (startTimerBtn) {
     startTimerBtn.onclick = () => {
         const mins = parseInt(timerMinutesInput?.value);
         if (!isNaN(mins) && mins > 0) window.setTimer(mins);
-        else showNotification('LỖI', 'VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!', '#ff4444', 'fa-circle-exclamation');
+        else showNotification('LỖI:', 'VUI LÒNG NHẬP SỐ PHÚT HỢP LỆ!', '#ff4444', 'fa-circle-exclamation');
     };
 }
 if (cancelTimerBtn) {
@@ -931,12 +956,12 @@ function toggleTheme() {
         document.body.classList.remove('dark');
         localStorage.setItem('xuanken_theme', 'light');
         if (themeIcon) themeIcon.className = 'fal fa-sun';
-        showNotification('GIAO DIỆN SÁNG', 'ĐÃ CHUYỂN SANG GIAO DIỆN SÁNG', '#ff9800', 'fa-sun');
+        showNotification('GIAO DIỆN SÁNG:', 'ĐÃ CHUYỂN SANG SÁNG', '#ff9800', 'fa-sun');
     } else {
         document.body.classList.add('dark');
         localStorage.setItem('xuanken_theme', 'dark');
         if (themeIcon) themeIcon.className = 'fal fa-moon';
-        showNotification('GIAO DIỆN TỐI', 'ĐÃ CHUYỂN SANG GIAO DIỆN TỐI', '#bb86fc', 'fa-moon');
+        showNotification('GIAO DIỆN TỐI:', 'ĐÃ CHUYỂN SANG TỐI', '#bb86fc', 'fa-moon');
     }
 }
 
