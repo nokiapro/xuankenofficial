@@ -1050,9 +1050,6 @@ body.dark .album-art {
     position: relative;
 }
 
-/* ========================================
-   MÀN HÌNH CHẠM ĐỂ BẮT ĐẦU - THIẾT KẾ MỚI
-   ======================================== */
 #interaction-hint {
     position: fixed;
     top: 0;
@@ -1078,7 +1075,6 @@ body.dark .album-art {
     transition: opacity 0.6s ease, visibility 0.6s ease;
     opacity: 1;
     visibility: visible;
-    font-family: -apple-system, system-ui, sans-serif;
 }
 
 #interaction-hint.hide {
@@ -1228,7 +1224,6 @@ body.dark .album-art {
     100% { transform: scale(1); }
 }
 
-/* Dark mode cho hint */
 body.dark #interaction-hint {
     background: linear-gradient(135deg, 
         rgba(30, 30, 40, 0.98),
@@ -1254,7 +1249,6 @@ body.dark .hint-decoration {
     color: rgba(255, 255, 255, 0.3);
 }
 
-/* Responsive cho hint */
 @media (max-width: 480px) {
     .hint-logo { width: 110px; height: 110px; }
     .hint-title { font-size: 1.7rem; letter-spacing: 3px; }
@@ -1262,4 +1256,126 @@ body.dark .hint-decoration {
     .hint-button { padding: 12px 24px; }
     .hint-button-text { font-size: 0.85rem; }
     .hint-decoration { font-size: 0.7rem; bottom: 25px; }
+}
+
+.notification {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-radius: 0 0 24px 24px;
+    padding: 12px 24px;
+    max-width: 90%;
+    width: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid #4ade80;
+    z-index: 10001;
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.notification.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.notification-icon {
+    width: 28px;
+    height: 28px;
+    background: rgba(74, 222, 128, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notification-icon i {
+    font-size: 0.9rem;
+    color: #4ade80;
+}
+
+.notification-content {
+    flex: 0 1 auto;
+    min-width: 0;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.notification-title {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.notification-message {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    display: inline-block;
+    white-space: nowrap;
+}
+
+body.dark .notification {
+    background: rgba(30, 30, 35, 0.98);
+    border-bottom-color: #4ade80;
+}
+
+body.dark .notification-title {
+    color: #ffffff;
+}
+
+body.dark .notification-message {
+    color: #aaaaaa;
+}
+
+@media (max-width: 480px) {
+    .notification {
+        padding: 10px 18px;
+        border-radius: 0 0 18px 18px;
+    }
+    
+    .notification-icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .notification-icon i {
+        font-size: 0.8rem;
+    }
+    
+    .notification-title {
+        font-size: 0.75rem;
+    }
+    
+    .notification-message {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .notification {
+        padding: 8px 14px;
+    }
+    
+    .notification-title {
+        font-size: 0.7rem;
+    }
+    
+    .notification-message {
+        font-size: 0.65rem;
+    }
 }
