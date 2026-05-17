@@ -154,10 +154,8 @@ const songs = [
     {
         id: "50NVS",
         name: "50 Năm Về Sau",
-        audio1:
-            "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/50NAMVESAU-XUANKEN.mp3",
-        audio2:
-            "https://dl.dropboxusercontent.com/scl/fi/gx7lmver0no1ds2fg7xq3/50NAMVESAU-XUANKEN.mp3?rlkey=o3hrdj1nfkmts6nyll9gr6m8e&st=c3juscsq&dl=0",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/50NAMVESAU-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/gx7lmver0no1ds2fg7xq3/50NAMVESAU-XUANKEN.mp3?rlkey=o3hrdj1nfkmts6nyll9gr6m8e&st=c3juscsq&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/50NAMVESAU-LYRIC.lrc",
         lrc2: "",
     },
@@ -219,7 +217,7 @@ const songs = [
     },
     {
         id: "BTTTNU",
-        name: "Bên Tách Trà Thơm (Version Nữ)",
+        name: "Bên Tách Trà Thơm (Ver Nữ)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/BENTACHTRATHOMNU-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/xmvov370ukauo6onn1gf2/BENTACHTRATHOMNU-XUANKEN.mp3?rlkey=zfuts0yscqqvts6v7s7g0xqv8&st=9ojbt0lw&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNU-LYRIC.lrc",
@@ -227,7 +225,7 @@ const songs = [
     },
     {
         id: "BTTTNAM",
-        name: "Bên Tách Trà Thơm (Version Nam)",
+        name: "Bên Tách Trà Thơm (Ver Nam)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/BENTACHTRATHOMNAM-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/am7ldgzplcftj3y27lnod/BENTACHTRATHOMNAM-XUANKEN.mp3?rlkey=et4mpw2qixg2ve7dzsw4k3dlt&st=y2g4vw76&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/BENTACHTRATHOMNAM-LYRIC.lrc",
