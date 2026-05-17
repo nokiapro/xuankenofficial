@@ -1381,3 +1381,16 @@ body.dark .notification-message {
         font-size: 0.7rem;
     }
 }
+
+@media (max-width: 768px) {
+    .song-title,
+    #current-title,
+    .item-title {
+        text-decoration: none !important;
+    }
+    
+    .song-item span,
+    .song-title span {
+        text-decoration: none !important;
+    }
+}
