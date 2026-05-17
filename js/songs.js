@@ -161,7 +161,7 @@ const songs = [
     },
     {
         id: "PCCENAM",
-        name: "Phố Cũ Còn Em (Version Nam)",
+        name: "Phố Cũ Còn Em (Ver Nam)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONEM-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/hdhgb71qdnb8umpikx2zc/PHOCUCONEM-XUANKEN.mp3?rlkey=4antz9cak1qomr5a388ufpnwg&st=1p432yqb&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONEM-LYRIC.lrc",
@@ -169,7 +169,7 @@ const songs = [
     },
     {
         id: "PCCANU",
-        name: "Phố Cũ Còn Anh (Version Nữ)",
+        name: "Phố Cũ Còn Anh (Ver Nữ)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/PHOCUCONANH-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/ecd36mpc0fwln8uayf1ob/PHOCUCONANH-XUANKEN.mp3?rlkey=a6cgjphx3k835fj0bsez7q0n0&st=thwtxs8o&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/PHOCUCONANH-LYRIC.lrc",
@@ -201,7 +201,7 @@ const songs = [
     },
     {
         id: "CCNNNU",
-        name: "Có Chút Ngọt Ngào (Version Nữ)",
+        name: "Có Chút Ngọt Ngào (Ver Nữ)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONU-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/jj0rfg3hgn29kan17yw3d/COCHUTNGOTNGAONU-XUANKEN.mp3?rlkey=sl25xj6o977i4ec9r12hfsfon&st=8j4svwjf&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONU-LYRIC.lrc",
@@ -209,7 +209,7 @@ const songs = [
     },
     {
         id: "CCNNNAM",
-        name: "Có Chút Ngọt Ngào (Version Nam)",
+        name: "Có Chút Ngọt Ngào (Ver Nam)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONAM-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/ia8dyq8rsc98fikfce0zr/COCHUTNGOTNGAONAM-XUANKEN.mp3?rlkey=6zknjbdoglz86pga5k2zy45wz&st=e2hjfkdg&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONAM-LYRIC.lrc",
@@ -265,7 +265,7 @@ const songs = [
     },
     {
         id: "TDTNNU",
-        name: "Tiêu Dao Tuyệt Nhất (Version Nữ)",
+        name: "Tiêu Dao Tuyệt Nhất (Ver Nữ)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TIEUDAOTUYETNHATNU-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/0tyy5hyl9hkns6cvobb03/TIEUDAOTUYETNHATNU-XUANKEN.mp3?rlkey=9roii9h3gkytex2pnoeksdgqq&st=zdoy5osc&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TIEUDAOTUYETNHATNU-LYRIC.lrc",
@@ -273,7 +273,7 @@ const songs = [
     },
     {
         id: "TDTNNAM",
-        name: "Tiêu Dao Tuyệt Nhất (Version Nam)",
+        name: "Tiêu Dao Tuyệt Nhất (Ver Nam)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/TIEUDAOTUYETNHATNAM-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/nh33b9axnj1y96hbhh0a6/TIEUDAOTUYETNHATNAM-XUANKEN.mp3?rlkey=u0zdtwjtb6rqrxkahnmd65kl4&st=3twzmajs&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/TIEUDAOTUYETNHATNAM-LYRIC.lrc",
