@@ -415,4 +415,12 @@ const songs = [
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/NGAYEMQUAYGOT-LYRIC.lrc",
         lrc2: "",
     },
+    {
+        id: "VNRDLE",
+        name: "Vì Người Ra Đi Là Em",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/VINGUOIRADILAEM-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/9qbk0s9agvhhr4gzre15m/VINGUOIRADILAEM-XUANKEN.mp3?rlkey=bcguhrvkkxv9pdu7pol3p2tjz&st=2og14eyw&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/VINGUOIRADILAEM-LYRIC.lrc",
+        lrc2: "https://dl.dropboxusercontent.com/scl/fi/c478s987xwx6k4f9tb37d/VINGUOIRADILAEM-LYRIC.lrc?rlkey=4652or6rx9oj6ak35pc5s42r7&st=fxhbtizh&dl=0",
+    },
 ];
