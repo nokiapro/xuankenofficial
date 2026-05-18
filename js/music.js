@@ -23,6 +23,7 @@ const repeatBtn = document.getElementById('repeat-btn');
 const playlistOverlay = document.getElementById('playlist');
 const playlistHeader = document.getElementById('playlist-header');
 const songTitleEl = document.getElementById('current-title');
+const artistNameEl = document.getElementById('current-artist');
 
 const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbweWf3H7-IYrM6Mf2P_N3_SLKpJJ2M0_Jrl_FzJygztabYkHpvZMriQPzSQ7WDgCEVPMw/exec';
 const GOOGLE_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTeZe9vI_OY_nJ0sHiSVUy31z9U-4zClIdkgBZCAiquu8wePVrosqwV-GnSOKTtYJP_pgHt_mtC8Kcm/pub?output=csv';
@@ -40,6 +41,15 @@ function getGradientByTheme() {
         return 'linear-gradient(135deg, #ffd89b, #c7e9fb)';
     } else {
         return 'linear-gradient(135deg, #ff0040, #8c00ff, #ff0040)';
+    }
+}
+
+function getArtistGradientByTheme() {
+    const isDarkMode = document.body.classList.contains('dark');
+    if (isDarkMode) {
+        return 'linear-gradient(135deg, #fbc2eb, #a6c1ee)';
+    } else {
+        return 'linear-gradient(135deg, #f5af19, #f12711, #f5af19)';
     }
 }
 
@@ -527,6 +537,20 @@ function applyGradientToSongTitle() {
     songTitleEl.style.animation = 'titleGradientMove 3s ease infinite';
 }
 
+function applyGradientToArtistName() {
+    if (!artistNameEl) return;
+    const isDarkMode = document.body.classList.contains('dark');
+    const gradient = isDarkMode 
+        ? 'linear-gradient(135deg, #fbc2eb, #a6c1ee)'
+        : 'linear-gradient(135deg, #f5af19, #f12711, #f5af19)';
+    artistNameEl.style.background = gradient;
+    artistNameEl.style.backgroundSize = '200% 200%';
+    artistNameEl.style.webkitBackgroundClip = 'text';
+    artistNameEl.style.backgroundClip = 'text';
+    artistNameEl.style.color = 'transparent';
+    artistNameEl.style.animation = 'artistGradientMove 3s ease infinite';
+}
+
 async function loadSong(i) {
     if (isChanging) return;
     isChanging = true;
@@ -535,6 +559,10 @@ async function loadSong(i) {
     if (songTitleEl) {
         songTitleEl.innerText = song.name;
         applyGradientToSongTitle();
+    }
+    if (artistNameEl) {
+        artistNameEl.innerText = 'XuanKen Official';
+        applyGradientToArtistName();
     }
     autoScaleSongTitle();
     const colors = getRandomPastel();
@@ -690,7 +718,7 @@ audio.ontimeupdate = () => {
         if (currentSong && currentSong.id) {
             hasRecordedCurrentSong = true;
             incrementListenCount(currentSong.id, currentSong.name, currentSource);
-            console.log(`GHI NHẬN SAU 5 GIÂY: ${currentSong.name} (${currentSong.id}) - NGUỒN: ${currentSource}`);
+            console.log(`GHI NHẬN SAU 5 GIÂY: ${currentSong.name} (${currentSong.id}) - Nguồn: ${currentSource}`);
         }
     }
     
@@ -949,6 +977,7 @@ window.onload = () => {
     renderPlaylist();
     autoScaleSongTitle();
     applyGradientToSongTitle();
+    applyGradientToArtistName();
     if ('mediaSession' in navigator) updateMediaSession();
     fetchListenData();
     updateProgressUI();
@@ -968,6 +997,7 @@ function loadTheme() {
         if (themeIcon) themeIcon.className = 'fal fa-sun';
     }
     applyGradientToSongTitle();
+    applyGradientToArtistName();
 }
 
 function toggleTheme() {
@@ -983,6 +1013,7 @@ function toggleTheme() {
         showNotification('GIAO DIỆN TỐI:', 'ĐÃ CHUYỂN SANG TỐI', '#bb86fc', 'fa-moon');
     }
     applyGradientToSongTitle();
+    applyGradientToArtistName();
 }
 
 if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
@@ -993,6 +1024,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
         if (e.matches) { document.body.classList.add('dark'); if (themeIcon) themeIcon.className = 'fal fa-moon'; }
         else { document.body.classList.remove('dark'); if (themeIcon) themeIcon.className = 'fal fa-sun'; }
         applyGradientToSongTitle();
+        applyGradientToArtistName();
     }
 });
 
