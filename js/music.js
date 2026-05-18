@@ -513,12 +513,29 @@ function adjustLyricFontSize(text) {
     }
 }
 
+function applyGradientToSongTitle() {
+    if (!songTitleEl) return;
+    const isDarkMode = document.body.classList.contains('dark');
+    const gradient = isDarkMode 
+        ? 'linear-gradient(135deg, #ffd89b, #c7e9fb)'
+        : 'linear-gradient(135deg, #ff0040, #8c00ff, #ff0040)';
+    songTitleEl.style.background = gradient;
+    songTitleEl.style.backgroundSize = '200% 200%';
+    songTitleEl.style.webkitBackgroundClip = 'text';
+    songTitleEl.style.backgroundClip = 'text';
+    songTitleEl.style.color = 'transparent';
+    songTitleEl.style.animation = 'titleGradientMove 3s ease infinite';
+}
+
 async function loadSong(i) {
     if (isChanging) return;
     isChanging = true;
     index = i;
     const song = songs[index];
-    if (songTitleEl) songTitleEl.innerText = song.name;
+    if (songTitleEl) {
+        songTitleEl.innerText = song.name;
+        applyGradientToSongTitle();
+    }
     autoScaleSongTitle();
     const colors = getRandomPastel();
     document.documentElement.style.setProperty('--bg-color', colors.bg);
@@ -673,7 +690,7 @@ audio.ontimeupdate = () => {
         if (currentSong && currentSong.id) {
             hasRecordedCurrentSong = true;
             incrementListenCount(currentSong.id, currentSong.name, currentSource);
-            console.log(`GHI NHẬN SAU 5 GIÂY: ${currentSong.name} (${currentSong.id}) - Nguồn: ${currentSource}`);
+            console.log(`GHI NHẬN SAU 5 GIÂY: ${currentSong.name} (${currentSong.id}) - NGUỒN: ${currentSource}`);
         }
     }
     
@@ -931,6 +948,7 @@ window.onload = () => {
     if (shuffleBtn) shuffleBtn.classList.add('active');
     renderPlaylist();
     autoScaleSongTitle();
+    applyGradientToSongTitle();
     if ('mediaSession' in navigator) updateMediaSession();
     fetchListenData();
     updateProgressUI();
@@ -949,6 +967,7 @@ function loadTheme() {
         document.body.classList.remove('dark');
         if (themeIcon) themeIcon.className = 'fal fa-sun';
     }
+    applyGradientToSongTitle();
 }
 
 function toggleTheme() {
@@ -963,6 +982,7 @@ function toggleTheme() {
         if (themeIcon) themeIcon.className = 'fal fa-moon';
         showNotification('GIAO DIỆN TỐI:', 'ĐÃ CHUYỂN SANG TỐI', '#bb86fc', 'fa-moon');
     }
+    applyGradientToSongTitle();
 }
 
 if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
@@ -972,6 +992,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
     if (!savedTheme) {
         if (e.matches) { document.body.classList.add('dark'); if (themeIcon) themeIcon.className = 'fal fa-moon'; }
         else { document.body.classList.remove('dark'); if (themeIcon) themeIcon.className = 'fal fa-sun'; }
+        applyGradientToSongTitle();
     }
 });
 
