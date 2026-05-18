@@ -192,7 +192,7 @@ async function incrementListenCount(songId, songName, source = 'normal') {
             updateListenStatsModal();
             localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
             
-            showNotification('+1 LƯỢT NGHE:', `⭐ ${songId} ⭐`, '#4ade80', 'fa-headphones');
+            showNotification('+1 LƯỢT NGHE:', `<i class="fa-regular fa-star"></i> ${songId} <i class="fa-regular fa-star"></i>`, '#4ade80', 'fa-headphones');
             console.log(`GHI NHẬN: ${songName} (${songId}) - ${result.count} (${source})`);
         }
     } catch (error) {
