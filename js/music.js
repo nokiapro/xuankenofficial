@@ -125,7 +125,7 @@ function showNotification(title, message, color = "#4ade80", icon = "fa-headphon
     
     notificationTimeout = setTimeout(() => {
         noti.classList.remove('show');
-    }, 5000);
+    }, 10000);
 }
 
 function showToastMsg(msg, isListen = false) {
