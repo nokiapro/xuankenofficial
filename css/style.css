@@ -317,11 +317,16 @@ body.dark .album-art {
     100% { background-position: 0% 50%; }
 }
 
+@keyframes artistGradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 .artist-name {
     display: block;
-    color: var(--text-secondary);
     font-size: 0.9rem;
-    font-weight: 400;
+    font-weight: 600;
     margin-bottom: 15px;
     transition: color 0.3s ease;
 }
