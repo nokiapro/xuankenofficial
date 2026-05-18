@@ -40,7 +40,6 @@ body.dark {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-decoration: none !important;
 }
 
 body {
@@ -296,7 +295,6 @@ body.dark .album-art {
 
 .song-title {
     display: block;
-    color: var(--text-primary);
     font-weight: 700;
     font-size: 1.4rem;
     text-transform: uppercase;
@@ -311,7 +309,12 @@ body.dark .album-art {
     max-width: 100%;
     line-height: 1.5;
     padding-bottom: 2px;
-    transition: color 0.3s ease;
+}
+
+@keyframes titleGradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .artist-name {
@@ -1380,18 +1383,5 @@ body.dark .notification-message {
     
     .notification-title {
         font-size: 0.7rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .song-title,
-    #current-title,
-    .item-title,
-    .song-item .item-title,
-    .song-title span,
-    #current-title span {
-        text-decoration: none !important;
-        border-bottom: none !important;
-        text-decoration-line: none !important;
     }
 }
