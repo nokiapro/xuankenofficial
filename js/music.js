@@ -134,15 +134,15 @@ function showToastMsg(msg, isListen = false) {
         if (match) {
             showNotification('+1 LƯỢT NGHE:', match[1], '#4ade80', 'fa-headphones');
         } else {
-            showNotification('THÔNG BÁO', msg, '#4ade80', 'fa-circle-info');
+            showNotification('THÔNG BÁO:', msg, '#4ade80', 'fa-circle-info');
         }
     } else {
-        showNotification('THÔNG BÁO', msg, 'var(--accent-color)', 'fa-circle-info');
+        showNotification('THÔNG BÁO:', msg, 'var(--accent-color)', 'fa-circle-info');
     }
 }
 
 function showToast(msg) {
-    showNotification('THÔNG BÁO', msg, 'var(--accent-color)', 'fa-circle-info');
+    showNotification('THÔNG BÁO:', msg, 'var(--accent-color)', 'fa-circle-info');
 }
 
 async function fetchListenData() {
@@ -192,7 +192,7 @@ async function incrementListenCount(songId, songName, source = 'normal') {
             updateListenStatsModal();
             localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
             
-            showNotification('+1 LƯỢT NGHE:', songId, '#4ade80', 'fa-headphones');
+            showNotification('+1 LƯỢT NGHE:', `<span style="display: inline-flex; align-items: center; gap: 6px;"><i class="fa-regular fa-star"></i> ${songId} <i class="fa-regular fa-star"></i></span>`, '#4ade80', 'fa-headphones');
             console.log(`GHI NHẬN: ${songName} (${songId}) - ${result.count} (${source})`);
         }
     } catch (error) {
