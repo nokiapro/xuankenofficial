@@ -205,7 +205,7 @@ const songs = [
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONU-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/jj0rfg3hgn29kan17yw3d/COCHUTNGOTNGAONU-XUANKEN.mp3?rlkey=sl25xj6o977i4ec9r12hfsfon&st=8j4svwjf&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONU-LYRIC.lrc",
-        lrc2: "",
+        lrc2: "https://dl.dropboxusercontent.com/scl/fi/lssew4d3tgszxqopyqh7g/COCHUTNGOTNGAONU-LYRIC.lrc?rlkey=z5om02o4waf352g7whbh7bf1m&st=espfdrtx&dl=0",
     },
     {
         id: "CCNNNAM",
@@ -213,7 +213,7 @@ const songs = [
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/COCHUTNGOTNGAONAM-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/ia8dyq8rsc98fikfce0zr/COCHUTNGOTNGAONAM-XUANKEN.mp3?rlkey=6zknjbdoglz86pga5k2zy45wz&st=e2hjfkdg&dl=0",
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/COCHUTNGOTNGAONAM-LYRIC.lrc",
-        lrc2: "",
+        lrc2: "https://dl.dropboxusercontent.com/scl/fi/nu9fvjej9alp5jer9uvqg/COCHUTNGOTNGAONAM-LYRIC.lrc?rlkey=gqkp0rkh4h4bdxxx5ls4v71vy&st=2nk8cgxt&dl=0",
     },
     {
         id: "BTTTNU",
@@ -280,7 +280,7 @@ const songs = [
         lrc2: "",
     },
     {
-        id: "NOLGMRMK",
+        id: "NOLGMREMAKE",
         name: "Người Ở Lại Giữa Mưa (Remake)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NGUOIOLAIGIUAMUAREMAKE-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/xcb88dzoba7jqhdioqr26/NGUOIOLAIGIUAMUAREMAKE-XUANKEN.mp3?rlkey=s64xw2cf1tu1ge6t1nif3fgkh&st=4ak2r3lx&dl=0",
@@ -288,7 +288,7 @@ const songs = [
         lrc2: "",
     },
     {
-        id: "SCMLNNRMK",
+        id: "SCMLNNREMAKE",
         name: "Sau Cơn Mưa Là Nỗi Nhớ (Remake)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/SAUCONMUALANOINHOREMAKE-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/4nhyf9wfo22zcf8kepvos/SAUCONMUALANOINHOREMAKE-XUANKEN.mp3?rlkey=qnn35aewi5kkbz8iesz6dyyev&st=qzktv3d1&dl=0",
@@ -296,7 +296,7 @@ const songs = [
         lrc2: "",
     },
     {
-        id: "GNNKERMK",
+        id: "GNNKEREMAKE",
         name: "Giữa Những Ngày Không Em (Remake)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/GIUANHUNGNGAYKHONGEMREMAKE-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/6zuwv2yodirdkjvim82vt/GIUANHUNGNGAYKHONGEMREMAKE-XUANKEN.mp3?rlkey=iherk1r703qn5tqth0trrlc2x&st=0epeuuql&dl=0",
@@ -304,7 +304,7 @@ const songs = [
         lrc2: "",
     },
     {
-        id: "DCVLARMK",
+        id: "DCVLAREMAKE",
         name: "Đến Cuối Vẫn Là Anh (Remake)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/DENCUOIVANLAANHREMAKE-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/c8hf7evi016i7alew1xz0/DENCUOIVANLAANHREMAKE-XUANKEN.mp3?rlkey=nlnsdomphrlv3ste7xbofhm3u&st=b3l7wdlo&dl=0",
@@ -392,7 +392,7 @@ const songs = [
         lrc2: "https://dl.dropboxusercontent.com/scl/fi/rblqzx0aue2cpdyqx4p6r/CHUNGTADATUNG-LYRIC.lrc?rlkey=rv6hsjb8xs471pdi8kjvbkpcv&st=ggs9o8i9&dl=0",
     },
     {
-        id: "NBTRMK",
+        id: "NBTREMAKE",
         name: "Nếu Biết Trước (Remake)",
         audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/NEUBIETTRUOCREMAKE-XUANKEN.mp3",
         audio2: "https://dl.dropboxusercontent.com/scl/fi/jk1do59a9y710t9iby1uf/NEUBIETTRUOCREMAKE-XUANKEN.mp3?rlkey=vtcvevpxz0ku0yrk9cv2l6hwl&st=2ucy8oof&dl=0",
