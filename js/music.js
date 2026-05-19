@@ -10,6 +10,7 @@ let lyrics = [];
 let lastLyric = "";
 let wakeLock = null;
 let isLoopingHandled = false;
+let listenInterval = null;
 
 const audio = document.getElementById('audio-player');
 const playIcon = document.getElementById('play-icon');
@@ -34,6 +35,19 @@ let hasRecordedCurrentSong = false;
 let currentSource = 'normal';
 
 let notificationTimeout = null;
+
+if (!Array.prototype.findLast) {
+    Array.prototype.findLast = function(predicate) {
+        for (let i = this.length - 1; i >= 0; i--) {
+            if (predicate(this[i], i, this)) return this[i];
+        }
+        return undefined;
+    };
+}
+
+if (typeof songs === 'undefined') {
+    console.error("LỖI: CHƯA TẢI FILE songs.js!");
+}
 
 function getGradientByTheme() {
     const isDarkMode = document.body.classList.contains('dark');
@@ -211,7 +225,7 @@ async function incrementListenCount(songId, songName, source = 'normal') {
         listenData[songId]++;
         localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
         updateListenStatsModal();
-        showNotification('LƯU OFFLINE', songId, '#ff9800', 'fa-circle-exclamation');
+        showNotification('LƯU OFFLINE:', songId, '#ff9800', 'fa-circle-exclamation');
     } finally { 
         isUpdatingListen = false;
     }
@@ -227,6 +241,14 @@ function updateListenStatsModal() {
     const container = document.getElementById('listen-stats-content');
     const totalContainer = document.getElementById('listen-total-stats');
     if (!container) return;
+    
+    if (!songs || !songs.length) {
+        container.innerHTML = '<div style="text-align:center;padding:40px">ĐANG TẢI DANH SÁCH BÀI HÁT...</div>';
+        if (totalContainer) {
+            totalContainer.innerHTML = `<span>TỔNG LƯỢT NGHE:</span><span>0</span>`;
+        }
+        return;
+    }
     
     if (listenData && Object.keys(listenData).length > 0) {
         const currentSongId = songs[index]?.id;
@@ -434,6 +456,7 @@ function releaseWakeLock() {
 
 function updateMediaSession() {
     if ('mediaSession' in navigator) {
+        if (!songs[index]) return;
         const song = songs[index];
         navigator.mediaSession.metadata = new MediaMetadata({
             title: song.name,
@@ -553,6 +576,10 @@ function applyGradientToArtistName() {
 
 async function loadSong(i) {
     if (isChanging) return;
+    if (!songs[i]) {
+        console.error(`BÀI HÁT TẠI INDEX ${i} KHÔNG TỒN TẠI!`);
+        return;
+    }
     isChanging = true;
     index = i;
     const song = songs[index];
@@ -588,7 +615,7 @@ async function loadSong(i) {
 function changeSong(i, source = 'normal') {
     currentSource = source;
     loadSong(i).then(() => {
-        audio.play().catch(() => { });
+        audio.play().catch(e => console.log("CẦN TƯƠNG TÁC TRƯỚC KHI PHÁT:", e));
         setTimeout(() => {
             updateCurrentSongHighlightAndScroll();
             updateListenStatsModal();
@@ -628,11 +655,12 @@ function prevSong() {
 }
 
 function togglePlay() {
-    if (audio.paused) audio.play().catch(() => { });
+    if (audio.paused) audio.play().catch(e => console.log("Cần tương tác:", e));
     else audio.pause();
 }
 
 audio.onerror = () => {
+    if (!songs[index]) return;
     const song = songs[index];
     const currentSrc = audio.src;
     if (currentSrc === song.audio1 && song.audio2 && song.audio2.trim() !== "") {
@@ -664,7 +692,14 @@ if (progressArea) {
         if (!audio.duration) return;
         const rect = progressArea.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
-        audio.currentTime = percent * audio.duration;
+        const newTime = percent * audio.duration;
+        audio.currentTime = newTime;
+        
+        if (newTime < 5 && hasRecordedCurrentSong) {
+            hasRecordedCurrentSong = false;
+            console.log("Tua về đầu bài, reset flag để ghi nhận lại");
+        }
+        
         updateProgressUI();
     };
 }
@@ -681,7 +716,13 @@ if (progressThumb) {
             let newLeft = moveEvent.clientX - rect.left;
             newLeft = Math.max(0, Math.min(newLeft, rect.width));
             const percent = newLeft / rect.width;
-            audio.currentTime = percent * audio.duration;
+            const newTime = percent * audio.duration;
+            audio.currentTime = newTime;
+            
+            if (newTime < 5 && hasRecordedCurrentSong) {
+                hasRecordedCurrentSong = false;
+            }
+            
             progressFill.style.width = percent * 100 + '%';
             progressThumb.style.left = newLeft + 'px';
         };
@@ -713,35 +754,54 @@ audio.ontimeupdate = () => {
         }
     }
     
-    if (cur >= 5 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging) {
-        const currentSong = songs[index];
-        if (currentSong && currentSong.id) {
+    if (cur >= 5 && !hasRecordedCurrentSong && !isUpdatingListen && !isChanging && dur && dur > 5) {
+        if (songs[index] && songs[index].id) {
             hasRecordedCurrentSong = true;
-            incrementListenCount(currentSong.id, currentSong.name, currentSource);
-            console.log(`GHI NHẬN SAU 5 GIÂY: ${currentSong.name} (${currentSong.id}) - Nguồn: ${currentSource}`);
+            incrementListenCount(songs[index].id, songs[index].name, currentSource);
+            console.log(`GHI NHẬN SAU 5 GIÂY: ${songs[index].name} (${songs[index].id}) - Nguồn: ${currentSource}`);
         }
     }
     
     if (isRepeatOne && dur && (dur - cur) <= 0.1 && !isLoopingHandled && dur > 0) {
         isLoopingHandled = true;
+        
+        if (hasRecordedCurrentSong) {
+            hasRecordedCurrentSong = false;
+            currentSource = 'loop';
+            console.log(`CHUẨN BỊ LẶP LẠI: RESET FLAG CHO BÀI ${songs[index]?.name}`);
+        }
+        
         audio.currentTime = 0;
-        audio.play().catch(e => setTimeout(() => audio.play(), 20));
+        setTimeout(() => {
+            audio.play().catch(e => {
+                setTimeout(() => audio.play(), 20);
+            });
+        }, 10);
     }
-    if (cur > 0 && dur && (dur - cur) > 0.2) isLoopingHandled = false;
+    
+    if (cur > 0 && dur && (dur - cur) > 0.2) {
+        isLoopingHandled = false;
+    }
     
     updateProgressUI();
 };
 
 audio.onended = () => {
     if (isRepeatOne) {
-        isLoopingHandled = true;
-        const currentSong = songs[index];
-        if (currentSong && currentSong.id) {
-            hasRecordedCurrentSong = false;
-            currentSource = 'loop';
+        if (!isLoopingHandled) {
+            isLoopingHandled = true;
+            if (hasRecordedCurrentSong) {
+                hasRecordedCurrentSong = false;
+                currentSource = 'loop';
+            }
+            audio.currentTime = 0;
+            setTimeout(() => {
+                audio.play().catch(e => {
+                    audio.load();
+                    setTimeout(() => audio.play(), 50);
+                });
+            }, 10);
         }
-        audio.currentTime = 0;
-        setTimeout(() => { audio.play().catch(e => { audio.load(); setTimeout(() => audio.play(), 50); }); }, 10);
     } else { 
         handleNextAction(); 
     }
@@ -775,6 +835,10 @@ function escapeHtml(str) {
 function renderPlaylist() {
     const list = document.getElementById('playlist-content');
     if (!list) return;
+    if (!songs || !songs.length) {
+        list.innerHTML = '<div style="text-align:center;padding:40px">ĐANG TẢI DANH SÁCH...</div>';
+        return;
+    }
     list.innerHTML = songs.map((s, i) => `<div class="song-item ${i === index ? 'active' : ''}" onclick="window.selectSongFromList(${i})"><div class="flex-1"><div class="item-title text-sm uppercase font-bold break-words pr-2">${escapeHtml(s.name)}</div><div class="text-xs text-gray-500"><i class="fa-regular fa-microphone"></i> XuanKen Official</div></div>${i === index ? '<i class="fa-sharp fa-light fa-face-grin-tongue-squint"></i>' : ''}</div>`).join('');
 }
 
@@ -968,7 +1032,7 @@ if (cancelTimerBtn) {
 if (timerModal) timerModal.addEventListener('click', (e) => e.stopPropagation());
 
 const observer = new ResizeObserver(() => autoScaleSongTitle());
-if (songTitleEl) observer.observe(songTitleEl.parentElement);
+if (songTitleEl && songTitleEl.parentElement) observer.observe(songTitleEl.parentElement);
 document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && !audio.paused) await requestWakeLock(); });
 
 window.onload = () => {
@@ -1036,7 +1100,10 @@ if (listenCountBtn) {
     };
 }
 
-setInterval(fetchListenData, 30000);
+listenInterval = setInterval(fetchListenData, 30000);
+window.addEventListener('beforeunload', () => {
+    if (listenInterval) clearInterval(listenInterval);
+});
 
 window.adjustLyricFontSize = adjustLyricFontSize;
 window.selectSongFromList = selectSongFromList;
