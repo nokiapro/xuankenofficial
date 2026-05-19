@@ -576,7 +576,11 @@ body.dark .album-art {
 
 .song-item.active {
     background: linear-gradient(135deg, var(--btn-hover), transparent);
-    border-left: 3px solid var(--accent-color);
+    border-left: 3px solid #ff0040;
+}
+
+body.dark .song-item.active {
+    border-left: 3px solid #ffd89b;
 }
 
 .song-item .item-title {
@@ -1012,7 +1016,11 @@ body.dark .album-art {
 
 .listen-stat-item.current-playing {
     background: linear-gradient(135deg, var(--btn-hover), transparent);
-    border-left: 3px solid var(--accent-color);
+    border-left: 3px solid #ff0040;
+}
+
+body.dark .listen-stat-item.current-playing {
+    border-left: 3px solid #ffd89b;
 }
 
 .listen-stat-item.current-playing .listen-stat-name {
