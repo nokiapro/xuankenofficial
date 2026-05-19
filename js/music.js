@@ -154,9 +154,9 @@ function showNotification(title, message, color = "#4ade80", icon = "fa-headphon
 
 function showToastMsg(msg, isListen = false) {
     if (isListen) {
-        const match = msg.match(/\+1 LƯỢT NGHE: "(.+)" \((.+)\)/);
+        const match = msg.match(/\+1 LISTEN: "(.+)" \((.+)\)/);
         if (match) {
-            showNotification('+1 LƯỢT NGHE:', match[1], '#4ade80', 'fa-headphones');
+            showNotification('+1 LISTEN:', match[1], '#4ade80', 'fa-headphones');
         } else {
             showNotification('THÔNG BÁO:', msg, '#4ade80', 'fa-circle-info');
         }
@@ -216,7 +216,7 @@ async function incrementListenCount(songId, songName, source = 'normal') {
             updateListenStatsModal();
             localStorage.setItem('xuanken_listens', JSON.stringify(listenData));
             
-            showNotification('+1 LƯỢT NGHE:', `<i class="fa-regular fa-star"></i> ${songId} <i class="fa-regular fa-star"></i>`, '#4ade80', 'fa-headphones');
+            showNotification('+1 LISTEN:', `<i class="fa-regular fa-star"></i> ${songId} <i class="fa-regular fa-star"></i>`, '#4ade80', 'fa-headphones');
             console.log(`GHI NHẬN: ${songName} (${songId}) - ${result.count} (${source})`);
         }
     } catch (error) {
@@ -697,7 +697,7 @@ if (progressArea) {
         
         if (newTime < 5 && hasRecordedCurrentSong) {
             hasRecordedCurrentSong = false;
-            console.log("Tua về đầu bài, reset flag để ghi nhận lại");
+            console.log("TUA VỀ ĐẦU BÀI, RESET FLAG GHI NHẬN LƯỢT NGHE CHO BÀI");
         }
         
         updateProgressUI();
@@ -758,7 +758,7 @@ audio.ontimeupdate = () => {
         if (songs[index] && songs[index].id) {
             hasRecordedCurrentSong = true;
             incrementListenCount(songs[index].id, songs[index].name, currentSource);
-            console.log(`GHI NHẬN SAU 5 GIÂY: ${songs[index].name} (${songs[index].id}) - Nguồn: ${currentSource}`);
+            console.log(`GHI NHẬN SAU 5 GIÂY: ${songs[index].name} (${songs[index].id}) - NGUỒN: ${currentSource}`);
         }
     }
     
@@ -895,9 +895,9 @@ if (repeatBtn) {
         this.classList.toggle('active', isRepeatOne);
         isLoopingHandled = false;
         if (isRepeatOne) {
-            showNotification('LẶP LẠI:', 'ĐÃ BẬT LẶP LẠI 1 BÀI', 'var(--accent-color)', 'fa-arrow-rotate-left');
+            showNotification('LẶP LẠI:', 'LẶP LẠI 1 BÀI', 'var(--accent-color)', 'fa-arrow-rotate-left');
         } else {
-            showNotification('TẮT LẶP:', 'ĐÃ TẮT LẶP LẠI', 'var(--accent-color)', 'fa-arrow-rotate-left');
+            showNotification('TẮT LẶP:', 'ĐÃ TẮT LẶP', 'var(--accent-color)', 'fa-arrow-rotate-left');
         }
     };
 }
@@ -1069,12 +1069,12 @@ function toggleTheme() {
         document.body.classList.remove('dark');
         localStorage.setItem('xuanken_theme', 'light');
         if (themeIcon) themeIcon.className = 'fal fa-sun';
-        showNotification('GIAO DIỆN SÁNG:', 'ĐÃ CHUYỂN SANG SÁNG', '#ff9800', 'fa-sun');
+        showNotification('LIGHT MODE:', 'ĐÃ CHUYỂN LIGHT', '#ff9800', 'fa-sun');
     } else {
         document.body.classList.add('dark');
         localStorage.setItem('xuanken_theme', 'dark');
         if (themeIcon) themeIcon.className = 'fal fa-moon';
-        showNotification('GIAO DIỆN TỐI:', 'ĐÃ CHUYỂN SANG TỐI', '#bb86fc', 'fa-moon');
+        showNotification('DARK MODE:', 'ĐÃ CHUYỂN DARK', '#bb86fc', 'fa-moon');
     }
     applyGradientToSongTitle();
     applyGradientToArtistName();
