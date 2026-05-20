@@ -423,4 +423,12 @@ const songs = [
         lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/VINGUOIRADILAEM-LYRIC.lrc",
         lrc2: "https://dl.dropboxusercontent.com/scl/fi/c478s987xwx6k4f9tb37d/VINGUOIRADILAEM-LYRIC.lrc?rlkey=4652or6rx9oj6ak35pc5s42r7&st=fxhbtizh&dl=0",
     },
+    {
+        id: "CCNNRMK",
+        name: "Chỉ Có Nỗi Nhớ (Remake)",
+        audio1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/musicofficial/CHICONNOINHOREMAKE-XUANKEN.mp3",
+        audio2: "https://dl.dropboxusercontent.com/scl/fi/hz3o4fpzi923wtmatewfc/CHICONNOINHOREMAKE-XUANKEN.mp3?rlkey=0s0x1pjnretc7splyr2pfystb&st=ecbv6gqr&dl=0",
+        lrc1: "https://raw.githubusercontent.com/nokiapro/xuankenofficial/main/lyric/CHICONNOINHOREMAKE-LYRIC.lrc",
+        lrc2: "",
+    },
 ];
